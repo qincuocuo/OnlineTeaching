@@ -9,7 +9,6 @@ import (
 // User 用户表
 type User struct {
 	ID              bson.ObjectId `bson:"_id,omitempty"`
-	UID             int           `bson:"uid" mgo:"index:1"`  //用户ID
 	Role            int           `bson:"role"`               //用户角色 1-老师、2-学生
 	UserId          string        `bson:"user_id"`            //学生学号/老师工号
 	UserName        string        `bson:"username"`           //用户名
