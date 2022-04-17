@@ -1,0 +1,237 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/auth/login/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "create user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "登录",
+                "parameters": [
+                    {
+                        "description": "request data",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/form_req.AuthLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.AuthLoginResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verifycode/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get verifycode",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "基础接口 - 获取验证码",
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.AuthVerifyCodeResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "create user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "创建用户",
+                "parameters": [
+                    {
+                        "description": "request data",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/form_req.CreateUserReq"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "authentication",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.StatusResp"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "form_req.AuthLoginReq": {
+            "type": "object",
+            "required": [
+                "captid",
+                "password",
+                "role",
+                "username",
+                "vcode"
+            ],
+            "properties": {
+                "captid": {
+                    "description": "验证码唯一ID",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "用户登录角色",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "vcode": {
+                    "description": "验证码",
+                    "type": "string"
+                }
+            }
+        },
+        "form_req.CreateUserReq": {
+            "type": "object",
+            "required": [
+                "confirm",
+                "password",
+                "role",
+                "username"
+            ],
+            "properties": {
+                "confirm": {
+                    "description": "确认用户密码",
+                    "type": "string"
+                },
+                "mail": {
+                    "description": "用户邮箱",
+                    "type": "string"
+                },
+                "mobile": {
+                    "description": "用户手机号码",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "用户备注信息",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "用户角色",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "form_resp.AuthLoginResp": {
+            "type": "object",
+            "properties": {
+                "authorization": {
+                    "description": "用户Token信息",
+                    "type": "string"
+                },
+                "enable": {
+                    "description": "是否允许登录 (true)-允许登录、(false)-拒绝登录",
+                    "type": "boolean"
+                },
+                "role": {
+                    "description": "用户权限",
+                    "type": "integer"
+                },
+                "uid": {
+                    "description": "用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "form_resp.AuthVerifyCodeResp": {
+            "type": "object",
+            "properties": {
+                "captid": {
+                    "description": "验证码唯一ID",
+                    "type": "string"
+                },
+                "image": {
+                    "description": "验证码图片数据",
+                    "type": "string"
+                }
+            }
+        },
+        "form_resp.StatusResp": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "基本状态(string)",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

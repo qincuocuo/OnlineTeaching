@@ -1,0 +1,34 @@
+Web:
+  WebHost: 0.0.0.0:5002
+  IgnoreURLs:
+    - /
+    - /auth/login
+    - /auth/verifycode
+
+JWTCfg:
+  JwtRenewSwitch: false
+  JwtTimeOut: 86400 #second
+  JwtLogLevel: debug
+  JwtSecret: secret
+
+Log:
+  LogPath: ./
+  LogLevel: info
+  MaxSize: 50
+  MaxAge: 7
+  Stacktrace: error
+  IsStdOut: yes
+
+Mongodb:
+  Host: 192.168.30.75
+  Port: 27017
+  User: sun
+  Passwd: sun#sun
+  DbName: db_sun
+
+Redis:
+  RedisHost: 192.168.30.75:6379
+  RedisPasswd: sun@sun
+  SubChannel: route.srv
+
+Tracking:

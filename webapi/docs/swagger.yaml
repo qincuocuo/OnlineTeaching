@@ -1,0 +1,158 @@
+definitions:
+  form_req.AuthLoginReq:
+    properties:
+      captid:
+        description: 验证码唯一ID
+        type: string
+      password:
+        description: 用户密码
+        type: string
+      role:
+        description: 用户登录角色
+        type: integer
+      username:
+        description: 用户名称
+        type: string
+      vcode:
+        description: 验证码
+        type: string
+    required:
+    - captid
+    - password
+    - role
+    - username
+    - vcode
+    type: object
+  form_req.CreateUserReq:
+    properties:
+      confirm:
+        description: 确认用户密码
+        type: string
+      mail:
+        description: 用户邮箱
+        type: string
+      mobile:
+        description: 用户手机号码
+        type: string
+      password:
+        description: 用户密码
+        type: string
+      remark:
+        description: 用户备注信息
+        type: string
+      role:
+        description: 用户角色
+        type: integer
+      username:
+        description: 用户名
+        type: string
+    required:
+    - confirm
+    - password
+    - role
+    - username
+    type: object
+  form_resp.AuthLoginResp:
+    properties:
+      authorization:
+        description: 用户Token信息
+        type: string
+      enable:
+        description: 是否允许登录 (true)-允许登录、(false)-拒绝登录
+        type: boolean
+      role:
+        description: 用户权限
+        type: integer
+      uid:
+        description: 用户ID
+        type: integer
+    type: object
+  form_resp.AuthVerifyCodeResp:
+    properties:
+      captid:
+        description: 验证码唯一ID
+        type: string
+      image:
+        description: 验证码图片数据
+        type: string
+    type: object
+  form_resp.StatusResp:
+    properties:
+      status:
+        description: 基本状态(string)
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login/:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.AuthLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.AuthLoginResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 登录
+      tags:
+      - common
+  /auth/verifycode/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: get verifycode
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.AuthVerifyCodeResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 基础接口 - 获取验证码
+      tags:
+      - common
+  /v1/user/:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateUserReq'
+      - description: authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建用户
+      tags:
+      - 用户管理
+swagger: "2.0"

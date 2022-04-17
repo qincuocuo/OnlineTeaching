@@ -1,0 +1,56 @@
+package controller
+
+import (
+	"webapi/dao/form_req"
+	"webapi/internal/wrapper"
+	"webapi/service"
+	"webapi/support"
+)
+
+type UserController struct {
+}
+
+// CreateUser
+// @Summary 创建用户
+// @Description create user
+// @Tags 用户管理
+// @Accept json
+// @Produce json
+// @Param auth body form_req.CreateUserReq true "request data"
+// @Success 200 {object} form_resp.StatusResp "response data"
+// @Router /v1/user/ [post]
+// @Security ApiKeyAuth
+// @Param Authorization header string true "authentication"
+func (u UserController) CreateUser(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.CreateUserHandler, true, &form_req.CreateUserReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
+
+// UserInfo
+// @Summary 获取用户信息
+// @Description get user info
+// @Tags 用户管理
+// @Accept json
+// @Produce json
+// @Param auth body form_req.UserInfoReq true "request data"
+// @Success 200 {object} form_resp.UserInfoResp "response data"
+// @Router /v1/user/ [get]
+// @Security ApiKeyAuth
+// @Param Authorization header string true "authentication"
+func (u UserController) UserInfo(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.UserInfoHandler, true, &form_req.UserInfoReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
+
+// UserPassword
+// @Summary 获取用户密码
+// @Description get user password
+// @Tags 用户管理
+// @Accept json
+// @Produce json
+// @Param auth body form_req.UserPasswordReq true "request data"
+// @Success 200 {object} form_resp.UserPasswordResp "response data"
+// @Router /v1/user/password/ [get]
+// @Security ApiKeyAuth
+// @Param Authorization header string true "authentication"
+func (u UserController) UserPassword(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.UserPasswordHandler, true, &form_req.UserPasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
