@@ -38,11 +38,11 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		return nil
 	}
 
-	newUid := mongo.User.GetMaxUid(traceCtx)
+	//newUid := mongo.User.GetMaxUid(traceCtx)
 	// 创建账户
 	userDoc := models.User{
 		ID:              bson.NewObjectId(),
-		UID:             newUid,
+		//UID:             newUid,
 		Role:            req.Role,
 		UserName:        req.Username,
 		Password:        password.MakePassword(req.Password),
@@ -90,6 +90,12 @@ func UserInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	return nil
 }
 
+// UserPasswordHandler 获取账户密码
 func UserPasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	return nil
+}
+
+// ChangePasswordHandler 修改账户密码
+func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	return nil
 }

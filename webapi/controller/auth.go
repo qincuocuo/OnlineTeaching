@@ -50,18 +50,3 @@ func (a AuthController) Login(ctx *wrapper.Context) {
 func (a AuthController) Logout(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.LogoutHandler, false, nil, nil)
 }
-
-// ChangePassword
-// @Summary 基础接口 - 修改账户密码
-// @Description change user password
-// @Tags common
-// @Accept json
-// @Produce json
-// @Param auth body form_req.ChangePasswordReq true "request data"
-// @Success 200 {object} form_resp.StatusResp "response data"
-// @Router /auth/change_password/ [post]
-// @Security ApiKeyAuth
-// @Param authorization header string true "authorization"
-func (a AuthController) ChangePassword(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.ChangePasswordHandler, true, form_req.ChangePasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
-}

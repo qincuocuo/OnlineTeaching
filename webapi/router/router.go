@@ -22,9 +22,15 @@ func InitRouters(app *iris.Application) {
 		}
 
 		// 课程接口
-		appClassRouter := appRouter.Party("/class")
+		appClassRouter := appRouter.Party("/course")
 		{
-			v1.RegisterClassRouter(appClassRouter)
+			v1.RegisterCourseRouter(appClassRouter)
+		}
+
+		// 学习内容接口
+		appLearningContentRouter := appRouter.Party("/learning_content")
+		{
+			v1.RegisterLearningContentRouter(appLearningContentRouter)
 		}
 
 		// 签到互动接口

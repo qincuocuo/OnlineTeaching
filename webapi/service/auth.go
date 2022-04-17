@@ -87,8 +87,3 @@ func LogoutHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	support.SendApiResponse(ctx, resp, "")
 	return
 }
-
-// ChangePasswordHandler 修改账户密码
-func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
-	return nil
-}

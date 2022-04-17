@@ -54,3 +54,18 @@ func (u UserController) UserInfo(ctx *wrapper.Context) {
 func (u UserController) UserPassword(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.UserPasswordHandler, true, &form_req.UserPasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
+
+// ChangePassword
+// @Summary 修改账户密码
+// @Description change user password
+// @Tags 用户管理
+// @Accept json
+// @Produce json
+// @Param auth body form_req.ChangePasswordReq true "request data"
+// @Success 200 {object} form_resp.StatusResp "response data"
+// @Router /v1/user/change_password/ [post]
+// @Security ApiKeyAuth
+// @Param authorization header string true "authorization"
+func (a AuthController) ChangePassword(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.ChangePasswordHandler, true, form_req.ChangePasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
