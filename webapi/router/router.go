@@ -34,9 +34,9 @@ func InitRouters(app *iris.Application) {
 		}
 
 		// 签到互动接口
-		appActiveRouter := appRouter.Party("/active")
+		appRegisterRouter := appRouter.Party("/register")
 		{
-			v1.RegisterActiveRouter(appActiveRouter)
+			v1.RegisterRouter(appRegisterRouter)
 		}
 
 		// 讨论聊天接口
@@ -49,6 +49,12 @@ func InitRouters(app *iris.Application) {
 		appExercisesRouter := appRouter.Party("/exercises")
 		{
 			v1.RegisterExercisesRouter(appExercisesRouter)
+		}
+
+		// 通知接口
+		appNoticeRouter := appRouter.Party("/notice")
+		{
+			v1.RegisterNoticeRouter(appNoticeRouter)
 		}
 	}
 }

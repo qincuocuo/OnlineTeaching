@@ -7,11 +7,8 @@ definitions:
       password:
         description: 用户密码
         type: string
-      role:
-        description: 用户登录角色
-        type: integer
-      username:
-        description: 用户名称
+      user_id:
+        description: 用户Id
         type: string
       vcode:
         description: 验证码
@@ -19,30 +16,154 @@ definitions:
     required:
     - captid
     - password
-    - role
-    - username
+    - user_id
     - vcode
+    type: object
+  form_req.ChangePasswordReq:
+    properties:
+      new_password:
+        description: 新账户密码
+        type: string
+      password:
+        description: 旧账户密码
+        type: string
+    required:
+    - new_password
+    - password
+    type: object
+  form_req.CourseListReq:
+    properties:
+      class:
+        description: 班级
+        type: integer
+      create_tm:
+        description: 创建时间
+        type: string
+      grade:
+        description: 年级
+        type: integer
+      ordering_create_tm:
+        description: 根据创建时间排序 "create_tm" "-create_tm"
+        type: string
+      ordering_grade:
+        description: 根据年级排序 "grade" "-grade
+        type: string
+      ordering_total_member:
+        description: 根据班级总人数排序 "total_member" "-total_member"
+        type: string
+      page:
+        description: 页数,用于分页
+        type: integer
+      page_size:
+        description: 每页数量，用于分页
+        type: integer
+      search:
+        description: 根据课程名搜索
+        type: string
+      user_id:
+        description: 教师工号
+        type: integer
+    type: object
+  form_req.CreateCourseReq:
+    properties:
+      class:
+        description: 班级
+        type: integer
+      course_name:
+        description: 课程名称
+        type: string
+      grade:
+        description: 年级
+        type: integer
+      user_id:
+        description: 教师工号
+        type: integer
+    type: object
+  form_req.CreateExercisesReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      exercises:
+        description: 练习题
+        items:
+          $ref: '#/definitions/form_req.ExercisesItem'
+        type: array
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.CreateLearningContentReq:
+    properties:
+      course_id:
+        description: 课程id
+        type: integer
+      file_name:
+        description: 文件名
+        type: string
+      title:
+        description: 学习标题
+        type: string
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.CreateRegisterReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      create_tm:
+        description: 创建时间
+        type: string
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      register_tm:
+        description: 签到时间限制，默认为2分钟
+        type: string
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.CreateTalkReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      talk:
+        description: 讨论主题
+        type: string
+      user_id:
+        description: 教师工号
+        type: string
     type: object
   form_req.CreateUserReq:
     properties:
+      class:
+        description: 班级
+        type: integer
       confirm:
         description: 确认用户密码
         type: string
-      mail:
-        description: 用户邮箱
-        type: string
-      mobile:
-        description: 用户手机号码
-        type: string
+      grade:
+        description: 年级 1-6
+        type: integer
       password:
         description: 用户密码
         type: string
-      remark:
-        description: 用户备注信息
-        type: string
       role:
-        description: 用户角色
+        description: 用户角色 1-老师、2-学生
         type: integer
+      user_id:
+        description: 学生学号/教师工号
+        type: string
       username:
         description: 用户名
         type: string
@@ -51,6 +172,185 @@ definitions:
     - password
     - role
     - username
+    type: object
+  form_req.DeleteCourseReq:
+    properties:
+      course_id:
+        description: 课程id
+        type: integer
+      user_id:
+        description: 教师工号
+        type: integer
+    type: object
+  form_req.ExercisesItem:
+    properties:
+      answer:
+        description: 答案
+        type: string
+      question:
+        description: 题目
+        type: string
+    type: object
+  form_req.ExercisesReq:
+    properties:
+      answer:
+        description: 答案
+        items:
+          type: string
+        type: array
+    type: object
+  form_req.LearningContentListReq:
+    properties:
+      course_id:
+        description: 课程id
+        type: integer
+      ordering_learned:
+        description: 根据已学习人数排序 learned/-learned
+        type: string
+      ordering_unlearned:
+        description: 根据未学习人数排序 unlearned/-unlearned
+        type: string
+      page:
+        description: 分页
+        type: integer
+      page_size:
+        description: 分页大小
+        type: integer
+      search:
+        description: 根据学习内容搜索
+        type: string
+      user_id:
+        description: 教师工号/学生学号
+        type: string
+    type: object
+  form_req.LearningReq:
+    properties:
+      course_id:
+        description: 课程id
+        type: integer
+      file_path:
+        description: 文件路径
+        type: string
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      user_id:
+        description: 教师工号/学生学号
+        type: string
+    type: object
+  form_req.LearningResultReq:
+    properties:
+      course_id:
+        description: 课程id
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      status:
+        description: 学习状态 learned-已学习/unlearned-未学习
+        type: string
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.NoticeReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      user_id:
+        description: 学生学号
+        type: string
+    type: object
+  form_req.RegisterReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      user_id:
+        description: 学生学号
+        type: string
+    type: object
+  form_req.RegisterResultReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      register_result:
+        description: 签到结果，unfinished-未签到/finished-已签到
+        type: integer
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.TalkInfoReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      talk_id:
+        description: 讨论id
+        type: integer
+      user_id:
+        description: 教师工号
+        type: string
+    type: object
+  form_req.TalkReq:
+    properties:
+      course_id:
+        description: 课程号
+        type: integer
+      learning_content_id:
+        description: 学习内容id
+        type: integer
+      talk_id:
+        description: 讨论id
+        type: integer
+      user_id:
+        description: 教师工号/学生学号
+        type: string
+    type: object
+  form_req.UpdateCourseReq:
+    properties:
+      class:
+        description: 班级
+        type: integer
+      course_id:
+        description: 课程id
+        type: integer
+      course_name:
+        description: 课程名称
+        type: string
+      grade:
+        description: 年级
+        type: integer
+      user_id:
+        description: 教师工号
+        type: integer
+    type: object
+  form_req.UserInfoReq:
+    properties:
+      user_id:
+        description: 学生学号/教师工号
+        type: string
+    type: object
+  form_req.UserPasswordReq:
+    properties:
+      user_id:
+        description: 学生学号/教师工号
+        type: string
     type: object
   form_resp.AuthLoginResp:
     properties:
@@ -76,10 +376,180 @@ definitions:
         description: 验证码图片数据
         type: string
     type: object
+  form_resp.CourseListItem:
+    properties:
+      class:
+        description: 班级
+        type: integer
+      course_id:
+        description: 课程ID
+        type: integer
+      course_name:
+        description: 课程名称
+        type: string
+      create_tm:
+        description: 创建时间
+        type: string
+      grade:
+        description: 年级
+        type: integer
+      total_member:
+        description: 总人数
+        type: integer
+    type: object
+  form_resp.CourseListResp:
+    properties:
+      count:
+        type: integer
+      result:
+        items:
+          $ref: '#/definitions/form_resp.CourseListItem'
+        type: array
+    type: object
+  form_resp.ExerciseResult:
+    properties:
+      answer:
+        description: 正确答案
+        type: string
+      correct:
+        description: 判断是否正确
+        type: boolean
+    type: object
+  form_resp.ExercisesResp:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/form_resp.ExerciseResult'
+        type: array
+    type: object
+  form_resp.LearningContentItem:
+    properties:
+      content:
+        description: 学习内容
+        type: string
+      file_path:
+        description: 文件路径
+        type: string
+      learned:
+        description: 已学习
+        type: integer
+      unlearned:
+        description: 未学习
+        type: integer
+    type: object
+  form_resp.LearningContentListResp:
+    properties:
+      count:
+        type: integer
+      result:
+        items:
+          $ref: '#/definitions/form_resp.LearningContentItem'
+        type: array
+    type: object
+  form_resp.LearningResultResp:
+    properties:
+      count:
+        description: 人数
+        type: integer
+      student_info:
+        description: 学生信息
+        items:
+          $ref: '#/definitions/form_resp.StudentItem'
+        type: array
+    type: object
+  form_resp.NoticeItem:
+    properties:
+      count:
+        description: 通知数量
+        type: integer
+      type:
+        description: 通知类型 0-签到/1-课堂讨论/2-课后练习
+        type: integer
+    type: object
+  form_resp.NoticeResp:
+    properties:
+      count:
+        type: integer
+      result:
+        items:
+          $ref: '#/definitions/form_resp.NoticeItem'
+        type: array
+    type: object
+  form_resp.RegisterResultResp:
+    properties:
+      count:
+        description: 人数
+        type: integer
+      student_info:
+        description: 学生信息
+        items:
+          $ref: '#/definitions/form_resp.StudentItem'
+        type: array
+    type: object
   form_resp.StatusResp:
     properties:
       status:
         description: 基本状态(string)
+        type: string
+    type: object
+  form_resp.StudentItem:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  form_resp.TalkInfoResp:
+    properties:
+      result:
+        description: 讨论结果
+        items:
+          $ref: '#/definitions/form_resp.UserItem'
+        type: array
+      topic:
+        description: 讨论话题
+        type: string
+    type: object
+  form_resp.UserInfoResp:
+    properties:
+      class:
+        description: 班级
+        type: integer
+      grade:
+        description: 年级
+        type: integer
+      last_login_time:
+        description: 最近登陆时间
+        type: string
+      login_time:
+        description: 注册时间
+        type: string
+      role:
+        description: 用户角色
+        type: integer
+      user_id:
+        description: 学生学号/教师工号
+        type: string
+      user_name:
+        description: 用户名
+        type: string
+    type: object
+  form_resp.UserItem:
+    properties:
+      talk_info:
+        description: 讨论信息
+        type: string
+      user_id:
+        description: 用户id
+        type: string
+      user_name:
+        description: 用户名
+        type: string
+    type: object
+  form_resp.UserPasswordResp:
+    properties:
+      password:
+        description: 用户密码
         type: string
     type: object
 info:
@@ -89,7 +559,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: create user
+      description: user login
       parameters:
       - description: request data
         in: body
@@ -109,6 +579,29 @@ paths:
       summary: 登录
       tags:
       - common
+  /auth/logout/:
+    post:
+      consumes:
+      - application/json
+      description: user logout
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 基础接口 - 用户登出
+      tags:
+      - common
   /auth/verifycode/:
     get:
       consumes:
@@ -126,7 +619,416 @@ paths:
       summary: 基础接口 - 获取验证码
       tags:
       - common
+  /v1/course/:
+    delete:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: delete course
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.DeleteCourseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除课程
+      tags:
+      - course
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: course list
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CourseListReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.CourseListResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 新建课程
+      tags:
+      - course
+  /v1/course/update/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: update course info
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.UpdateCourseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑课程信息
+      tags:
+      - course
+  /v1/exercises/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create exercises
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateExercisesReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建课后练习
+      tags:
+      - exercises
+  /v1/exercises/do/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: exercises
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.ExercisesReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.ExercisesResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 完成课后练习
+      tags:
+      - exercises
+  /v1/learning_content/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: learning list
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.LearningContentListReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.LearningContentListResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 学习内容列表
+      tags:
+      - learning
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: delete course
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateLearningContentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 新增学习内容
+      tags:
+      - learning
+  /v1/learning_content/learning/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: learning
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.LearningReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 进入学习
+      tags:
+      - learning
+  /v1/learning_content/result/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: get learning result
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.LearningResultReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.LearningResultResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 查看学习情况
+      tags:
+      - learning
+  /v1/notice/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: notice
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.NoticeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.NoticeResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 通知
+      tags:
+      - notice
+  /v1/register/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create register
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateRegisterReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建签到任务
+      tags:
+      - register
+  /v1/register/do:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: register
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.RegisterReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 学生参与签到
+      tags:
+      - register
+  /v1/register/result/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: register result
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.RegisterResultReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.RegisterResultResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 签到结果
+      tags:
+      - register
+  /v1/talk/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: get talk info
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.TalkInfoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.TalkInfoResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取讨论话题详情
+      tags:
+      - talk
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create talk
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateTalkReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建讨论话题
+      tags:
+      - talk
+  /v1/talk/do/:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: join talk
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.TalkReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 参与讨论
+      tags:
+      - talk
   /v1/user/:
+    get:
+      consumes:
+      - application/json
+      description: get user info
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.UserInfoReq'
+      - description: authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.UserInfoResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 用户管理
     post:
       consumes:
       - application/json
@@ -153,6 +1055,64 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 创建用户
+      tags:
+      - 用户管理
+  /v1/user/change_password/:
+    post:
+      consumes:
+      - application/json
+      description: change user password
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.ChangePasswordReq'
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改账户密码
+      tags:
+      - 用户管理
+  /v1/user/password/:
+    get:
+      consumes:
+      - application/json
+      description: get user password
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.UserPasswordReq'
+      - description: authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.UserPasswordResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户密码
       tags:
       - 用户管理
 swagger: "2.0"
