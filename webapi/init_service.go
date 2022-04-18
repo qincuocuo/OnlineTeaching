@@ -27,6 +27,7 @@ func InitService() error {
 	if err = cache.RedisInitPool(config.IrisConf.Redis); err != nil {
 		return errors.WithStack(err)
 	}
+
 	//初始化SysToken，Jwt防重放
 	//if err = jwts.InitSysToken(); err != nil {
 	//	return errors.WithStack(err)
