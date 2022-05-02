@@ -1,0 +1,241 @@
+// https://github.com/ElemeFE/element/issues/10308
+
+.el-table th.is-leaf {
+  padding: 8px 0;
+  background-color: @background-color-base !important;
+}
+
+.el-table th.is-sortable {
+  padding: 3px;
+}
+
+.el-table th:hover {
+  background-color: #e7edf4;
+}
+.el-table th.single-choice .cell {
+  display: none;
+}
+
+.el-table th > .cell {
+  color: #333;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.el-table .caret-wrapper {
+  left: 2px;
+}
+
+.el-table .sort-caret {
+  transform: scale(0.8);
+}
+
+.el-table .sort-caret.ascending {
+  top: 7px;
+}
+
+.el-table th.is-sortable.ascending,
+.el-table th.is-sortable.descending {
+  background-color: #e7edf4;
+}
+
+.el-table__body td {
+  padding: 0;
+  height: 40px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent !important;
+  border-bottom-color: @table-border-color;
+  font-size: 13px;
+  color: #333;
+}
+.el-table--scrollable-x .el-table__body-wrapper {
+  overflow: auto !important;
+}
+
+.el-table .el-table__row.current-row {
+  td:first-child::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #5383ed;
+  }
+}
+
+.el-table__fixed-right {
+  td::before {
+    display: none;
+  }
+}
+
+.el-table__fixed::before,
+.el-table__fixed-right::before {
+  display: none;
+}
+.el-table-fixed-column--right {
+}
+
+.n-table--border {
+  border-width: 0;
+}
+
+// 右侧边线
+.n-table--border::after {
+  display: none;
+}
+
+// 底部边线
+.n-table--border::before {
+  display: none;
+}
+
+// 分页
+.p-contianer {
+  justify-content: end;
+  position: relative;
+  background-color: white;
+  height: 44px;
+  border-top: 1px solid @table-border-color;
+
+  .p-bar {
+    float: right;
+    margin: 0px 100px 0 0;
+  }
+}
+
+// 头部为白色 不加粗的表风格
+.el-table-header--white {
+  th {
+    border-right-width: 0;
+    background-color: white !important;
+    .cell {
+      font-size: 13px;
+      font-weight: normal;
+      font-weight: bold;
+    }
+    &:hover {
+      border-right-width: 1px;
+    }
+  }
+
+  .el-table-column--selection .cell {
+    padding-right: 14px !important;
+  }
+}
+
+.el-table-column--selection .cell {
+  padding-left: 12px !important;
+}
+
+.el-table--border .el-table__inner-wrapper tr:first-child td:first-child{
+  border-left: 0;
+}
+
+.table-visit--underline {
+  color: #2362fb !important;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.table-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-btn-box {
+  display: inline-block;
+  & + .table-btn-box {
+    margin-left: 12px;
+  }
+}
+
+.filter-container {
+  .form-create {
+    .el-col {
+      flex: unset;
+      .el-form-item {
+        margin-bottom: 8px;
+        .el-input,
+        .el-select,
+        .el-cascader,
+        .el-autocomplete {
+          width: 100%;
+          min-width: 220px;
+        }
+        .el-date-editor {
+          width: 220px;
+        }
+      }
+    }
+  }
+}
+.filter-search-container {
+    .el-form-item {
+      margin-bottom: 8px;
+      margin-right: 0;
+
+      .el-input,
+      .el-select,
+      .el-cascader,
+      .el-autocomplete {
+        width: 100%;
+        min-width: 200px;
+      }
+      .el-form-item__content {
+        min-width: 220px;
+      }
+      .el-date-editor {
+        width: 220px;
+      }
+    }
+}
+
+.query-add-btns-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0 8px;
+  .add-btns {
+  }
+  .query-btns {
+  }
+  .el-button {
+    width: 80px;
+  }
+}
+
+.create-popup-container {
+  .form-create,
+  .el-form {
+    .el-col {
+      flex: 0 0 50%;
+      .el-form-item {
+        display: block;
+        padding: 12px 12px 0;
+        margin-bottom: 0px;
+        .el-input,
+        .el-select,
+        .el-cascader,
+        .el-autocomplete,
+        .el-date-editor,
+        .el-input-number {
+          width: 100%;
+        }
+        .fuzzy-input .el-input__inner {
+          cursor: text;
+        }
+      }
+    }
+    .el-col-48,
+    .creat-col-24 {
+      flex: 0 0 100%;
+    }
+  }
+}

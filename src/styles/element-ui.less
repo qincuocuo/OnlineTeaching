@@ -1,0 +1,208 @@
+//to reset element-ui default css
+// .el-upload {
+//   input[type="file"] {
+//     display: none !important;
+//   }
+// }
+
+// .el-upload__input {
+//   display: none;
+// }
+
+// //暂时性解决diolag 问题 https://github.com/ElemeFE/element/issues/2461
+// .el-dialog {
+//   transform: none;
+//   left: 0;
+//   position: relative;
+//   margin: 0 auto;
+// }
+
+// //element ui upload
+// .upload-container {
+//   .el-upload {
+//     width: 100%;
+//     .el-upload-dragger {
+//       width: 100%;
+//       height: 200px;
+//     }
+//   }
+// }
+
+// /** checkbox 更改 */
+// .el-checkbox__label {
+//   font-size: 13px;
+//   color: #333333;
+// }
+
+// .el-checkbox__input.is-checked+.el-checkbox__label {
+//   color: #333333;
+// }
+
+.el-main {
+  padding: 8px;
+}
+
+.el-input .el-input__inner {
+  padding: 0 8px;
+  line-height: 1px;
+}
+
+.el-textarea .el-textarea__inner {
+  padding: 5px 8px;
+}
+
+.el-radio .el-radio__label {
+  padding-left: 8px;
+}
+
+.el-checkbox .el-checkbox__label {
+  padding-left: 8px;
+}
+.el-date-editor--date .el-input__inner {
+  padding: 0 31px;
+}
+.el-autocomplete__popper.el-autocomplete__no-select {
+  .el-autocomplete-suggestion__list li {
+    pointer-events: none;
+  }
+}
+
+.el-input .el-input__inner::-webkit-outer-spin-button,
+.el-input .el-input__inner::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+.el-input .el-input__inner[type="number"] {
+  -moz-appearance: textfield;
+}
+.el-input-number {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    display: none;
+  }
+}
+
+.el-button--default:not(.el-button--primary):not(.el-button--text) {
+  color: var(--el-text-color-regular);
+}
+.el-button--primary,
+.el-button--primary:focus:not(.el-button--primary:hover) {
+  color: white;
+  background: var(--el-color-primary);
+}
+.el-button--text,
+.el-button--text:focus:not(.el-button--text:hover) {
+  color: var(--el-color-primary);
+}
+
+.el-message {
+  top: 36px !important;
+  z-index: 9999999999999999 !important;
+}
+
+// 参考 https://blog.csdn.net/HZKang/article/details/90447373
+// body .el-table th.gutter {
+//   display: table-cell !important;
+// }
+
+// body .el-table colgroup.gutter {
+//   display: table-cell !important;
+// }
+
+table {
+  width: 100% !important;
+}
+
+// 弹窗样式
+.el-dialog__footer {
+  padding: 10px !important;
+  background-color: #f7f8fa;
+  border-top: 1px solid @border-color-base;
+}
+
+.el-dialog__close {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.el-dialog__title {
+  font-weight: 600 !important;
+}
+
+// 消息框
+.el-message-box__title {
+  font-weight: 600 !important;
+}
+
+.el-message-box__close {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.el-message-box {
+  padding: 0 !important;
+}
+
+.el-message-box__btns {
+  padding: 8px 15px !important;
+  background-color: #f7f8fa;
+  border-top: 1px solid @border-color-base;
+}
+
+.el-message-box__content {
+  padding-bottom: 20px !important;
+}
+
+.el-checkbox .el-checkbox__label,
+.el-checkbox__input.is-checked + .el-checkbox__label,
+.el-radio__input.is-checked + .el-radio__label,
+.el-radio .el-radio__label {
+  color: #333 !important;
+}
+.el-upload-list__item {
+  transition: none !important;
+}
+
+.el-menu span {
+  user-select: none;
+}
+
+// 修改 el-cascader 点击文本区域可选中
+.el-cascader-panel {
+  .el-radio {
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    position: absolute;
+    right: 0;
+  }
+  .is-disabled {
+    cursor: not-allowed;
+  }
+  .el-radio__input {
+    visibility: hidden;
+  }
+}
+
+// 去除焦点时的蓝色边框
+* :focus {
+  outline: none;
+}
+.el-pagination {
+  * {
+    font-size: 12px !important;
+  }
+
+  .number.active {
+    list-style-position: inside;
+    border: 1px solid @color-primary;
+    color: @color-primary !important;
+    background-color: #f4f4f5 !important;
+  }
+}
+
+.el-menu {
+  border-right-width: 0;
+}
+.el-menu-item:hover {
+  background-color: hsla(0, 0%, 100%, 0.1) !important;
+}

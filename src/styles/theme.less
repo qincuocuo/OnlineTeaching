@@ -1,0 +1,80 @@
+/** color */
+@color-primary: #2362fb; // 主色调蓝色
+@color-white: #ffffff;
+@color-black: #000000;
+
+/** font */
+@font-size-base: 14px;
+@font-size-small: 12px;
+@font-size-large: 18px;
+@color-text-primary: #333333;
+@color-text-regular: #666666;
+@color-text-secondary: #999999;
+@color-text-placeholder: #c0c4cc;
+
+/** shadow */
+@box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+@box-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.12);
+@box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+/** backgroud */
+@backgroud: #f5f6f9;
+@background-color-base: #f6f8fa;
+
+/** border */
+@border-color-base: #e6e6e6;
+@border-radius-base: 4px;
+@border-radius-small: 2px;
+@border-line-color: #e6e6e6;
+@focus-border: @color-primary;
+
+/** table */
+@table-border-color: @border-color-base;
+
+// the :export directive is the magic sauce for webpack
+// https://programmer.ink/think/how-does-javascript-share-variables-with-sass-less-and-css.html
+:export {
+  colorPrimary: @color-primary;
+}
+
+/*状态图标*/
+.status-success,
+.status-error,
+.status-warning,
+.status-normal,
+.status-brand {
+  position: relative;
+  padding-left: 14px;
+}
+
+.status-success::before,
+.status-error::before,
+.status-warning::before,
+.status-normal::before,
+.status-brand::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #11b45a;
+}
+
+.status-error::before {
+  background-color: #e02020;
+}
+
+.status-warning::before {
+  background-color: #eab62a;
+}
+
+.status-brand::before {
+  background-color: var(--themeColor);
+}
+
+.status-normal::before {
+  background-color: #bababa;
+}
