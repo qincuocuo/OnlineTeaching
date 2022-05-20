@@ -41,7 +41,7 @@ func (u UserController) UserInfo(ctx *wrapper.Context) {
 }
 
 // UserPassword
-// @Summary 获取用户密码
+// @Summary 忘记密码
 // @Description get user password
 // @Tags 用户管理
 // @Accept json

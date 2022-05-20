@@ -30,21 +30,21 @@ func UserWebTokenIsExists(ctx context.Context, uid int) (isExist bool, err error
 	return
 }
 
-func SetUserLoginLock(addr, username string, lockTm int32) {
+func SetUserLoginLock(addr, userId string, lockTm int32) {
 	var count int
-	countStr, _ := cache.RedisCli.Get(cache.RdxUserLock(addr, username))
+	countStr, _ := cache.RedisCli.Get(cache.RdxUserLock(addr, userId))
 	count, _ = strconv.Atoi(countStr)
 	count++
-	_, _ = cache.RedisCli.SetEx(cache.RdxUserLock(addr, username), count, lockTm*60)
+	_, _ = cache.RedisCli.SetEx(cache.RdxUserLock(addr, userId), count, lockTm*60)
 }
 
-func GetUserLoginLock(addr, username string) (count int) {
-	countStr, _ := cache.RedisCli.Get(cache.RdxUserLock(addr, username))
+func GetUserLoginLock(addr, userId string) (count int) {
+	countStr, _ := cache.RedisCli.Get(cache.RdxUserLock(addr, userId))
 	count, _ = strconv.Atoi(countStr)
 	return
 }
-func RemoveUserLoginLock(addr, username string) {
-	_ = cache.RedisCli.Del(cache.RdxUserLock(addr, username))
+func RemoveUserLoginLock(addr, userId string) {
+	_ = cache.RedisCli.Del(cache.RdxUserLock(addr, userId))
 }
 
 func SetUserPasswordCheckLock(addr string, userRole int32, lockTm int32) {

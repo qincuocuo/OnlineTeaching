@@ -3,7 +3,7 @@ package form_resp
 // UserInfoResp 获取用户信息
 type UserInfoResp struct {
 	UserId        string `json:"user_id"`         //学生学号/教师工号
-	Role          int    `json:"role"`            //用户角色
+	Role          int    `json:"role"`            //用户角色 1-老师、2-学生
 	UserName      string `json:"user_name"`       //用户名
 	Grade         int    `json:"grade"`           //年级
 	Class         int    `json:"class"`           //班级

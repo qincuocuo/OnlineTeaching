@@ -26,7 +26,7 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.PasswordNotConfirm, 0)
 		return nil
 	}
-	existQuery := bson.M{"username": req.Username, "role": req.Role}
+	existQuery := bson.M{"user_id": req.UserId}
 	if mongo.User.IsExist(traceCtx, existQuery) {
 		support.SendApiErrorResponse(ctx, support.UserIsExist, 0)
 		return nil
@@ -37,14 +37,14 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.PasswordStrengthFailed, 0)
 		return nil
 	}
-
-	//newUid := mongo.User.GetMaxUid(traceCtx)
+	newUid := mongo.User.GetMaxUid(traceCtx)
 	// 创建账户
 	userDoc := models.User{
 		ID:              bson.NewObjectId(),
-		//UID:             newUid,
 		Role:            req.Role,
 		UserName:        req.Username,
+		UID:             newUid,
+		UserId:          req.UserId,
 		Password:        password.MakePassword(req.Password),
 		LastPwdChangeTm: time.Now(),
 		LastLoginTm:     time.Now(),
@@ -57,45 +57,83 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.CreateUserFailed, 0)
 		return nil
 	}
-	//TOOD 创建用户HCL规范
-	//var respDoc models.User
-	//if respDoc, err = mongo.User.Get(traceCtx, newUid); err != nil {
-	//	mlog.WithContext(traceCtx).Error("create user failed", zap.Error(err))
-	//	support.SendApiErrorResponse(ctx, support.CreateUserFailed, 0)
-	//	return nil
-	//}
-	//resp = form_json.UserResp{
-	//	ID:               respDoc.ID.Hex(),
-	//	UID:              respDoc.UID,
-	//	Enable:           respDoc.Enable,
-	//	UserType:         respDoc.UserType,
-	//	UserName:         respDoc.UserName,
-	//	Password:         respDoc.Password,
-	//	PasswordStrength: respDoc.PasswordStrength,
-	//	Mail:             respDoc.Mail,
-	//	Mobile:           respDoc.Mobile,
-	//	LastLoginIp:      respDoc.LastLoginIp,
-	//	LastPwdChangeTm:  respDoc.LastPwdChangeTm,
-	//	LastLoginTm:      respDoc.LastLoginTm,
-	//	InsertTm:         respDoc.InsertTm,
-	//	UpdateTm:         respDoc.UpdateTm,
-	//	OpenID:           respDoc.OpenID,
-	//}
 	support.SendApiResponse(ctx, resp, "")
 	return
 }
 
 // UserInfoHandler 获取用户信息
 func UserInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.UserInfoReq)
+	var userDoc models.User
+	userDoc, err = mongo.User.FindByUserId(traceCtx, req.UserId)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return nil
+	}
+	resp := form_resp.UserInfoResp{
+		UserId:        userDoc.UserId,
+		Role:          userDoc.Role,
+		UserName:      userDoc.UserName,
+		Grade:         userDoc.Grade,
+		Class:         userDoc.Class,
+		LoginTime:     time.Now().String(),
+		LastLoginTime: userDoc.LastLoginTm.String(),
+	}
+	support.SendApiResponse(ctx, resp, "success")
 	return nil
 }
 
-// UserPasswordHandler 获取账户密码
+// UserPasswordHandler 忘记密码
 func UserPasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.UserPasswordReq)
+	if !utils.String.Compare(req.Password, req.Confirm) {
+		support.SendApiErrorResponse(ctx, support.PasswordNotConfirm, 0)
+		return nil
+	}
+	query := bson.M{"user_id": req.UserId, "username": req.UserName, "role": req.Role}
+	_, err = mongo.User.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return nil
+	}
+	upset := bson.M{"password": password.MakePassword(req.Password)}
+	err = mongo.User.Update(traceCtx, query, upset)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UpdatePasswordFailed, 0)
+		return nil
+	}
+
+	resp := form_resp.UserPasswordResp{
+		Password: req.Password,
+	}
+	support.SendApiResponse(ctx, resp, "success")
 	return nil
 }
 
 // ChangePasswordHandler 修改账户密码
 func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.ChangePasswordReq)
+	var userDoc models.User
+	userDoc, err = mongo.User.FindByUserId(traceCtx, req.UserId)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return nil
+	}
+	if !password.CheckPassword(req.Password, userDoc.Password) {
+		support.SendApiErrorResponse(ctx, support.PasswordFailed, 0)
+		return nil
+	}
+	query := bson.M{"user_id": req.UserId}
+	upset := bson.M{"password": req.NewPassword}
+	err = mongo.User.Update(traceCtx, query, upset)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UpdatePasswordFailed, 0)
+		return nil
+	}
+	resp := form_resp.StatusResp{Status: "ok"}
+	support.SendApiResponse(ctx, resp, "success")
 	return nil
 }

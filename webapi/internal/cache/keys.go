@@ -24,8 +24,8 @@ func RdxCaptchaKey(id string) string {
 
 // RdxUserLock 用户锁定表(用于错误次数判定)
 //类型: string
-func RdxUserLock(addr, username string) string {
-	return "user:lock:" + addr + ":" + username
+func RdxUserLock(addr, userId string) string {
+	return "user:lock:" + addr + ":" + userId
 }
 
 // RdxPasswordCheckLock 用户密码校验锁定表(用于错误次数判定)

@@ -11,4 +11,5 @@ func RegisterCourseRouter(party router.Party) {
 	party.Handle("DELETE", "/", wrapper.Handler(controller.CourseController{}.DeleteCourse)) //删除课程
 	party.Handle("POST", "/update", wrapper.Handler(controller.CourseController{}.UpdateCourse)) //编辑课程信息
 	party.Handle("GET","/",wrapper.Handler(controller.CourseController{}.CourseList)) //获取课程列表
+	party.Handle("POST", "/enter", wrapper.Handler(controller.CourseController{}.EnterCourse)) //加入课程
 }

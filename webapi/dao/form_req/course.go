@@ -1,14 +1,14 @@
 package form_req
 
 type CreateCourseReq struct {
-	UserId     int    `json:"user_id"`     // 教师工号
+	UserId     string `json:"user_id"`     // 教师工号
 	CourseName string `json:"course_name"` // 课程名称
 	Grade      int    `json:"grade"`       // 年级
 	Class      int    `json:"class"`       // 班级
 }
 
 type CourseListReq struct {
-	UserId              int    `json:"user_id"`               // 教师工号
+	UserId              string `json:"user_id"`               // 教师工号/学生学号
 	Grade               int    `json:"grade"`                 // 年级
 	Class               int    `json:"class"`                 // 班级
 	CreateTm            string `json:"create_tm"`             // 创建时间
@@ -21,7 +21,7 @@ type CourseListReq struct {
 }
 
 type UpdateCourseReq struct {
-	UserId     int    `json:"user_id"`     // 教师工号
+	UserId     string `json:"user_id"`     // 教师工号
 	CourseId   int    `json:"course_id"`   // 课程id
 	CourseName string `json:"course_name"` // 课程名称
 	Grade      int    `json:"grade"`       // 年级
@@ -29,6 +29,11 @@ type UpdateCourseReq struct {
 }
 
 type DeleteCourseReq struct {
-	UserId   int `json:"user_id"`   // 教师工号
-	CourseId int `json:"course_id"` // 课程id
+	UserId   string `json:"user_id"`   // 教师工号
+	CourseId int    `json:"course_id"` // 课程id
+}
+
+type EnterCourseReq struct {
+	CourseId int    `json:"course_id"` //课程id
+	UserId   string `json:"user_id"`   //学生学号
 }

@@ -3,15 +3,22 @@ package mongo
 import (
 	"common/models"
 	"context"
+	"github.com/globalsign/mgo/bson"
 	"webapi/internal/db"
 	"webapi/middleware/tracking"
-
-	"github.com/globalsign/mgo/bson"
 )
 
 type user struct{}
 
 var User user
+
+func (user) FindOne(ctx context.Context, query bson.M) (userDoc models.User, err error) {
+	dbName := userDoc.CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	_, err = db.MongoCli.FindOne(dbName, query, &userDoc)
+	return
+}
 
 func (user) IsExist(ctx context.Context, query bson.M) bool {
 	var userDoc []models.User
@@ -33,6 +40,14 @@ func (user) Get(ctx context.Context, uid int) (userDoc models.User, err error) {
 	return
 }
 
+func (user) Update(ctx context.Context, query bson.M, upset bson.M) (err error) {
+	dbName := (&models.User{}).CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	err = db.MongoCli.Update(dbName, query, upset, false)
+	return
+}
+
 func (user) Create(ctx context.Context, user models.User) (err error) {
 	dbName := user.CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, user)
@@ -44,6 +59,15 @@ func (user) Create(ctx context.Context, user models.User) (err error) {
 func (user) GetInfo(ctx context.Context, uid int) (userDoc models.User, err error) {
 	dbName := userDoc.CollectName()
 	query := bson.M{"uid": uid}
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	_, err = db.MongoCli.FindOne(dbName, query, &userDoc)
+	return
+}
+
+func (user) FindByUserId(ctx context.Context, id string) (userDoc models.User, err error) {
+	dbName := userDoc.CollectName()
+	query := bson.M{"user_id": id}
 	span, _ := tracking.DbTracking(ctx, dbName, query)
 	defer span.End()
 	_, err = db.MongoCli.FindOne(dbName, query, &userDoc)

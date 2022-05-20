@@ -7,7 +7,7 @@ type CreateRegisterReq struct {
 	CourseId          int       `json:"course_id"`           // 课程号
 	LearningContentId int       `json:"learning_content_id"` // 学习内容id
 	CreateTm          time.Time `json:"create_tm"`           // 创建时间
-	RegisterTm        time.Time `json:"register_tm"`         // 签到时间限制，默认为2分钟
+	RegisterTm        int       `json:"register_tm"`         // 签到时间限制，默认为2分钟
 }
 
 type RegisterResultReq struct {
