@@ -1,6 +1,11 @@
 package controller
 
-import "webapi/internal/wrapper"
+import (
+	"webapi/dao/form_req"
+	"webapi/internal/wrapper"
+	"webapi/service"
+	"webapi/support"
+)
 
 type Register struct {
 }
@@ -15,7 +20,9 @@ type Register struct {
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/register/ [post]
 // @Security ApiKeyAuth
-func (r *Register) CreateRegister(ctx *wrapper.Context) {}
+func (r *Register) CreateRegister(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.CreateRegisterHandler, true, form_req.CreateRegisterReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
 
 // RegisterResult
 // @Summary 签到结果
@@ -39,4 +46,6 @@ func (r *Register) RegisterResult(ctx *wrapper.Context) {}
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/register/do [post]
 // @Security ApiKeyAuth
-func (r *Register) Register(ctx *wrapper.Context) {}
+func (r *Register) Register(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.RegisterHandler, true, form_req.RegisterReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}

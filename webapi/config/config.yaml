@@ -20,15 +20,15 @@ Log:
   IsStdOut: yes
 
 Mongodb:
-  Host: 192.168.30.75
+  Host: 192.168.130.50
   Port: 27017
   User: sun
   Passwd: sun#sun
   DbName: db_sun
 
 Redis:
-  RedisHost: 192.168.30.75:6379
-  RedisPasswd: sun@sun
+  RedisHost: 192.168.130.50:6379
+  RedisPasswd: sun@edu
   SubChannel: route.srv
 
 Tracking:

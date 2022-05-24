@@ -1,8 +1,9 @@
 package models
 
 type LearningContent struct {
-	Id            int64    `json:"id"`
-	Title         string   `json:"title"`          // 标题
+	ContentId     int      `json:"content_id"`     //学习内容id
+	CourseId      int      `json:"course_id"`      //课程id
+	Title         string   `json:"title"`          //标题
 	FinishedNum   int      `json:"finished_num"`   //已学人数
 	UnfinishedNum int      `json:"unfinished_num"` //未学人数
 	Finished      []string `json:"finished"`       //已学学生id
