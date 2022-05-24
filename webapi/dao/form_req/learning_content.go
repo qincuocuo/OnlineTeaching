@@ -15,7 +15,6 @@ type LearningContentListReq struct {
 }
 
 type LearningResultReq struct {
-	UserId    string `json:"user_id"`    // 教师工号
 	ContentId int    `json:"content_id"` // 学习内容id
 	Status    string `json:"status"`     // 学习状态 learned-已学习/unlearned-未学习
 }

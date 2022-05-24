@@ -63,7 +63,7 @@ func LoginHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		redis.RemoveUserLoginLock(ctx.Context.RemoteAddr(), req.UserId)
 	}
 	token, err := jwts.GenerateToken(&common.UserToken{
-		UserId: userDoc.UID,
+		UserId: userDoc.UserId,
 	}, jwts.JwtSecKey, false)
 	if err = redis.SetJwtWhitelist(token, int32(24*60*60)); err != nil {
 		mlog.Error("token add to whitelist failed", zap.Error(err))

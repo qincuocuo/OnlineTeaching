@@ -19,7 +19,7 @@ func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.CreateCourseReq)
 	resp := form_resp.StatusResp{}
-	query := bson.M{"manager_id": req.UserId}
+	query := bson.M{"manager_id": ctx.UserToken.UserId}
 	_, err = mongo.Course.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
@@ -27,7 +27,7 @@ func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	}
 	courseInfo := models.Course{
 		CourseId:    mongo.Course.GetMaxId(traceCtx),
-		ManagerId:   req.UserId,
+		ManagerId:   ctx.UserToken.UserId,
 		Name:        req.CourseName,
 		Grade:       req.Grade,
 		Class:       req.Class,
@@ -48,10 +48,10 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	req := reqBody.(*form_req.CourseListReq)
 	resp := form_resp.CourseListResp{}
 	query := bson.M{}
-	if len(req.UserId) == 10 {
-		query["student_id"] = bson.M{"$elemMatch": req.UserId}
+	if len(ctx.UserToken.UserId) == 10 {
+		query["student_id"] = bson.M{"$elemMatch": ctx.UserToken.UserId}
 	} else {
-		query["manager_id"] = req.UserId
+		query["manager_id"] = ctx.UserToken.UserId
 	}
 	if req.Grade > 0 {
 		query["grade"] = req.Grade
@@ -113,7 +113,7 @@ func UpdateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return nil
 	}
-	if courseDoc.ManagerId != req.UserId {
+	if courseDoc.ManagerId != ctx.UserToken.UserId {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
@@ -138,7 +138,7 @@ func DeleteCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return nil
 	}
-	if courseDoc.ManagerId != req.UserId {
+	if courseDoc.ManagerId != ctx.UserToken.UserId {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
@@ -163,7 +163,7 @@ func EnterCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		return nil
 	}
 	totalNum := courseDoc.TotalMember + 1
-	upset := bson.M{"$push": bson.M{"student_id": req.UserId}, "total_member": totalNum}
+	upset := bson.M{"$push": bson.M{"student_id": ctx.UserToken.UserId}, "total_member": totalNum}
 	err = mongo.Course.Update(traceCtx, query, upset)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.EnterCourseFailed, 0)

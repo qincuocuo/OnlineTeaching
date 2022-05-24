@@ -10,7 +10,6 @@ import (
 type User struct {
 	ID              bson.ObjectId `bson:"_id,omitempty"`
 	Role            int           `bson:"role"`               //用户角色 1-老师、2-学生
-	UID 			int           `bson:"uid"`                //用户id
 	UserId          string        `bson:"user_id"`            //学生学号/老师工号
 	UserName        string        `bson:"username"`           //用户名
 	Password        string        `bson:"password"`           //用户密码

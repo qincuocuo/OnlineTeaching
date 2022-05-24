@@ -31,7 +31,6 @@ func (u UserController) CreateUser(ctx *wrapper.Context) {
 // @Tags 用户管理
 // @Accept json
 // @Produce json
-// @Param auth body form_req.UserInfoReq true "request data"
 // @Success 200 {object} form_resp.UserInfoResp "response data"
 // @Router /v1/user/ [get]
 // @Security ApiKeyAuth

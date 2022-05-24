@@ -37,13 +37,11 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.PasswordStrengthFailed, 0)
 		return nil
 	}
-	newUid := mongo.User.GetMaxUid(traceCtx)
 	// 创建账户
 	userDoc := models.User{
 		ID:              bson.NewObjectId(),
 		Role:            req.Role,
 		UserName:        req.Username,
-		UID:             newUid,
 		UserId:          req.UserId,
 		Password:        password.MakePassword(req.Password),
 		LastPwdChangeTm: time.Now(),
@@ -64,9 +62,8 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 // UserInfoHandler 获取用户信息
 func UserInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
-	req := reqBody.(*form_req.UserInfoReq)
 	var userDoc models.User
-	userDoc, err = mongo.User.FindByUserId(traceCtx, req.UserId)
+	userDoc, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
 		return nil

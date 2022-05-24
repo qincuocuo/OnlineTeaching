@@ -797,15 +797,6 @@ const docTemplate = `{
                 "summary": "获取用户信息",
                 "parameters": [
                     {
-                        "description": "request data",
-                        "name": "auth",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/form_req.UserInfoReq"
-                        }
-                    },
-                    {
                         "type": "string",
                         "description": "authentication",
                         "name": "Authorization",
@@ -1047,10 +1038,6 @@ const docTemplate = `{
                 "search": {
                     "description": "根据课程名搜索",
                     "type": "string"
-                },
-                "user_id": {
-                    "description": "教师工号/学生学号",
-                    "type": "string"
                 }
             }
         },
@@ -1068,10 +1055,6 @@ const docTemplate = `{
                 "grade": {
                     "description": "年级",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1106,14 +1089,6 @@ const docTemplate = `{
                     "description": "课程id",
                     "type": "integer"
                 },
-                "file_name": {
-                    "description": "文件名",
-                    "type": "string"
-                },
-                "title": {
-                    "description": "学习标题",
-                    "type": "string"
-                },
                 "user_id": {
                     "description": "教师工号",
                     "type": "string"
@@ -1123,25 +1098,17 @@ const docTemplate = `{
         "form_req.CreateRegisterReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程号",
+                "content_id": {
+                    "description": "学习内容id",
                     "type": "integer"
                 },
                 "create_tm": {
                     "description": "创建时间",
                     "type": "string"
                 },
-                "learning_content_id": {
-                    "description": "学习内容id",
-                    "type": "integer"
-                },
                 "register_tm": {
                     "description": "签到时间限制，默认为2分钟",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1211,10 +1178,6 @@ const docTemplate = `{
                 "course_id": {
                     "description": "课程id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1224,10 +1187,6 @@ const docTemplate = `{
                 "course_id": {
                     "description": "课程id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "学生学号",
-                    "type": "string"
                 }
             }
         },
@@ -1288,20 +1247,16 @@ const docTemplate = `{
         "form_req.LearningReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程id",
-                    "type": "integer"
-                },
-                "file_path": {
-                    "description": "文件路径",
-                    "type": "string"
-                },
-                "learning_content_id": {
+                "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
                 },
+                "file_name": {
+                    "description": "文件名",
+                    "type": "string"
+                },
                 "user_id": {
-                    "description": "教师工号/学生学号",
+                    "description": "学生学号",
                     "type": "string"
                 }
             }
@@ -1309,20 +1264,12 @@ const docTemplate = `{
         "form_req.LearningResultReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程id",
-                    "type": "integer"
-                },
-                "learning_content_id": {
+                "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
                 },
                 "status": {
                     "description": "学习状态 learned-已学习/unlearned-未学习",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "教师工号",
                     "type": "string"
                 }
             }
@@ -1347,38 +1294,22 @@ const docTemplate = `{
         "form_req.RegisterReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程号",
-                    "type": "integer"
-                },
-                "learning_content_id": {
+                "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "学生学号",
-                    "type": "string"
                 }
             }
         },
         "form_req.RegisterResultReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程号",
-                    "type": "integer"
-                },
-                "learning_content_id": {
+                "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
                 },
                 "register_result": {
                     "description": "签到结果，unfinished-未签到/finished-已签到",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1442,19 +1373,6 @@ const docTemplate = `{
                 "grade": {
                     "description": "年级",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
-                }
-            }
-        },
-        "form_req.UserInfoReq": {
-            "type": "object",
-            "properties": {
-                "user_id": {
-                    "description": "学生学号/教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1586,6 +1504,10 @@ const docTemplate = `{
                 "content": {
                     "description": "学习内容",
                     "type": "string"
+                },
+                "content_id": {
+                    "description": "学习内容id",
+                    "type": "integer"
                 },
                 "file_path": {
                     "description": "文件路径",

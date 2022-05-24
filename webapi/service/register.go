@@ -30,7 +30,7 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
 		return nil
 	}
-	if courseDoc.ManagerId != req.UserId {
+	if courseDoc.ManagerId != ctx.UserToken.UserId {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
@@ -38,7 +38,7 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	var userList = make([]string, 0)
 	registerDoc := models.Register{
 		RegisterId: maxId,
-		ManagerId: req.UserId,
+		ManagerId: ctx.UserToken.UserId,
 		ContentId: req.ContentId,
 		Finished: userList,
 		Unfinished: userList,
@@ -72,7 +72,7 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
 		return nil
 	}
-	if !utils.IsContainInSlice(req.UserId, courseDoc.StudentId) {
+	if !utils.IsContainInSlice(ctx.UserToken.UserId, courseDoc.StudentId) {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}

@@ -39,7 +39,7 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 	}
 	var contentDoc []models.LearningContent
 	contentDoc, err = mongo.Content.FindSortByLimitAndSkip(traceCtx, query, req.Page, req.PageSize, sorter)
-	if err != nil {
+	if err != nil{
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
 	}
@@ -57,17 +57,6 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 }
 
 func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
-	traceCtx := ctx.Request().Context()
-	req := reqBody.(*form_req.CreateLearningContentReq)
-
-	// TOD:文件的key你填一下
-	file, fh, err := ctx.FormFile("fr != nil {
-	support
-}
-	if err ！=
-
-	resp := form_resp.StatusResp{Status: "ok"}
-	support.SendApiResponse(ctx, resp, "success")
 	return
 }
 
@@ -91,7 +80,7 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
 		return nil
 	}
-	if courseDoc.ManagerId != req.UserId {
+	if courseDoc.ManagerId != ctx.UserToken.UserId {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}

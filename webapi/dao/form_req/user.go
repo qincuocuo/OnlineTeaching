@@ -10,16 +10,14 @@ type CreateUserReq struct {
 	Class    int    `json:"class"`                         //班级
 }
 
-type UserInfoReq struct {
-	UserId string `json:"user_id"` //学生学号/教师工号
-}
+type UserInfoReq struct {}
 
 type UserPasswordReq struct {
 	UserId   string `json:"user_id"`   //学生学号/教师工号
 	Role     int    `json:"role"`      //用户角色
 	UserName string `json:"user_name"` //用户名
-	Password string `json:"password"` //新密码
-	Confirm string `json:"confirm"` //确认用户密码
+	Password string `json:"password"`  //新密码
+	Confirm  string `json:"confirm"`   //确认用户密码
 }
 
 type ChangePasswordReq struct {
