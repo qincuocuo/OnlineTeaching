@@ -1,7 +1,6 @@
 package service
 
 import (
-	"common/models"
 	"strings"
 	"webapi/common"
 	"webapi/dao/form_req"
@@ -12,6 +11,7 @@ import (
 	"webapi/internal/password"
 	"webapi/internal/wrapper"
 	"webapi/middleware/jwts"
+	"webapi/models"
 	"webapi/support"
 
 	"git.moresec.cn/moresec/go-common/mlog"
@@ -69,7 +69,7 @@ func LoginHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		mlog.Error("token add to whitelist failed", zap.Error(err))
 	}
 	resp = form_resp.AuthLoginResp{
-		Uid:           userDoc.UID,
+		UserId: userDoc.UserId,
 		Role:          userDoc.Role,
 		Authorization: token,
 	}

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"common/models"
 	"git.moresec.cn/moresec/go-common/mbase"
 	"git.moresec.cn/moresec/go-common/mlog"
 	"github.com/globalsign/mgo/bson"
@@ -12,6 +11,7 @@ import (
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
 	"webapi/internal/wrapper"
+	"webapi/models"
 	"webapi/support"
 )
 
