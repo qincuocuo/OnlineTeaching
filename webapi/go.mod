@@ -3,10 +3,8 @@ module webapi
 go 1.17
 
 require (
-	common/models v0.0.0-00010101000000-000000000000
-	git.moresec.cn/moresec/go-common v0.0.0-00010101000000-000000000000
+	git.moresec.cn/moresec/go-common v0.0.0-20220509031404-21413ec453ba
 	github.com/Shopify/sarama v1.29.0
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/iris-contrib/swagger/v12 v12.0.1
@@ -22,21 +20,16 @@ require (
 )
 
 require (
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/eapache/go-resiliency v1.2.0 // indirect
 	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.7.7 // indirect
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-logr/logr v1.2.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible // indirect
-	github.com/go-swagger/go-swagger v0.29.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/hashicorp/go-uuid v1.0.2 // indirect
@@ -48,17 +41,14 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/openzipkin/zipkin-go v0.2.5 // indirect
 	github.com/pierrec/lz4 v2.6.0+incompatible // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/sevlyar/go-daemon v0.1.5 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/swaggo/gin-swagger v1.4.2 // indirect
-	github.com/ugorji/go/codec v1.1.7 // indirect
-	github.com/urfave/cli/v2 v2.4.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.1 // indirect
 	go.opentelemetry.io/otel/exporters/zipkin v1.0.1 // indirect
 	go.opentelemetry.io/otel/internal/metric v0.27.0 // indirect
@@ -75,8 +65,6 @@ require (
 	github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53 // indirect
 	github.com/CloudyKit/jet/v3 v3.0.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/PuerkitoBio/purell v1.1.1 // indirect
-	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
@@ -132,9 +120,4 @@ require (
 	gopkg.in/ini.v1 v1.66.3 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 
-)
-
-replace (
-	common/models => ./../common/models/
-	git.moresec.cn/moresec/go-common => ../common/git.moresec.cn/moresec/go-common
 )

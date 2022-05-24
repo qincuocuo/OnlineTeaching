@@ -12,9 +12,6 @@ import (
 	"webapi/utils"
 
 	"github.com/globalsign/mgo/bson"
-
-	"git.moresec.cn/moresec/go-common/mlog"
-	"go.uber.org/zap"
 )
 
 // CreateUserHandler 创建用户
@@ -33,7 +30,6 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	passwordStrengthLevel := utils.Logic.GetPasswordStrength(req.Password)
 	if passwordStrengthLevel == 0 {
-		mlog.WithContext(traceCtx).Error("password too weak", zap.Error(err))
 		support.SendApiErrorResponse(ctx, support.PasswordStrengthFailed, 0)
 		return nil
 	}
@@ -51,7 +47,6 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 
 	if err = mongo.User.Create(traceCtx, userDoc); err != nil {
-		mlog.WithContext(traceCtx).Error("create user failed", zap.Error(err))
 		support.SendApiErrorResponse(ctx, support.CreateUserFailed, 0)
 		return nil
 	}
