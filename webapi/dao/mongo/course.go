@@ -1,12 +1,12 @@
 package mongo
 
 import (
-	"common/models"
 	"context"
 	"github.com/globalsign/mgo/bson"
 	"webapi/internal/db"
 	"webapi/internal/utils"
 	"webapi/middleware/tracking"
+	"webapi/models"
 )
 
 type course struct{}

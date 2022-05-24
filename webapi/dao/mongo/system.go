@@ -1,10 +1,10 @@
 package mongo
 
 import (
-	"common/models"
 	"context"
 	"webapi/internal/db"
 	"webapi/middleware/tracking"
+	"webapi/models"
 
 	"github.com/globalsign/mgo/bson"
 )

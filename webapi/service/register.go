@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/globalsign/mgo/bson"
+	"time"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
@@ -35,13 +36,16 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		return nil
 	}
 	maxId := mongo.Register.GetMaxId(traceCtx)
+	endTm := time.Now().Add(time.Duration(req.RegisterTm) * time.Second)
 	var userList = make([]string, 0)
 	registerDoc := models.Register{
 		RegisterId: maxId,
-		ManagerId: ctx.UserToken.UserId,
-		ContentId: req.ContentId,
-		Finished: userList,
-		Unfinished: userList,
+		ManagerId:  ctx.UserToken.UserId,
+		ContentId:  req.ContentId,
+		Finished:   userList,
+		Unfinished: courseDoc.StudentId,
+		CreateTime: time.Now(),
+		EndTime:    endTm,
 	}
 	err = mongo.Register.Create(traceCtx, registerDoc)
 	if err != nil {
@@ -53,15 +57,79 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	return
 }
 
-func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
-	req := reqBody.(*form_req.CreateRegisterReq)
+	req := reqBody.(*form_req.RegisterResultReq)
+	resp := form_resp.RegisterResultResp{}
 	query := bson.M{}
+	if req.RegisterId > 0 {
+		query["register_id"] = req.RegisterId
+	}
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
+	var registerDoc models.Register
+	registerDoc, err = mongo.Register.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.RegisterNotFount, 0)
+		return nil
+	}
+
+	if req.RegisterResult == "finished" {
+		resp.Count = len(registerDoc.Finished)
+		for _, item := range registerDoc.Finished {
+			var userDoc models.User
+			userDoc, err = mongo.User.FindByUserId(traceCtx, item)
+			if err != nil {
+				continue
+			}
+			msg := form_resp.StudentItem{
+				Id:   item,
+				Name: userDoc.UserName,
+			}
+			resp.StudentInfo = append(resp.StudentInfo, msg)
+		}
+	} else if req.RegisterResult == "unfinished" {
+		resp.Count = len(registerDoc.Unfinished)
+		for _, item := range registerDoc.Unfinished {
+			var userDoc models.User
+			userDoc, err = mongo.User.FindByUserId(traceCtx, item)
+			if err != nil {
+				continue
+			}
+			msg := form_resp.StudentItem{
+				Id:   item,
+				Name: userDoc.UserName,
+			}
+			resp.StudentInfo = append(resp.StudentInfo, msg)
+		}
+	}
+	support.SendApiResponse(ctx, resp, "success")
+	return
+}
+
+func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.RegisterReq)
+	query := bson.M{}
+	if req.RegisterId > 0 {
+		query["register_id"] = req.RegisterId
+	}
+	if req.ContentId > 0 {
+		query["content_id"] = req.ContentId
+	}
+	var registerDoc models.Register
+	registerDoc, err = mongo.Register.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.RegisterNotFount, 0)
+		return nil
+	}
+	if registerDoc.EndTime.Before(time.Now()) {
+		support.SendApiErrorResponse(ctx, support.RegisterExpired, 0)
+		return nil
+	}
 	var contentDoc models.LearningContent
-	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
+	contentDoc, err = mongo.Content.FindOne(traceCtx, bson.M{"content_id": req.ContentId})
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
@@ -76,7 +144,12 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
-
+	update := bson.M{"$push": bson.M{"finished": ctx.UserToken.UserId}, "$pull": bson.M{"unfinished": ctx.UserToken.UserId}}
+	err = mongo.Register.Update(traceCtx, query, update)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.JoinInRegisterFailed, 0)
+		return nil
+	}
 	resp := form_resp.StatusResp{Status: "ok"}
 	support.SendApiResponse(ctx, resp, "success")
 	return

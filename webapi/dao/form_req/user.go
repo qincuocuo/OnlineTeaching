@@ -10,8 +10,6 @@ type CreateUserReq struct {
 	Class    int    `json:"class"`                         //班级
 }
 
-type UserInfoReq struct {}
-
 type UserPasswordReq struct {
 	UserId   string `json:"user_id"`   //学生学号/教师工号
 	Role     int    `json:"role"`      //用户角色

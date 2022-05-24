@@ -1,11 +1,11 @@
 package mongo
 
 import (
-	"common/models"
 	"context"
 	"github.com/globalsign/mgo/bson"
 	"webapi/internal/db"
 	"webapi/middleware/tracking"
+	"webapi/models"
 )
 
 type user struct{}
@@ -83,12 +83,3 @@ func (user) FindByNameRole(ctx context.Context, name string, role int) (userDoc 
 	return
 }
 
-func (user) GetMaxUid(ctx context.Context) (uid int) {
-	var userDoc []models.User
-	dbName := (&models.User{}).CollectName()
-	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
-	defer span.End()
-	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &userDoc, 1, 0, "-uid")
-	uid = userDoc[0].UID + 1
-	return
-}

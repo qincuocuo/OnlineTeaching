@@ -18,7 +18,10 @@ const (
 	EnterCourseFailed  string = "加入课程失败"
 
 	GetLearningContentListFailed string = "获取学习内容信息失败"
-	GetCourseInfoFailed string = "根据学习内容获取课程信息失败"
+	GetCourseInfoFailed          string = "根据学习内容获取课程信息失败"
 
+	RegisterNotFount     string = "签到任务不存在"
 	CreateRegisterFailed string = "创建签到任务失败"
+	JoinInRegisterFailed string = "参与签到失败"
+	RegisterExpired      string = "签到任务已过期"
 )

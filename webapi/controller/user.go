@@ -36,7 +36,7 @@ func (u UserController) CreateUser(ctx *wrapper.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "authentication"
 func (u UserController) UserInfo(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.UserInfoHandler, true, &form_req.UserInfoReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.UserInfoHandler, false, nil, nil)
 }
 
 // UserPassword
