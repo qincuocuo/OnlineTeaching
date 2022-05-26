@@ -14,7 +14,7 @@ type Exercises struct{}
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/exercises/ [post]
 // @Security ApiKeyAuth
-func (e *Exercises) CreateExercises(ctx *wrapper.Context) {}
+func (e Exercises) CreateExercises(ctx *wrapper.Context) {}
 
 // Exercises
 // @Summary 完成课后练习
@@ -26,4 +26,4 @@ func (e *Exercises) CreateExercises(ctx *wrapper.Context) {}
 // @Success 200 {object} form_resp.ExercisesResp "response data"
 // @Router /v1/exercises/do/ [post]
 // @Security ApiKeyAuth
-func (e *Exercises) Exercises(ctx *wrapper.Context) {}
+func (e Exercises) Exercises(ctx *wrapper.Context) {}

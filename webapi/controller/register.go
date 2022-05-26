@@ -20,7 +20,7 @@ type Register struct {
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/register/ [post]
 // @Security ApiKeyAuth
-func (r *Register) CreateRegister(ctx *wrapper.Context) {
+func (r Register) CreateRegister(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.CreateRegisterHandler, true, form_req.CreateRegisterReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -34,7 +34,7 @@ func (r *Register) CreateRegister(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.RegisterResultResp "response data"
 // @Router /v1/register/result/ [get]
 // @Security ApiKeyAuth
-func (r *Register) RegisterResult(ctx *wrapper.Context) {
+func (r Register) RegisterResult(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.RegisterResultHandler, true, form_req.RegisterResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -48,6 +48,6 @@ func (r *Register) RegisterResult(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/register/do [post]
 // @Security ApiKeyAuth
-func (r *Register) Register(ctx *wrapper.Context) {
+func (r Register) Register(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.RegisterHandler, true, form_req.RegisterReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }

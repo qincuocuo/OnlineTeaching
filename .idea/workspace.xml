@@ -1,58 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1ba32dbd-44c0-42dd-b89d-6fc6c2c0c986" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/webapi/controller/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/form_req/auth.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/form_req/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/form_resp/common.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/form_resp/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/mongo/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/dao/redis/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/internal/password/password.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/internal/password/password_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/router/api/v1/active.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/router/api/v1/class.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/router/api/v1/exercises.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/router/api/v1/talk.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/router/api/v1/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/script/mongo_init.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/service/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/support/auth_message.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/utils/logic.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webapi/utils/string.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/cmd/request.log" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/cmd/request.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/common/const.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/common/const.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/common/user_token.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/common/user_token.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/config/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/config/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/config/meta.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/config/meta.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/dao/form_resp/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/dao/form_resp/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/docs/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/docs/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/docs/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/edu_sun.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/edu_sun.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/controller/exercises.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/exercises.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/controller/learning_content.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/learning_content.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/controller/notice.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/notice.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/controller/register.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/register.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/controller/talk.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/talk.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapi/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/init_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/init_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/middleware/jwts/jwts.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/middleware/jwts/jwts.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webapi/middleware/jwts/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/middleware/jwts/token.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/middleware/tracking/tracking.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/middleware/tracking/tracking.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/router/api/common/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/router/api/common/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/service/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/service/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/support/basic_message.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/support/basic_message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/AUTHORS" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/AUTHORS" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CODE_OF_CONDUCT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/HISTORY.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/HISTORY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CODE_OF_CONDUCT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="GOROOT" url="file://$USER_HOME$/sdk/go1.17.6" />
+  <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/webapi" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1653403860" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1653403859" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="pcjxzemu" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="26PX75fPO5DVLsxgEluWT6MAVZ1" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -64,13 +82,43 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.format.on.save.advertiser.fired" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/webapi" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.DirectoryMappings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="go build webapi/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="edu_sun" />
+      <working_directory value="$PROJECT_DIR$/webapi" />
+      <kind value="PACKAGE" />
+      <package value="webapi/cmd" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/webapi/cmd/webapi.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build webapi/cmd" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/webapi" />
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
   </component>
 </project>

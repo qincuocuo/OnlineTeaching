@@ -1,13 +1,12 @@
 package config
 
 import (
+	"git.moresec.cn/moresec/go-common/mlog/zaplog"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 
 	"git.moresec.cn/moresec/go-common/mlog"
 	"git.moresec.cn/moresec/go-common/mlog/conf"
-	"git.moresec.cn/moresec/go-common/mlog/zaplog"
-
-	"gopkg.in/yaml.v2"
 )
 
 var IrisConf Config
