@@ -14,4 +14,4 @@ type Notice struct{}
 // @Success 200 {object} form_resp.NoticeResp "response data"
 // @Router /v1/notice/ [get]
 // @Security ApiKeyAuth
-func (n *Notice) Notice(ctx *wrapper.Context) {}
+func (n Notice) Notice(ctx *wrapper.Context) {}

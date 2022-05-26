@@ -20,7 +20,7 @@ type LearningController struct {
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/learning_content/ [post]
 // @Security ApiKeyAuth
-func (l *LearningController) CreateLearningContent(ctx *wrapper.Context) {
+func (l LearningController) CreateLearningContent(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.CreateLearningContentHandler, true, form_req.CreateLearningContentReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -34,7 +34,7 @@ func (l *LearningController) CreateLearningContent(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.LearningContentListResp "response data"
 // @Router /v1/learning_content/ [get]
 // @Security ApiKeyAuth
-func (l *LearningController) LearningContentList(ctx *wrapper.Context) {
+func (l LearningController) LearningContentList(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.LearningContentListHandler, true, form_req.LearningContentListReq{PageSize: 10}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -48,7 +48,7 @@ func (l *LearningController) LearningContentList(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.LearningResultResp "response data"
 // @Router /v1/learning_content/result/ [get]
 // @Security ApiKeyAuth
-func (l *LearningController) LearningResult(ctx *wrapper.Context) {
+func (l LearningController) LearningResult(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.LearningResultHandler, true, form_req.LearningResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -62,5 +62,5 @@ func (l *LearningController) LearningResult(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/learning_content/learning/ [post]
 // @Security ApiKeyAuth
-func (l *LearningController) Learning(ctx *wrapper.Context) {
+func (l LearningController) Learning(ctx *wrapper.Context) {
 }
