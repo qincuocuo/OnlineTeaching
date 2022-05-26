@@ -79,6 +79,3 @@ func (c CourseController) DeleteCourse(ctx *wrapper.Context) {
 func (c CourseController) EnterCourse(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.EnterCourseHandler, true, &form_req.EnterCourseReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
-
-
-

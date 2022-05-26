@@ -1,12 +1,12 @@
 package jwts
 
 import (
-	"common/models"
 	"fmt"
 	"time"
 	"webapi/common"
 	"webapi/config"
 	"webapi/internal/db"
+	"webapi/models"
 	"webapi/utils"
 
 	mbase "git.moresec.cn/moresec/go-common/mbase/basic"
