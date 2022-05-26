@@ -17,8 +17,9 @@ const (
 	DeleteCourseFailed string = "删除课程失败"
 	EnterCourseFailed  string = "加入课程失败"
 
-	GetLearningContentListFailed string = "获取学习内容信息失败"
-	GetCourseInfoFailed          string = "根据学习内容获取课程信息失败"
+	LearningContentNotFound string = "章节不存在"
+	GetLearningContentListFailed string = "获取学习章节信息失败"
+	GetCourseInfoFailed          string = "根据学习章节获取课程信息失败"
 
 	RegisterNotFount     string = "签到任务不存在"
 	CreateRegisterFailed string = "创建签到任务失败"
@@ -26,4 +27,7 @@ const (
 	RegisterExpired      string = "签到任务已过期"
 
 	CreateTalkFailed string = "创建讨论失败"
+
+	CreateExercisesFailed string = "创建课后练习失败"
+	ExercisesNotExists string = "课后练习任务不存在"
 )

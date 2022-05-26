@@ -60,7 +60,7 @@ func (course) GetMaxId(ctx context.Context) (uid int) {
 	dbName := (&models.Course{}).CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
 	defer span.End()
-	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &courseDoc, 1, 0, "-uid")
+	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &courseDoc, 1, 0, "-course_id")
 	uid = courseDoc[0].CourseId + 1
 	return
 }

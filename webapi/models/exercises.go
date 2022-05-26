@@ -9,6 +9,7 @@ type Exercises struct {
 }
 
 type QuestionsItem struct {
+	Id       int      `bson:"id"`       //习题id
 	Type     int      `bson:"type"`     //0-选择 1-判断
 	Question string   `bson:"question"` //问题
 	Answer   string   `bson:"answer"`   //答案
