@@ -40,12 +40,12 @@ func (content) FindSortByLimitAndSkip(ctx context.Context, query bson.M, page in
 }
 
 func (content) GetMaxId(ctx context.Context) (uid int) {
-	var courseDoc []models.LearningContent
+	var contentDoc []models.LearningContent
 	dbName := (&models.LearningContent{}).CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
 	defer span.End()
-	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &courseDoc, 1, 0, "-uid")
-	uid = courseDoc[0].ContentId + 1
+	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &contentDoc, 1, 0, "-content_id")
+	uid = contentDoc[0].ContentId + 1
 	return
 }
 

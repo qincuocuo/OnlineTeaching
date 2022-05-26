@@ -8,5 +8,6 @@ import (
 
 func RegisterExercisesRouter(party router.Party) {
 	party.Handle("POST", "/", wrapper.Handler(controller.Exercises{}.CreateExercises))
+	party.Handle("GET", "/", wrapper.Handler(controller.Exercises{}.GetExercises))
 	party.Handle("POST", "/do/", wrapper.Handler(controller.Exercises{}.Exercises))
 }

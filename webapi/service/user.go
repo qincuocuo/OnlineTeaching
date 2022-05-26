@@ -35,7 +35,6 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	// 创建账户
 	userDoc := models.User{
-		ID:              bson.NewObjectId(),
 		Role:            req.Role,
 		UserName:        req.Username,
 		UserId:          req.UserId,
@@ -43,7 +42,6 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		LastPwdChangeTm: time.Now(),
 		LastLoginTm:     time.Now(),
 		InsertTm:        time.Now(),
-		UpdateTm:        time.Now(),
 	}
 
 	if err = mongo.User.Create(traceCtx, userDoc); err != nil {
@@ -119,7 +117,8 @@ func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		return nil
 	}
 	query := bson.M{"user_id": req.UserId}
-	upset := bson.M{"password": req.NewPassword}
+	newPwd := password.MakePassword(req.Password)
+	upset := bson.M{"password": newPwd, "last_pwd_change_tm": time.Now()}
 	err = mongo.User.Update(traceCtx, query, upset)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UpdatePasswordFailed, 0)

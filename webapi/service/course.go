@@ -48,10 +48,10 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	req := reqBody.(*form_req.CourseListReq)
 	resp := form_resp.CourseListResp{}
 	query := bson.M{}
-	if len(ctx.UserToken.UserId) == 10 {
-		query["student_id"] = bson.M{"$elemMatch": ctx.UserToken.UserId}
-	} else {
+	if ctx.UserToken.Role == 1 {
 		query["manager_id"] = ctx.UserToken.UserId
+	} else if ctx.UserToken.Role == 2 {
+		query["student_id"] = bson.M{"$elemMatch": ctx.UserToken.UserId}
 	}
 	if req.Grade > 0 {
 		query["grade"] = req.Grade
