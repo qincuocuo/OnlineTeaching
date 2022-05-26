@@ -36,8 +36,8 @@ func CreateTalkHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	talkDoc := models.Talk{
 		ContentId: req.ContentId,
-		Topic: req.Talk,
-		CreateTm: time.Now(),
+		Topic:     req.Talk,
+		CreateTm:  time.Now(),
 	}
 	err = mongo.Talk.Create(traceCtx, talkDoc)
 	if err != nil {
