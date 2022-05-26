@@ -24,4 +24,6 @@ const (
 	CreateRegisterFailed string = "创建签到任务失败"
 	JoinInRegisterFailed string = "参与签到失败"
 	RegisterExpired      string = "签到任务已过期"
+
+	CreateTalkFailed string = "创建讨论失败"
 )

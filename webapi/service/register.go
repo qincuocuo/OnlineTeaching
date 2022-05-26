@@ -6,7 +6,6 @@ import (
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
-	"webapi/internal/utils"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
@@ -35,11 +34,9 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
-	maxId := mongo.Register.GetMaxId(traceCtx)
 	endTm := time.Now().Add(time.Duration(req.RegisterTm) * time.Second)
 	var userList = make([]string, 0)
 	registerDoc := models.Register{
-		RegisterId: maxId,
 		ManagerId:  ctx.UserToken.UserId,
 		ContentId:  req.ContentId,
 		Finished:   userList,
@@ -62,9 +59,6 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	req := reqBody.(*form_req.RegisterResultReq)
 	resp := form_resp.RegisterResultResp{}
 	query := bson.M{}
-	if req.RegisterId > 0 {
-		query["register_id"] = req.RegisterId
-	}
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
@@ -112,9 +106,6 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.RegisterReq)
 	query := bson.M{}
-	if req.RegisterId > 0 {
-		query["register_id"] = req.RegisterId
-	}
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
@@ -128,19 +119,7 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.RegisterExpired, 0)
 		return nil
 	}
-	var contentDoc models.LearningContent
-	contentDoc, err = mongo.Content.FindOne(traceCtx, bson.M{"content_id": req.ContentId})
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
-		return nil
-	}
-	var courseDoc models.Course
-	courseDoc, err = mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
-		return nil
-	}
-	if !utils.IsContainInSlice(ctx.UserToken.UserId, courseDoc.StudentId) {
+	if registerDoc.ManagerId != ctx.UserToken.UserId {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}

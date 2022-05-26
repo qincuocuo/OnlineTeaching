@@ -10,11 +10,9 @@ type CreateRegisterReq struct {
 
 type RegisterResultReq struct {
 	ContentId      int    `json:"content_id"`      // 学习内容id
-	RegisterId     int    `json:"register_id"`     // 签到任务id
 	RegisterResult string `json:"register_result"` // 签到结果，unfinished-未签到/finished-已签到
 }
 
 type RegisterReq struct {
 	ContentId int `json:"content_id"` // 学习内容id
-	RegisterId int `json:"register_id"` //签到id
 }

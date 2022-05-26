@@ -1,6 +1,11 @@
 package controller
 
-import "webapi/internal/wrapper"
+import (
+	"webapi/dao/form_req"
+	"webapi/internal/wrapper"
+	"webapi/service"
+	"webapi/support"
+)
 
 type Talk struct{}
 
@@ -14,7 +19,9 @@ type Talk struct{}
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/talk/ [post]
 // @Security ApiKeyAuth
-func (t *Talk) CreateTalk(ctx *wrapper.Context) {}
+func (t *Talk) CreateTalk(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.CreateTalkHandler, true, form_req.CreateTalkReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
 
 // TalkInfo
 // @Summary 获取讨论话题详情
