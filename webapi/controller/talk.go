@@ -19,7 +19,7 @@ type Talk struct{}
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/talk/ [post]
 // @Security ApiKeyAuth
-func (t *Talk) CreateTalk(ctx *wrapper.Context) {
+func (t Talk) CreateTalk(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.CreateTalkHandler, true, form_req.CreateTalkReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
@@ -33,7 +33,7 @@ func (t *Talk) CreateTalk(ctx *wrapper.Context) {
 // @Success 200 {object} form_resp.TalkInfoResp "response data"
 // @Router /v1/talk/ [get]
 // @Security ApiKeyAuth
-func (t *Talk) TalkInfo(ctx *wrapper.Context) {}
+func (t Talk) TalkInfo(ctx *wrapper.Context) {}
 
 // Talk
 // @Summary 参与讨论
@@ -45,4 +45,4 @@ func (t *Talk) TalkInfo(ctx *wrapper.Context) {}
 // @Success 200 {object} form_resp.StatusResp "response data"
 // @Router /v1/talk/do/ [post]
 // @Security ApiKeyAuth
-func (t *Talk) Talk(ctx *wrapper.Context) {}
+func (t Talk) Talk(ctx *wrapper.Context) {}

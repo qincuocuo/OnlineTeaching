@@ -41,7 +41,6 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		Password:        password.MakePassword(req.Password),
 		LastPwdChangeTm: time.Now(),
 		LastLoginTm:     time.Now(),
-		InsertTm:        time.Now(),
 	}
 
 	if err = mongo.User.Create(traceCtx, userDoc); err != nil {
