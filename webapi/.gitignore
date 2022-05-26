@@ -28,7 +28,7 @@ frontend/src/.umi-production
 # vendor/
 
 ### Go Patch ###
-backend/vendor/
+vendor/
 /Godeps/
 
 ### macOS ###
