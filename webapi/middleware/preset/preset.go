@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"webapi/config"
+	"webapi/middleware/basic"
 	"webapi/support"
 
 	"github.com/iris-contrib/swagger/v12"
@@ -82,6 +83,8 @@ func PreSetting(app *iris.Application) {
 		}
 		next(w, r)
 	})
+
+	basic.RegisterIgnoreURLs(config.IrisConf.Web.IgnoreUrls)
 
 	// --------------------------
 	// register swagger router
