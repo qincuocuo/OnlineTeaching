@@ -20,9 +20,19 @@ func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	req := reqBody.(*form_req.CreateCourseReq)
 	resp := form_resp.StatusResp{}
 	query := bson.M{"manager_id": ctx.UserToken.UserId}
+	if req.Grade > 0 {
+		query["grade"] = req.Grade
+	}
+	if req.Class > 0 {
+		query["class"] = req.Class
+	}
+	if len(req.CourseName) > 0 {
+		query["name"] = req.CourseName
+	}
+
 	_, err = mongo.Course.FindOne(traceCtx, query)
 	if err != nil {
-		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		support.SendApiErrorResponse(ctx, support.CourseIsExists, 0)
 		return nil
 	}
 	courseInfo := models.Course{
