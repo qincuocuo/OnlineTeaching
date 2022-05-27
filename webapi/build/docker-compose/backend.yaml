@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  sun:
+    image: sun:1.0
+    container_name: sun
+    ports:
+      - 80:8080
+    restart: always
+    environment:
+      moscan_oss_accessKey: minioadmin
+      moscan_oss_accessSecret: minioadmin
+      moscan_oss_endpoint: ms_minio:9001
+      moscan_oss_bucket: learning
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    command: ./webapi_srv
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+
+networks:
+  default:
+    external:
+      name: learning

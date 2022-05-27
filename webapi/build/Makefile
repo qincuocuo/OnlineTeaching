@@ -9,4 +9,4 @@ BUILD_LDFLAGS += -X 'ds_server/app.BuildDate=${BUILD_DATE}'
 BUILD_LDFLAGS += -X 'ds_server/app.BuildGitCommit=${BUILD_GIT_COMMIT}'
 
 webapi-srv:
-	${BUILD_ENV} go build -mod=vendor -ldflags "${BUILD_LDFLAGS}" -o ${BUILD_PATH}/bin/webapi_srv ${BUILD_PATH}/cmd/webapi_srv.go
+	${BUILD_ENV} go build -mod=vendor -ldflags "${BUILD_LDFLAGS}" -o ${BUILD_PATH}/bin/webapi_srv ${BUILD_PATH}/cmd/webapi.go

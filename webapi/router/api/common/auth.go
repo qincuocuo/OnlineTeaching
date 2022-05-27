@@ -8,6 +8,7 @@ import (
 )
 
 func RegisterAuthRouter(party router.Party) {
+	party.Handle("POST", "/auth/register", wrapper.Handler(controller.UserController{}.CreateUser))
 	party.Handle("GET", "/auth/verifycode/", wrapper.Handler(controller.AuthController{}.VerifyCode))
 	party.Handle("POST", "/auth/login/", wrapper.Handler(controller.AuthController{}.Login))
 	party.Handle("POST", "/auth/logout/", wrapper.Handler(controller.AuthController{}.Logout))

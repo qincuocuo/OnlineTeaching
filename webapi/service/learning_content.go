@@ -39,15 +39,15 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 	}
 	var contentDoc []models.LearningContent
 	contentDoc, err = mongo.Content.FindSortByLimitAndSkip(traceCtx, query, req.Page, req.PageSize, sorter)
-	if err != nil{
+	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
 	}
 	for _, item := range contentDoc {
 		msg := form_resp.LearningContentItem{
 			ContentId: item.ContentId,
-			Content: item.Title,
-			Learned: item.FinishedNum,
+			Content:   item.Title,
+			Learned:   item.FinishedNum,
 			Unlearned: item.UnfinishedNum,
 		}
 		resp.Result = append(resp.Result, msg)
@@ -93,7 +93,7 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 				continue
 			}
 			msg := form_resp.StudentItem{
-				Id: item,
+				Id:   item,
 				Name: userDoc.UserName,
 			}
 			resp.StudentInfo = append(resp.StudentInfo, msg)
@@ -107,7 +107,7 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 				continue
 			}
 			msg := form_resp.StudentItem{
-				Id: item,
+				Id:   item,
 				Name: userDoc.UserName,
 			}
 			resp.StudentInfo = append(resp.StudentInfo, msg)
