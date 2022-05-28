@@ -193,7 +193,8 @@ func EnterCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		return nil
 	}
 	totalNum := courseDoc.TotalMember + 1
-	upset := bson.M{"$push": bson.M{"student_id": ctx.UserToken.UserId}, "total_member": totalNum}
+	stuIds := append(courseDoc.StudentId, ctx.UserToken.UserId)
+	upset := bson.M{"student_id": stuIds, "total_member": totalNum}
 	err = mongo.Course.Update(traceCtx, query, upset)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.EnterCourseFailed, 0)

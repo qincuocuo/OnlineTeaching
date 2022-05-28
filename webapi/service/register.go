@@ -123,7 +123,15 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
-	update := bson.M{"$push": bson.M{"finished": ctx.UserToken.UserId}, "$pull": bson.M{"unfinished": ctx.UserToken.UserId}}
+	finish := append(registerDoc.Finished, ctx.UserToken.UserId)
+	unfinish := make([]string, 0)
+	for _, s := range registerDoc.Unfinished {
+		if s == ctx.UserToken.UserId {
+			continue
+		}
+		unfinish = append(unfinish, s)
+	}
+	update := bson.M{"finished": finish, "unfinished": unfinish}
 	err = mongo.Register.Update(traceCtx, query, update)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.JoinInRegisterFailed, 0)
