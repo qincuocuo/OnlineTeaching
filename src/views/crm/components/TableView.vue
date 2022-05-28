@@ -42,6 +42,7 @@
             :fixed="item.fixed"
             :column-key="item.prop"
             :class-name="item.class || ''"
+            :sortable="item.sortable"
             :show-overflow-tooltip="
               item.showOverflowTooltip === undefined ? true : item.showOverflowTooltip
             "

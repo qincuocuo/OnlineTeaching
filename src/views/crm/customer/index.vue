@@ -11,7 +11,7 @@
         />
         <div class="query-add-btns-container">
           <div class="add-btns">
-            <el-button v-has="'cus_add'" @click="add" :disabled="slideShow" type="primary">
+            <el-button v-has="'_add'" @click="add" :disabled="slideShow" type="primary">
               新增
             </el-button>
           </div>
@@ -118,6 +118,7 @@ export default {
           label: "班级人数",
           prop: "ipoFlag",
           slot: "ipoFlag",
+          sortable: true,
           width: 100
         },
         {
@@ -132,7 +133,7 @@ export default {
         }
       ],
       url: {
-        list: "/crm/auth/api/customer/customer_list"
+        list: "/v1/course"
       },
       disableMixinInit: true,
       formOptions: {
@@ -189,7 +190,6 @@ export default {
             type: "select",
             field: "class",
             title: "班级",
-
             options: [
               {
                 value: 1
@@ -200,10 +200,8 @@ export default {
             type: "DatePicker",
             field: "section_day",
             title: "创建时间",
-            value: ["2018-02-20", "2021-02-15"],
             props: {
               type: "datetimerange",
-              format: "yyyy-MM-dd HH:mm:ss",
               placeholder: "请选择时间"
             }
           },

@@ -106,6 +106,12 @@ export default {
             if (res && res.code === 200) {
               let token = res.data.authorization;
               localStorage.setItem("crmToken", token);
+              localStorage.setItem(
+                "crmPermission",
+                JSON.stringify({
+                  loginUser: res.data
+                })
+              );
               this.$store.commit("set_userInfo", res.data);
               this.$message.success("登录成功");
               this.$router.push("/crm/customer");
