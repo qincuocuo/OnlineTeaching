@@ -86,7 +86,7 @@
       </el-form>
     </el-dialog>
     <!-- 发起签到 -->
-    <el-dialog v-model="qiandaoVisible" title="发起签到" width="40%" :before-close="handleClose">
+    <el-dialog v-model="qiandaoVisible" title="发起签到" width="40%">
       <div style="text-align: center">
         签到有效时间为
         <el-input-number v-model="register_tm" :min="1" controls-position="right" />
@@ -100,7 +100,7 @@
       </template>
     </el-dialog>
     <!-- 发起讨论 -->
-    <el-dialog v-model="talkVisible" title="讨论话题" width="40%" :before-close="handleClose">
+    <el-dialog v-model="talkVisible" title="讨论话题" width="40%">
       <el-input type="textarea" v-model="talk"></el-input>
       <template #footer>
         <span class="dialog-footer">
@@ -215,7 +215,7 @@ export default {
         title: "",
         content: ""
       },
-      register_tm: "", //签到时间限制
+      register_tm: 1, //签到时间限制
       talk: "", // 讨论话题
       //表单验证规则
       contentfFormRules: {
@@ -225,8 +225,7 @@ export default {
       qiandaoDetailActiveName: "qiandao",
       finalishList: ["zhangsan", "lisi"],
       notFinalishList: ["zhangsan", "lisi"],
-      learningDetailActiveName: 'learning',
-
+      learningDetailActiveName: "learning"
     };
   },
 
@@ -242,6 +241,7 @@ export default {
   },
   methods: {
     handleClose() {},
+    handleClick() {},
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
