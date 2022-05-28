@@ -17,7 +17,7 @@ export default {
       /* 分页参数 */
       ipagination: {
         page: 1,
-        size: 20,
+        page_size: 20,
         sizes: [10, 20, 30],
         total: 0
       },
@@ -78,7 +78,7 @@ export default {
       if (res.code === 0) {
         this.dataSource = res.data.list || res.data[this.url.field] || [];
         this.dataSource.forEach((item, index) => {
-          item.index = index + 1 + (params.page - 1) * params.size;
+          item.index = index + 1 + (params.page - 1) * params.page_size;
         });
         this.ipagination.total = res.data.total;
       } else {
@@ -93,7 +93,7 @@ export default {
       //获取查询条件
       const param = Object.assign({}, this.queryParam);
       param.page = this.ipagination.page;
-      param.size = this.ipagination.size;
+      param.page_size = this.ipagination.page_size;
       return filterObj(param);
     },
 

@@ -31,23 +31,6 @@
         v-model:ipagination="ipagination"
         @load="loadData"
       >
-        <template v-slot:customerName="scope">
-          <div class="table-visit--underline" @click="viewDetails(scope.row)">
-            {{ scope.row.customerName || "--" }}
-          </div>
-        </template>
-        <template v-slot:ipoFlag="scope">
-          <span>
-            {{
-              [undefined, ""].includes(scope.row.ipoFlag) ? "--" : scope.row.ipoFlag ? "是" : "否"
-            }}
-          </span>
-        </template>
-        <template v-slot:status="scope">
-          <el-tag v-if="scope.row.status === 0" type="warning">待审核</el-tag>
-          <el-tag v-else-if="scope.row.status === 1" type="success">已通过</el-tag>
-          <el-tag v-else type="danger">不通过</el-tag>
-        </template>
         <template v-slot:operate="scope">
           <div v-if="scope.row.status === 2" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
@@ -80,7 +63,6 @@ import TableMixin from "@/views/crm/mixins/Table";
 import CreatePopup from "@/components/CreatePopup";
 import SlideDetail from "@/components/SlideDetail";
 import { customerRemove } from "@/api/crm/customer";
-import { hasFun } from "@/directives/has";
 import { computed } from "vue";
 import { useStore } from "vuex";
 
@@ -231,9 +213,7 @@ export default {
       }
     };
   },
-  async mounted() {
-    if (hasFun("cus_query")) await this.loadData();
-  },
+  async mounted() {},
   methods: {
     add() {
       this.createAction = this.$options.data().createAction;
