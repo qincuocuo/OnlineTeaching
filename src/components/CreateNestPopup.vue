@@ -4,13 +4,13 @@
   </transition>
 </template>
 <script>
-import CreateResource from "@/views/crm/cooperation/CreateResource";
+import EditPassword from "@/views/layout/components/EditPassword.vue";
 
 export default {
   // createPopup 中嵌套的 createPopup
   name: "CreateNestPopup",
   components: {
-    CreateResource
+    EditPassword
   },
   inheritAttrs: false,
   props: {

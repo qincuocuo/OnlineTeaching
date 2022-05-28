@@ -86,8 +86,8 @@ export default {
             ],
             on: {
               change: val => {
-                this.formOptions.fApi.getRule("grade").hidden = !val;
-                this.formOptions.fApi.getRule("class").hidden = !val;
+                this.formOptions.fApi.getRule("grade").hidden = val === 1;
+                this.formOptions.fApi.getRule("class").hidden = val === 1;
               }
             }
           },

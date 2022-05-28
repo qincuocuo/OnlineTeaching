@@ -6,16 +6,36 @@
         $store.getters?.userInfo?.roleName === 2 ? "学生" : "教师"
       }}）
     </div>
-    <div class="logout" @click="logout">退出</div>
+    <div class="mine" @click="toMy"><el-button type="text">我的</el-button></div>
+    <div class="logout" @click="logout"><el-button type="text">退出</el-button></div>
+    <create-popup
+      :show="popupShow"
+      :showCancelButton="false"
+      :showConfirmButton="false"
+      :popup-type="popupType"
+      :action="createAction"
+      @close="popupShow = false"
+    />
   </div>
 </template>
 
 <script>
+import CreatePopup from "@/components/CreatePopup";
 import { logout } from "@/api/login";
 export default {
   name: "NavBar",
+  components: { CreatePopup },
+
   data() {
-    return {};
+    return {
+      popupShow: false,
+      popupType: "UserInfo",
+      createAction: {
+        type: "add",
+        id: "",
+        data: {}
+      }
+    };
   },
   methods: {
     // 退出登录
@@ -37,6 +57,10 @@ export default {
             .catch(() => {});
         })
         .catch(() => {});
+    },
+    // 我的
+    toMy() {
+      this.popupShow = true;
     }
   }
 };
@@ -57,19 +81,20 @@ export default {
     font-weight: 500;
   }
 
-  .user {
+  .user,
+  .mine,
+  .logout {
     position: absolute;
+    right: 120px;
+  }
+  .mine {
     right: 80px;
   }
 
   .logout {
-    // color: #c0c4cc;
     cursor: pointer;
     position: absolute;
     right: 30px;
-  }
-  .logout:hover {
-    color: #409eff;
   }
 }
 </style>
