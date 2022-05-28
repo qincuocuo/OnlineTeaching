@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkcrm"]=self["webpackChunkcrm"]||[]).push([[884],{71884:function(r,n,e){e.r(n),e.d(n,{default:function(){return f}});var t=e(66252);function u(r,n,e,u,a,c){return(0,t.wg)(),(0,t.iD)("div",null,"个人中心")}var a={name:"UserCenter",data(){return{}}},c=e(83744);const s=(0,c.Z)(a,[["render",u]]);var f=s}}]);
+//# sourceMappingURL=884.2022e2ee.js.map

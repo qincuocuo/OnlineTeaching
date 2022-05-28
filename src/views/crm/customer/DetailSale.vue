@@ -9,7 +9,12 @@
             placeholder="请输入学习内容"
             prefix-icon="Search"
           />
-          <el-button class="content-add" @click="addContentVisible = true" type="primary">
+          <el-button
+            v-has="'teach'"
+            class="content-add"
+            @click="addContentVisible = true"
+            type="primary"
+          >
             新增学习内容
           </el-button>
         </div>
@@ -29,34 +34,35 @@
           }}
         </template>
         <template v-slot:operate="scope">
-          <div v-has="'visit_edit'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">查看学习内容</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="learningDetail = true">查看学习情况</el-button>
           </div>
-          <div v-has="'visit_edit'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="qiandaoVisible = true">发起签到</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="talkVisible = true">发起讨论</el-button>
           </div>
-          <div v-has="'visit_edit'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="qiandaoDetail = true">查看签到结果</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text">查看讨论情况</el-button>
+          </div>
+          <div v-has="'student'" class="table-btn-box">
+            <el-button type="text">进入学习</el-button>
+          </div>
+          <div v-has="'student'" class="table-btn-box">
+            <el-button type="text">查看通知</el-button>
           </div>
         </template>
       </table-view>
     </div>
     <!-- 新增课程内容 -->
-    <el-dialog
-      v-model="addContentVisible"
-      title="新增课程内容"
-      width="40%"
-      :before-close="handleClose"
-    >
+    <el-dialog v-model="addContentVisible" title="新增课程内容" width="40%">
       <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules">
         <el-form-item prop="title" class="login-email" label="名称">
           <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>

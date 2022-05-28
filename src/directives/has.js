@@ -1,11 +1,30 @@
 import store from "@/store";
 
+function getAllowList(field) {
+  let list = [];
+  switch (field) {
+    case "teach": // 删除
+      list = [1];
+      break;
+    case "student":
+      list = [2];
+      break;
+    default:
+      list = [1, 2];
+  }
+  return list;
+}
+
 /**
  * 控制某些按钮显示
  */
 const has = {
   mounted(el, binding) {
-    const roleId = store.getters.userInfo.roleId;
+    const roleId = store.getters.userInfo.role;
+    const list = getAllowList(binding.value);
+    if (!list.includes(roleId)) {
+      el.parentNode.removeChild(el);
+    }
   }
 };
 
@@ -15,8 +34,9 @@ const has = {
  * return Boolean
  */
 const hasFun = function (field) {
-  const roleId = store.getters.userInfo.roleId;
-  return true;
+  const roleId = store.getters.userInfo.role;
+  const list = getAllowList(field);
+  return list.includes(roleId);
 };
 
 export { has, hasFun };

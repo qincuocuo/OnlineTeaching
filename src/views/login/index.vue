@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item prop="vcode" class="vcode">
           <el-input placeholder="验证码" v-model.trim="form.vcode"></el-input>
-          <img :src="vcodeImage" alt="" class="v-code-img" @click="verifycode" />
+          <img :src="vcodeImage" class="v-code-img" @click="verifycode" />
         </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login" :loading="loginLoading">登录</el-button>
@@ -176,6 +176,7 @@ export default {
       }
       .v-code-img {
         height: 40px;
+        width: 120px;
       }
     }
 

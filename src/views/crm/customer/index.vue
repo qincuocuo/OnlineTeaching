@@ -37,11 +37,14 @@
           </div>
         </template>
         <template v-slot:operate="scope">
-          <div class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="itemHandle('del', scope.row)">删除</el-button>
+          </div>
+          <div v-has="'student'" class="table-btn-box">
+            <el-button type="text" @click="viewDetails(scope.row)">详情</el-button>
           </div>
         </template>
       </table-view>
