@@ -12,6 +12,7 @@ import (
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
+	"webapi/utils"
 )
 
 func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
@@ -71,7 +72,18 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	}
 	defer file.Close()
 
-	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", req.CourseId, fh.Filename)
+	dir := fmt.Sprintf("%s/%d", "/workspace/data", req.CourseId)
+	//filePath := fmt.Sprintf("%s/%d/%s", ".", req.CourseId, fh.Filename)
+
+	if !utils.IsExistDir(dir) {
+		err = os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+			return nil
+		}
+	}
+	filePath := fmt.Sprintf("%s/%s", dir, fh.Filename)
+
 	dest, err := os.Create(filePath)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
@@ -95,7 +107,7 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	learningContent := models.LearningContent{
 		ContentId:     mongo.Content.GetMaxId(traceCtx),
 		CourseId:      req.CourseId,
-		Title:         filePath,
+		Title:         fh.Filename,
 		FinishedNum:   0,
 		UnfinishedNum: courseDoc.TotalMember,
 		Finished:      nil,
