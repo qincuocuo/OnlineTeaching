@@ -6,11 +6,13 @@
 <script>
 import CreateCustomer from "@/views/crm/customer/Create";
 import CreateUser from "@/views/login/Create.vue";
+import UserInfo from "@/views/layout/components/UserInfo";
 export default {
   name: "CreatePopup",
   components: {
     CreateCustomer,
-    CreateUser
+    CreateUser,
+    UserInfo
   },
   inheritAttrs: false,
   props: {

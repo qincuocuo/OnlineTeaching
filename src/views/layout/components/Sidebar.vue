@@ -116,7 +116,7 @@ export default {
         {
           "permissionId": 105,
           "enableFlag": true,
-          "permissionName": "客户中心",
+          "permissionName": "教学中心",
           "onSite": true,
           "path": "customer",
           "permissionTypeId": 1,
@@ -126,7 +126,7 @@ export default {
               "permissionId": 106,
               "enableFlag": true,
               "parentId": 105,
-              "permissionName": "客户管理",
+              "permissionName": "课程信息",
               "onSite": true,
               "path": "/crm/customer",
               "permissionTypeId": 2,
