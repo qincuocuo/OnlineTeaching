@@ -47,6 +47,9 @@
           <div v-has="'del'" class="table-btn-box">
             <el-button type="text">查看讨论情况</el-button>
           </div>
+          <div v-has="'del'" class="table-btn-box">
+            <el-button type="text" @click="homeworkVisible = true">发布课后练习</el-button>
+          </div>
         </template>
       </table-view>
     </div>
@@ -131,6 +134,63 @@
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
+    <!-- 课后练习 -->
+    <el-dialog
+      class="homework"
+      v-model="homeworkVisible"
+      title="课后练习"
+      width="50%"
+      height="100px"
+      :before-close="handleClose"
+    >
+      <el-form ref="homeworkRef" :model="homeworkForm">
+        <div v-for="(item, index) in exercises" :key="item.question" style="padding-bottom: 20px">
+          <el-form-item prop="index">
+            <h4>第{{ index + 1 }}题</h4>
+          </el-form-item>
+          <el-form-item label="题目" prop="question">
+            <el-input type="textarea" v-model="item.question"></el-input>
+          </el-form-item>
+          <el-form-item label="题目类型" prop="type">
+            <el-radio-group v-model="item.type" class="ml-4">
+              <el-radio label="1" size="large">判断题</el-radio>
+              <el-radio label="2" size="large">选择题</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="选项" prop="option">
+            <div v-for="(optionItem, optionIndex) in item.option" :key="optionItem">
+              <span>{{ selectOption[optionIndex]?.label }}:</span>
+              <el-input style="padding-right:10px;" v-model="option" placeholder="请输入选项内容" class="input-with-select">
+                <template #prepend>
+                  <el-button icon="Plus" @click="addOption(index)" />
+                </template>
+                <template #append>
+                  <el-button icon="Minus" @click="deleteOption(index, optionIndex)" />
+                </template>
+              </el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="答案" prop="answer">
+            <el-select v-model="item.answer">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-button type="primary" @click="deleteQuestion(index)">删除题目</el-button>
+        </div>
+        <el-button type="primary" @click="addQuestion">添加题目</el-button>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="homeworkVisible = false">取消</el-button>
+          <el-button type="primary" @click="homeworkVisible = false">提交</el-button>
+        </span>
+      </template>
+    </el-dialog>
     <create-popup
       ref="refCreatePoup"
       :show="popupShow"
@@ -203,6 +263,7 @@ export default {
       talkVisible: false,
       qiandaoDetail: false,
       learningDetail: false,
+      homeworkVisible: true,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -225,8 +286,37 @@ export default {
       qiandaoDetailActiveName: "qiandao",
       finalishList: ["zhangsan", "lisi"],
       notFinalishList: ["zhangsan", "lisi"],
-      learningDetailActiveName: 'learning',
-
+      learningDetailActiveName: "learning",
+      exercises: [
+        {
+          question: "",
+          type: "",
+          option: [""],
+          answer: ""
+        },
+      ],
+      selectOption: [
+        {
+          value: "1",
+          label: "A"
+        },
+        {
+          value: "2",
+          label: "B"
+        },
+        {
+          value: "3",
+          label: "C"
+        },
+        {
+          value: "4",
+          label: "D"
+        },
+        {
+          value: "5",
+          label: "E"
+        }
+      ]
     };
   },
 
@@ -241,6 +331,34 @@ export default {
     }
   },
   methods: {
+    // 添加题目
+    addQuestion() {
+      this.exercises.push({
+        question: "",
+        type: "",
+        option: [""],
+        answer: ""
+      });
+    },
+    // 删除题目
+    deleteQuestion(index) {
+      this.exercises.splice(index, 1);
+    },
+    // 添加选项
+    addOption(index) {
+      if (this.exercises[index].option.length === 5) {
+        this.$message.warning("选项最多为5个");
+        return;
+      }
+      this.exercises[index].option.push("");
+    },
+    deleteOption(index, optionIndex) {
+      if (this.exercises[index].option.length === 2) {
+        this.$message.warning("选项至少2个");
+        return;
+      }
+      this.exercises[index].option.splice(optionIndex, 1);
+    },
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
@@ -284,5 +402,9 @@ export default {
       white-space: pre-line;
     }
   }
+}
+/deep/ .el-dialog {
+  height: 550px;
+  overflow: auto;
 }
 </style>
