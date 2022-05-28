@@ -45,7 +45,11 @@ func (content) GetMaxId(ctx context.Context) (uid int) {
 	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
 	defer span.End()
 	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &contentDoc, 1, 0, "-content_id")
-	uid = contentDoc[0].ContentId + 1
+	if len(contentDoc) == 0 {
+		uid = 1
+	} else {
+		uid = contentDoc[0].ContentId + 1
+	}
 	return
 }
 

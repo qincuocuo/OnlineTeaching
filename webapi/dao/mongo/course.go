@@ -14,11 +14,11 @@ type course struct{}
 var Course course
 
 func (course) FindCount(ctx context.Context, query bson.M) (count int, err error) {
-		dbName := (&models.Course{}).CollectName()
-		span, _ := tracking.DbTracking(ctx, dbName, query)
-		defer span.End()
-		count, err = db.MongoCli.FindCount(dbName, query)
-		return
+	dbName := (&models.Course{}).CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	count, err = db.MongoCli.FindCount(dbName, query)
+	return
 }
 
 func (course) FindOne(ctx context.Context, query bson.M) (courseDoc models.Course, err error) {
@@ -77,6 +77,10 @@ func (course) GetMaxId(ctx context.Context) (uid int) {
 	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
 	defer span.End()
 	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &courseDoc, 1, 0, "-course_id")
-	uid = courseDoc[0].CourseId + 1
+	if len(courseDoc) == 0{
+		uid = 1
+	} else {
+		uid = courseDoc[0].CourseId + 1
+	}
 	return
 }
