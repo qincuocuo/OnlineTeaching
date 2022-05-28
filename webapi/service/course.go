@@ -51,7 +51,7 @@ func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	}
 	var count int
 	count, err = mongo.Course.FindCount(traceCtx, query)
-	if count == 0 {
+	if count != 0 {
 		support.SendApiErrorResponse(ctx, support.CourseIsExists, 0)
 		return nil
 	}
