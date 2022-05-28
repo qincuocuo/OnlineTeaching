@@ -20,7 +20,7 @@ type Talk struct{}
 // @Router /v1/talk/ [post]
 // @Security ApiKeyAuth
 func (t Talk) CreateTalk(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.CreateTalkHandler, true, form_req.CreateTalkReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.CreateTalkHandler, true, &form_req.CreateTalkReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
 // TalkInfo

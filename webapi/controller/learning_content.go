@@ -21,7 +21,7 @@ type LearningController struct {
 // @Router /v1/learning_content/ [post]
 // @Security ApiKeyAuth
 func (l LearningController) CreateLearningContent(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.CreateLearningContentHandler, true, form_req.CreateLearningContentReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.CreateLearningContentHandler, true, &form_req.CreateLearningContentReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // LearningContentList
@@ -35,7 +35,7 @@ func (l LearningController) CreateLearningContent(ctx *wrapper.Context) {
 // @Router /v1/learning_content/ [get]
 // @Security ApiKeyAuth
 func (l LearningController) LearningContentList(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningContentListHandler, true, form_req.LearningContentListReq{PageSize: 10}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
+	wrapper.ApiWrapper(ctx, service.LearningContentListHandler, true, &form_req.LearningContentListReq{PageSize: 10}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // LearningResult
@@ -49,7 +49,7 @@ func (l LearningController) LearningContentList(ctx *wrapper.Context) {
 // @Router /v1/learning_content/result/ [get]
 // @Security ApiKeyAuth
 func (l LearningController) LearningResult(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningResultHandler, true, form_req.LearningResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
+	wrapper.ApiWrapper(ctx, service.LearningResultHandler, true, &form_req.LearningResultReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // Learning
@@ -63,5 +63,5 @@ func (l LearningController) LearningResult(ctx *wrapper.Context) {
 // @Router /v1/learning_content/learning/ [post]
 // @Security ApiKeyAuth
 func (l LearningController) Learning(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningHandler, true, form_req.LearningReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.LearningHandler, true, &form_req.LearningReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }

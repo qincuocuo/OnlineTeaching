@@ -66,5 +66,5 @@ func (u UserController) UserPassword(ctx *wrapper.Context) {
 // @Security ApiKeyAuth
 // @Param authorization header string true "authorization"
 func (a UserController) ChangePassword(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.ChangePasswordHandler, true, form_req.ChangePasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.ChangePasswordHandler, true, &form_req.ChangePasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }

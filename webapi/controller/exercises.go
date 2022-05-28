@@ -20,7 +20,7 @@ type Exercises struct{}
 // @Router /v1/exercises/ [post]
 // @Security ApiKeyAuth
 func (e Exercises) CreateExercises(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.CreateExercisesHandler, true, form_req.CreateExercisesReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.CreateExercisesHandler, true, &form_req.CreateExercisesReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
 // GetExercises
@@ -34,7 +34,7 @@ func (e Exercises) CreateExercises(ctx *wrapper.Context) {
 // @Router /v1/exercises/ [get]
 // @Security ApiKeyAuth
 func (e Exercises) GetExercises(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.GetExercisesHandler, true, form_req.GetExercisesReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
+	wrapper.ApiWrapper(ctx, service.GetExercisesHandler, true, &form_req.GetExercisesReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // Exercises
@@ -48,5 +48,5 @@ func (e Exercises) GetExercises(ctx *wrapper.Context) {
 // @Router /v1/exercises/do/ [post]
 // @Security ApiKeyAuth
 func (e Exercises) Exercises(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.ExercisesHandler, true, form_req.ExercisesReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.ExercisesHandler, true, &form_req.ExercisesReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }

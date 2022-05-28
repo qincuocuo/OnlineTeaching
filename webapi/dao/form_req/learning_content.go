@@ -1,7 +1,7 @@
 package form_req
 
 type CreateLearningContentReq struct {
-	CourseId int    `json:"course_id" validate:"required"` // 课程id
+	CourseId int    `form:"course_id" json:"course_id" validate:"required"` // 课程id
 }
 
 type LearningContentListReq struct {
