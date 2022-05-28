@@ -33,7 +33,7 @@
             <el-button type="text" @click="edit(scope.row)">查看学习内容</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
-            <el-button type="text">查看学习情况</el-button>
+            <el-button type="text" @click="learningDetail = true">查看学习情况</el-button>
           </div>
           <div v-has="'visit_edit'" class="table-btn-box">
             <el-button type="text" @click="qiandaoVisible = true">发起签到</el-button>
@@ -113,10 +113,21 @@
     <el-drawer v-model="qiandaoDetail" title="签到结果" direction="rtl" size="20%">
       <el-tabs v-model="qiandaoDetailActiveName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane :label="`已签到(${12})`" name="qiandao">
-          <div v-for="item in qiandaoList" :key="item">{{ item }}</div>
+          <div v-for="item in finalishList" :key="item">{{ item }}</div>
         </el-tab-pane>
         <el-tab-pane :label="`未签到(${23})`" name="notQiandao">
-          <div v-for="item in notQiandaoList" :key="item">{{ item }}</div>
+          <div v-for="item in notFinalishList" :key="item">{{ item }}</div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-drawer>
+    <!-- 查看学习情况 -->
+    <el-drawer v-model="learningDetail" :title="`${'背影'}学习结果`" direction="rtl" size="20%">
+      <el-tabs v-model="learningDetailActiveName" class="demo-tabs" @tab-click="handleClick">
+        <el-tab-pane :label="`已学习(${12})`" name="learning">
+          <div v-for="item in finalishList" :key="item">{{ item }}</div>
+        </el-tab-pane>
+        <el-tab-pane :label="`未学习(${23})`" name="notLearningDetail">
+          <div v-for="item in notFinalishList" :key="item">{{ item }}</div>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -191,6 +202,7 @@ export default {
       qiandaoVisible: false,
       talkVisible: false,
       qiandaoDetail: false,
+      learningDetail: false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -211,8 +223,10 @@ export default {
         content: [{ required: true, message: "请输入内容", trigger: "change" }]
       },
       qiandaoDetailActiveName: "qiandao",
-      qiandaoList: ["zhangsan", "lisi"],
-      notQiandaoList: ["zhangsan", "lisi"]
+      finalishList: ["zhangsan", "lisi"],
+      notFinalishList: ["zhangsan", "lisi"],
+      learningDetailActiveName: 'learning',
+
     };
   },
 
