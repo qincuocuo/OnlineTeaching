@@ -5,17 +5,17 @@ type CreateLearningContentReq struct {
 }
 
 type LearningContentListReq struct {
-	CourseId          int    `json:"course_id" validate:"required"`          // 课程id
-	Search            string `json:"search"`             // 根据学习内容搜索
-	OrderingLearned   string `json:"ordering_learned"`   // 根据已学习人数排序 learned/-learned
-	OrderingUnLearned string `json:"ordering_unlearned"` // 根据未学习人数排序 unlearned/-unlearned
-	Page              int    `json:"page"`               // 分页
-	PageSize          int    `json:"page_size"`          // 分页大小
+	CourseId          int    `form:"course_id" json:"course_id" validate:"required"`          // 课程id
+	Search            string `form:"search" json:"search"`             // 根据学习内容搜索
+	OrderingLearned   string `form:"ordering_learned" json:"ordering_learned"`   // 根据已学习人数排序 learned/-learned
+	OrderingUnLearned string `form:"ordering_unlearned" json:"ordering_un_learned"` // 根据未学习人数排序 unlearned/-unlearned
+	Page              int    `form:"page" json:"page"`               // 分页
+	PageSize          int    `form:"page_size" json:"page_size"`          // 分页大小
 }
 
 type LearningResultReq struct {
-	ContentId int    `json:"content_id" validate:"required"` // 学习内容id
-	Status    string `json:"status" validate:"required"`     // 学习状态 learned-已学习/unlearned-未学习
+	ContentId int    `form:"content_id" json:"content_id" validate:"required"` // 学习内容id
+	Status    string `form:"status" json:"status" validate:"required"`     // 学习状态 learned-已学习/unlearned-未学习
 }
 
 type LearningReq struct {

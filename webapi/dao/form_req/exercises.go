@@ -13,7 +13,7 @@ type ExercisesItem struct {
 }
 
 type GetExercisesReq struct {
-	ContentId int `json:"content_id" validate:"required"` //内容id
+	ContentId int `form:"content_id" json:"content_id" validate:"required"` //内容id
 }
 
 type ExercisesReq struct {

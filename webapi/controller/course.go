@@ -21,7 +21,7 @@ type CourseController struct {
 // @Router /v1/course/class [get]
 // @Security ApiKeyAuth
 func (c CourseController) GetClassList(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.GetClassListHandler, true, &form_req.GetClassListReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.GetClassListHandler, true, &form_req.GetClassListReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // CreateCourse
@@ -44,12 +44,12 @@ func (c CourseController) CreateCourse(ctx *wrapper.Context) {
 // @Tags course
 // @Accept x-www-form-urlencoded
 // @Produce json
-// @Param auth body form_req.CourseListReq true "request data"
+// @Param auth query form_req.CourseListReq true "request data"
 // @Success 200 {object} form_resp.CourseListResp "response data"
-// @Router /v1/course/ [post]
+// @Router /v1/course/ [get]
 // @Security ApiKeyAuth
 func (c CourseController) CourseList(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.CourseListHandler, true, &form_req.CourseListReq{PageSize: 10}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.CourseListHandler, true, &form_req.CourseListReq{PageSize: 10}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // UpdateCourse

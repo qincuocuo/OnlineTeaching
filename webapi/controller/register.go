@@ -35,7 +35,7 @@ func (r Register) CreateRegister(ctx *wrapper.Context) {
 // @Router /v1/register/result/ [get]
 // @Security ApiKeyAuth
 func (r Register) RegisterResult(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.RegisterResultHandler, true, form_req.RegisterResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.RegisterResultHandler, true, form_req.RegisterResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // Register
