@@ -24,6 +24,7 @@ const (
 	GetCourseInfoFailed          string = "根据学习章节获取课程信息失败"
 	UploadLearningContentFailed  string = "上传学习章节失败"
 	CreateLearningContentFailed  string = "创建学习章节失败"
+	UpdateContentFailed          string = "更新学习结果失败"
 
 	RegisterNotFount     string = "签到任务不存在"
 	CreateRegisterFailed string = "创建签到任务失败"

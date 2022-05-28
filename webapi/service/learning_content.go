@@ -84,15 +84,22 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
 		return nil
 	}
+	query := bson.M{"course_id": req.CourseId}
+	var courseDoc models.Course
+	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
+		return
+	}
 
 	learningContent := models.LearningContent{
 		ContentId:     mongo.Content.GetMaxId(traceCtx),
 		CourseId:      req.CourseId,
 		Title:         filePath,
 		FinishedNum:   0,
-		UnfinishedNum: 0, // TODO
+		UnfinishedNum: courseDoc.TotalMember,
 		Finished:      nil,
-		Unfinished:    nil, // TODO
+		Unfinished:    courseDoc.StudentId,
 	}
 	err = mongo.Content.Create(traceCtx, learningContent)
 	if err != nil {
@@ -163,9 +170,9 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.LearningReq)
-
+	query := bson.M{"content_id": req.ContentId}
 	var contentDoc models.LearningContent
-	contentDoc, err = mongo.Content.FindOne(traceCtx, bson.M{"content_id": req.ContentId})
+	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
@@ -179,15 +186,29 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	defer file.Close()
 
-	var userDoc models.User
-	userDoc, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
+	_, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
 		return nil
 	}
 
-	// TODO 这里更新一下contentDoc
+	finished := append(contentDoc.Finished, ctx.UserToken.UserId)
+	unfinished := make([]string, 0)
+	for _, s := range contentDoc.Unfinished {
+		if s == ctx.UserToken.UserId {
+			continue
+		}
+		unfinished = append(unfinished, s)
+	}
 
+	finishNum := contentDoc.FinishedNum + 1
+	unfinishedNum := contentDoc.UnfinishedNum + 1
+	upset := bson.M{"finished_num": finishNum, "unfinished_num": unfinishedNum, "finished": finished, "unfinished": unfinished}
+	err = mongo.Content.Update(traceCtx, query, upset)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UpdateContentFailed, 0)
+		return nil
+	}
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)

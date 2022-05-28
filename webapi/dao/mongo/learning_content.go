@@ -69,10 +69,3 @@ func (content) GetMaxId(ctx context.Context) (uid int) {
 	return
 }
 
-func (content) Create(ctx context.Context, content models.LearningContent) (err error) {
-	dbName := content.CollectName()
-	span, _ := tracking.DbTracking(ctx, dbName, content)
-	defer span.End()
-	err = db.MongoCli.Insert(dbName, content)
-	return
-}
