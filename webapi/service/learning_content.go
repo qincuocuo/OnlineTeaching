@@ -64,7 +64,7 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.CreateLearningContentReq)
-
+	resp := form_resp.StatusResp{Status: "ok"}
 	file, fh, err := ctx.FormFile("file")
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
@@ -118,7 +118,7 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		support.SendApiErrorResponse(ctx, support.CreateLearningContentFailed, 0)
 		return nil
 	}
-
+	support.SendApiResponse(ctx, resp, "success")
 	return
 }
 
