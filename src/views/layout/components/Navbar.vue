@@ -2,13 +2,16 @@
   <div class="navbar">
     <div class="logo">阳光小学线上教学系统</div>
     <div class="user">
-      {{ $store.getters?.userInfo?.username }}（{{ $store.getters?.userInfo?.roleName }}）
+      {{ $store.getters?.userInfo?.username }}（{{
+        $store.getters?.userInfo?.roleName === 2 ? "学生" : "教师"
+      }}）
     </div>
     <div class="logout" @click="logout">退出</div>
   </div>
 </template>
 
 <script>
+import { logout } from "@/api/login";
 export default {
   name: "NavBar",
   data() {
@@ -23,8 +26,15 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$router.push("/login");
-          window.localStorage.removeItem("crmPermission");
+          logout()
+            .then(res => {
+              if (res && res.code === 200) {
+                this.$message.success(res.message);
+                this.$router.push("/login");
+                window.localStorage.removeItem("crmPermission");
+              }
+            })
+            .catch(() => {});
         })
         .catch(() => {});
     }

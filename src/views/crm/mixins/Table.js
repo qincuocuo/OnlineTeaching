@@ -75,14 +75,14 @@ export default {
           this.loading = false;
         });
       if (!res) return;
-      if (res.code === 0) {
+      if (res.code === 200) {
         this.dataSource = res.data.list || res.data[this.url.field] || [];
         this.dataSource.forEach((item, index) => {
           item.index = index + 1 + (params.page - 1) * params.page_size;
         });
         this.ipagination.total = res.data.total;
       } else {
-        this.$message.warning(res.msg);
+        this.$message.warning(res.error);
       }
     },
 

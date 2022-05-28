@@ -17,3 +17,9 @@ export function register(params) {
   let url = "/auth/register";
   return axios.post(url, params);
 }
+
+//登出
+export function logout(params) {
+  let url = "/auth/logout";
+  return axios.post(url, params);
+}
