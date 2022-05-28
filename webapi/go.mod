@@ -7,10 +7,12 @@ require (
 	github.com/Shopify/sarama v1.29.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
+	github.com/gorilla/websocket v1.4.1
 	github.com/iris-contrib/swagger/v12 v12.0.1
 	github.com/kataras/iris/v12 v12.1.8
 	github.com/mojocn/base64Captcha v0.0.0-20190509095025-87c9c59224d8
 	github.com/pkg/errors v0.9.1
+	github.com/sirupsen/logrus v1.6.0
 	go.uber.org/ratelimit v0.2.0
 	go.uber.org/zap v1.21.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
@@ -41,6 +43,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/openzipkin/zipkin-go v0.2.5 // indirect
