@@ -28,6 +28,7 @@ const (
 
 	RegisterExists       string = "签到任务已存在"
 	RegisterNotFount     string = "签到任务不存在"
+	RegisterFinished     string = "用户已完成签到，请勿重复提交"
 	CreateRegisterFailed string = "创建签到任务失败"
 	JoinInRegisterFailed string = "参与签到失败"
 	RegisterExpired      string = "签到任务已过期"

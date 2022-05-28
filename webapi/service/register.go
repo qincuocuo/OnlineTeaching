@@ -6,6 +6,7 @@ import (
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
+	"webapi/internal/utils"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
@@ -114,12 +115,35 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
+	var contentDoc models.LearningContent
+	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.LearningContentNotFound, 0)
+		return nil
+	}
+	var courseDoc models.Course
+	courseDoc, err = mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
+		return nil
+	}
+	if !utils.IsContainInSlice(ctx.UserToken.UserId, courseDoc.StudentId) {
+		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
+		return nil
+	}
+
 	var registerDoc models.Register
 	registerDoc, err = mongo.Register.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.RegisterNotFount, 0)
 		return nil
 	}
+
+	if utils.IsContainInSlice(ctx.UserToken.UserId, registerDoc.Finished) {
+		support.SendApiErrorResponse(ctx, support.RegisterFinished, 0)
+		return nil
+	}
+
 	if registerDoc.EndTime.Before(time.Now()) {
 		support.SendApiErrorResponse(ctx, support.RegisterExpired, 0)
 		return nil
