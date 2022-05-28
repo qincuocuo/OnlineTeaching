@@ -17,7 +17,9 @@ module.exports = defineConfig({
     },
     // host: "127.0.0.1",
     port: 8090,
-    proxy: "https://testadmin.yinsfinance.com" //测试
+    // proxy: "https://testadmin.yinsfinance.com" //测试 http://121.199.167.227:5002/
+    proxy: "http://121.199.167.227:5002/" //测试 http://121.199.167.227:5002/
+
     // devtool: "cheap-source-map"
   },
   css: {

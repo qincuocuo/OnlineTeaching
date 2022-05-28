@@ -5,11 +5,12 @@
 </template>
 <script>
 import CreateCustomer from "@/views/crm/customer/Create";
-
+import CreateUser from "@/views/login/Create.vue";
 export default {
   name: "CreatePopup",
   components: {
-    CreateCustomer
+    CreateCustomer,
+    CreateUser
   },
   inheritAttrs: false,
   props: {

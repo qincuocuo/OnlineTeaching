@@ -46,7 +46,6 @@
 import TableView from "@/views/crm/components/TableView";
 import TableMixin from "@/views/crm/mixins/Table";
 import CreatePopup from "@/components/CreatePopup";
-import { queryCustomerSource } from "@/api/crm/customer";
 import { gainAppoint } from "@/utils/utils";
 import { useStore } from "vuex";
 import { computed } from "vue";

@@ -9,60 +9,54 @@
       </el-row>
       <!-- 表单 -->
       <el-form ref="loginFormRef" class="login_form" :model="form" :rules="formRules">
-        <el-form-item prop="loginEmail" class="login-email">
-          <el-input placeholder="请输入邮箱地址" v-model.trim="form.loginEmail" class="email-input">
-            <template #append>{{ mailboxSuffix }}</template>
-          </el-input>
+        <el-form-item prop="user_id" class="login-email">
+          <el-input placeholder="账户名" v-model.trim="form.user_id" class="email-input"></el-input>
         </el-form-item>
         <el-form-item prop="password" class="password">
-          <el-input
-            placeholder="请输入口令"
-            v-model.trim="form.password"
-            type="password"
-          ></el-input>
+          <el-input placeholder="密码" v-model.trim="form.password" type="password"></el-input>
         </el-form-item>
-        <el-row class="applyForPassword">
-          <el-col>
-            <el-button
-              type="text"
-              class="password-countdown"
-              v-if="passwordCountdown === 30"
-              :loading="applyLoading"
-              @click="applyForPassword"
-            >
-              申请口令
-            </el-button>
-            <el-button class="prompt-information" type="text" v-else>
-              {{ passwordCountdown }}秒后重新获取
-            </el-button>
-          </el-col>
-        </el-row>
+        <el-form-item prop="vcode" class="vcode">
+          <el-input placeholder="验证码" v-model.trim="form.vcode"></el-input>
+          <img :src="vcodeImage" alt="" class="v-code-img" @click="verifycode" />
+        </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login" :loading="loginLoading">登录</el-button>
         </el-form-item>
+        <div class="add-box">
+          <el-button class="add-btn" type="text" @click="add">注册</el-button>
+        </div>
       </el-form>
     </div>
+    <create-popup
+      :show="popupShow"
+      :popup-type="popupType"
+      :action="createAction"
+      @close="popupShow = false"
+    />
   </div>
 </template>
 <script>
-import { applyForPassword, login } from "@/api/login";
+import { verifycode, login } from "@/api/login";
+import CreatePopup from "@/components/CreatePopup";
+
 export default {
   name: "LoginLayout",
+  components: { CreatePopup },
+
   data() {
     return {
       form: {
-        loginEmail: "",
-        password: ""
+        user_id: "",
+        password: "",
+        captid: "",
+        vcode: ""
       },
-      mailboxSuffix: "@mycaiwen.com", //邮箱后缀
-      passwordCountdown: 30, //口令倒计时
-      passwordTimer: null,
-      applyLoading: false,
       loginLoading: false,
+      vcodeImage: "",
       //表单验证规则
       formRules: {
-        loginEmail: [
-          { required: true, message: "请输入邮箱", trigger: "change" },
+        user_id: [
+          { required: true, message: "请输入用户名", trigger: "change" },
           {
             min: 3,
             max: 20,
@@ -70,85 +64,68 @@ export default {
             trigger: "change"
           }
         ],
-        password: [{ required: true, message: "请输入口令", trigger: "change" }]
+        password: [{ required: true, message: "请输入密码", trigger: "change" }],
+        vcode: [{ required: true, message: "请输入验证码", trigger: "change" }]
       },
-      initialRoute: "/crm/customer"
+      initialRoute: "/crm/customer",
+      popupShow: false,
+      popupType: "CreateUser",
+      createAction: {
+        type: "add",
+        id: "",
+        data: {}
+      }
     };
   },
+  mounted() {
+    this.verifycode();
+  },
   methods: {
-    //申请口令
-    applyForPassword() {
-      let that = this;
-      this.$refs.loginFormRef.validateField("loginEmail", async valid => {
-        if (valid) return false;
-        this.applyLoading = true;
-        let params = {
-          email: this.form.loginEmail + this.mailboxSuffix
-        };
-        applyForPassword(params)
-          .then(res => {
-            if (res && res.code === 0) {
-              this.$message.success("发送口令成功！");
-              this.passwordTimer = setInterval(function () {
-                if (that.passwordCountdown) {
-                  that.passwordCountdown--;
-                } else {
-                  clearInterval(that.passwordTimer);
-                  that.passwordTimer = null;
-                  that.passwordCountdown = 30;
-                }
-              }, 1000);
-            } else {
-              this.$message.error(res.msg);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            this.applyLoading = false;
-          });
-      });
+    //验证码
+    verifycode() {
+      verifycode()
+        .then(res => {
+          if (res && res.code === 200) {
+            this.form.captid = res.data.captid;
+            this.vcodeImage = res.data.image;
+          } else {
+            this.$message.error(res.error);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //登录
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;
-        const initialRoute = this.initialRoute;
         this.loginLoading = true;
-        this.applyLoading = true;
-        let params = {
-          email: this.form.loginEmail + this.mailboxSuffix,
-          code: this.form.password
-        };
-        login(params)
+        login(this.form)
           .then(res => {
-            if (res && res.code === 0) {
+            if (res && res.code === 200) {
               let permission = res.data;
               let token = res.data.token;
               localStorage.setItem("crmToken", token);
               localStorage.setItem("crmPermission", JSON.stringify(permission));
               this.$store.commit("set_userInfo", permission.loginUser);
-              let as = permission.permission.routerWhiteList.find(function (item) {
-                return item === initialRoute;
-              });
-              if (as) {
-                this.$router.push(initialRoute);
-                // window.sessionStorage.setItem("activePath", initialRoute);
-              } else {
-                this.$router.push(permission.permission.routerWhiteList[0]);
-              }
+
               this.$message.success("登录成功");
             } else {
-              this.$message.warning(res.msg);
+              this.$message.warning(res.message);
             }
           })
           .catch(() => {})
           .finally(() => {
             this.loginLoading = false;
-            this.applyLoading = false;
+            this.verifycode();
           });
       });
+    },
+    // 注册
+    add() {
+      this.createAction = this.$options.data().createAction;
+      this.popupShow = true;
     }
   }
 };
@@ -156,7 +133,7 @@ export default {
 <style lang="less" scoped>
 .login_container {
   height: 100%;
-  // background: url(../../assets/images/login_bg.png) no-repeat;
+  background: url(../../assets/images/login_bg.png) no-repeat;
   background-size: cover;
   .login_box {
     position: absolute;
@@ -185,31 +162,31 @@ export default {
         }
       }
     }
+    .vcode {
+      .el-form-item__content {
+        display: flex;
+        .el-input {
+          flex: 1;
+          margin-right: 12px;
+        }
+      }
+      .v-code-img {
+        height: 40px;
+      }
+    }
 
-    .password,
     .login-button {
       margin-bottom: 0;
-    }
-
-    .applyForPassword {
-      text-align: right;
-      margin-bottom: 22px;
-
-      .el-button {
-        padding-top: 8px;
-        font-weight: 400;
-      }
-
-      .prompt-information {
-        color: rgba(0, 0, 0, 0.7);
-      }
-    }
-
-    .login-button {
       .el-button {
         width: 100%;
         height: 38px;
       }
+    }
+    .add-box {
+      text-align: right;
+    }
+    .add-btn {
+      font-size: 12px;
     }
 
     :deep(.el-input__inner) {
