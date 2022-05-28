@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <div class="logo">CRM</div>
+    <div class="logo">阳光小学线上教学系统</div>
     <div class="user">
       {{ $store.getters.userInfo.username }}（{{ $store.getters.userInfo.roleName }}）
     </div>

@@ -49,11 +49,11 @@
           <el-tag v-else type="danger">不通过</el-tag>
         </template>
         <template v-slot:operate="scope">
-          <div v-has="'del'" class="table-btn-box">
-            <el-button type="text" @click="itemHandle('del', scope.row)">删除</el-button>
-          </div>
           <div v-if="scope.row.status === 2" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+          </div>
+          <div v-has="'del'" class="table-btn-box">
+            <el-button type="text" @click="itemHandle('del', scope.row)">删除</el-button>
           </div>
         </template>
       </table-view>
@@ -99,42 +99,31 @@ export default {
     return {
       columns: [
         {
-          label: "客户名称",
+          label: "课程名",
           prop: "customerName",
           slot: "customerName",
           width: 140
         },
         {
-          label: "所属行业",
+          label: "年级",
           prop: "industry",
           width: 120
         },
         {
-          label: "生命周期",
+          label: "班级",
           prop: "lifecycle",
           width: 100
         },
         {
-          label: "是否上市",
+          label: "班级人数",
           prop: "ipoFlag",
           slot: "ipoFlag",
           width: 100
         },
         {
-          label: "区域",
+          label: "创建时间",
           prop: "address",
           width: 200
-        },
-        {
-          label: "客户归属",
-          prop: "salesmanName",
-          width: 100
-        },
-        {
-          label: "审核状态",
-          prop: "status",
-          width: 120,
-          slot: "status"
         },
         {
           label: "操作",
@@ -173,6 +162,26 @@ export default {
               {
                 value: 1,
                 label: "一年级"
+              },
+              {
+                value: 2,
+                label: "二年级"
+              },
+              {
+                value: 3,
+                label: "三年级"
+              },
+              {
+                value: 4,
+                label: "四年级"
+              },
+              {
+                value: 5,
+                label: "五年级"
+              },
+              {
+                value: 6,
+                label: "六年级"
               }
             ]
           },
@@ -188,9 +197,23 @@ export default {
             ]
           },
           {
+            type: "DatePicker",
+            field: "section_day",
+            title: "创建时间",
+            value: ["2018-02-20", "2021-02-15"],
+            props: {
+              type: "datetimerange",
+              format: "yyyy-MM-dd HH:mm:ss",
+              placeholder: "请选择时间"
+            }
+          },
+          {
             type: "input",
             field: "course",
-            title: "课程名"
+            title: "课程名",
+            props: {
+              "suffix-icon": "Search"
+            }
           }
         ]
       },
