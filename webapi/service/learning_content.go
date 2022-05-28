@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"io"
+	"io/ioutil"
 	"os"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
@@ -156,5 +157,48 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		}
 	}
 	support.SendApiResponse(ctx, resp, "success")
+	return
+}
+
+func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.LearningReq)
+
+	var contentDoc models.LearningContent
+	contentDoc, err = mongo.Content.FindOne(traceCtx, bson.M{"content_id": req.ContentId})
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+
+	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", contentDoc.CourseId, contentDoc.Title)
+	file, err := os.Open(filePath)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+	defer file.Close()
+
+	var userDoc models.User
+	userDoc, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return nil
+	}
+
+	// TODO 这里更新一下contentDoc
+
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+
+	_, err = ctx.Write(data)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+
 	return
 }
