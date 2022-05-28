@@ -34,7 +34,7 @@ func (e Exercises) CreateExercises(ctx *wrapper.Context) {
 // @Router /v1/exercises/ [get]
 // @Security ApiKeyAuth
 func (e Exercises) GetExercises(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.GetExercisesHandler, true, form_req.GetExercisesReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.GetExercisesHandler, true, form_req.GetExercisesReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // Exercises

@@ -34,36 +34,6 @@ definitions:
     - new_password
     - password
     type: object
-  form_req.CourseListReq:
-    properties:
-      class:
-        description: 班级
-        type: integer
-      create_tm:
-        description: 创建时间
-        type: string
-      grade:
-        description: 年级
-        type: integer
-      ordering_create_tm:
-        description: 根据创建时间排序 "create_tm" "-create_tm"
-        type: string
-      ordering_grade:
-        description: 根据年级排序 "grade" "-grade
-        type: string
-      ordering_total_member:
-        description: 根据班级总人数排序 "total_member" "-total_member"
-        type: string
-      page:
-        description: 页数,用于分页
-        type: integer
-      page_size:
-        description: 每页数量，用于分页
-        type: integer
-      search:
-        description: 根据课程名搜索
-        type: string
-    type: object
   form_req.CreateCourseReq:
     properties:
       class:
@@ -370,6 +340,9 @@ definitions:
         type: integer
       user_id:
         description: 用户ID
+        type: string
+      username:
+        description: 用户名
         type: string
     type: object
   form_resp.AuthVerifyCodeResp:
@@ -708,17 +681,47 @@ paths:
       summary: 删除课程
       tags:
       - course
-    post:
+    get:
       consumes:
       - application/x-www-form-urlencoded
       description: course list
       parameters:
-      - description: request data
-        in: body
-        name: auth
-        required: true
-        schema:
-          $ref: '#/definitions/form_req.CourseListReq'
+      - description: 班级
+        in: query
+        name: class
+        type: integer
+      - description: 创建时间
+        in: query
+        name: create_tm
+        type: string
+      - description: 年级
+        in: query
+        name: grade
+        type: integer
+      - description: 根据创建时间排序 "create_tm" "-create_tm"
+        in: query
+        name: ordering_create_tm
+        type: string
+      - description: 根据年级排序 "grade" "-grade
+        in: query
+        name: ordering_grade
+        type: string
+      - description: 根据班级总人数排序 "total_member" "-total_member"
+        in: query
+        name: ordering_total_member
+        type: string
+      - description: 页数,用于分页
+        in: query
+        name: page
+        type: integer
+      - description: 每页数量，用于分页
+        in: query
+        name: page_size
+        type: integer
+      - description: 根据课程名搜索
+        in: query
+        name: search
+        type: string
       produces:
       - application/json
       responses:
@@ -729,6 +732,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 课程列表
+      tags:
+      - course
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: create course
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateCourseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 新建课程
       tags:
       - course
   /v1/course/class:

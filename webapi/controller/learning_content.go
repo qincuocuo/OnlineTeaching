@@ -35,7 +35,7 @@ func (l LearningController) CreateLearningContent(ctx *wrapper.Context) {
 // @Router /v1/learning_content/ [get]
 // @Security ApiKeyAuth
 func (l LearningController) LearningContentList(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningContentListHandler, true, form_req.LearningContentListReq{PageSize: 10}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.LearningContentListHandler, true, form_req.LearningContentListReq{PageSize: 10}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // LearningResult
@@ -49,7 +49,7 @@ func (l LearningController) LearningContentList(ctx *wrapper.Context) {
 // @Router /v1/learning_content/result/ [get]
 // @Security ApiKeyAuth
 func (l LearningController) LearningResult(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningResultHandler, true, form_req.LearningResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.LearningResultHandler, true, form_req.LearningResultReq{}, wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // Learning

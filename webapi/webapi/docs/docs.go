@@ -167,7 +167,7 @@ const docTemplate = `{
             }
         },
         "/v1/course/": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -186,13 +186,58 @@ const docTemplate = `{
                 "summary": "课程列表",
                 "parameters": [
                     {
-                        "description": "request data",
-                        "name": "auth",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/form_req.CourseListReq"
-                        }
+                        "type": "integer",
+                        "description": "班级",
+                        "name": "class",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "create_tm",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "年级",
+                        "name": "grade",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据创建时间排序 \"create_tm\" \"-create_tm\"",
+                        "name": "ordering_create_tm",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据年级排序 \"grade\" \"-grade",
+                        "name": "ordering_grade",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据班级总人数排序 \"total_member\" \"-total_member\"",
+                        "name": "ordering_total_member",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页数,用于分页",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量，用于分页",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据课程名搜索",
+                        "name": "search",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -200,6 +245,43 @@ const docTemplate = `{
                         "description": "response data",
                         "schema": {
                             "$ref": "#/definitions/form_resp.CourseListResp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "create course",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "course"
+                ],
+                "summary": "新建课程",
+                "parameters": [
+                    {
+                        "description": "request data",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/form_req.CreateCourseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.StatusResp"
                         }
                     }
                 }
@@ -1077,47 +1159,6 @@ const docTemplate = `{
                 }
             }
         },
-        "form_req.CourseListReq": {
-            "type": "object",
-            "properties": {
-                "class": {
-                    "description": "班级",
-                    "type": "integer"
-                },
-                "create_tm": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "grade": {
-                    "description": "年级",
-                    "type": "integer"
-                },
-                "ordering_create_tm": {
-                    "description": "根据创建时间排序 \"create_tm\" \"-create_tm\"",
-                    "type": "string"
-                },
-                "ordering_grade": {
-                    "description": "根据年级排序 \"grade\" \"-grade",
-                    "type": "string"
-                },
-                "ordering_total_member": {
-                    "description": "根据班级总人数排序 \"total_member\" \"-total_member\"",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "页数,用于分页",
-                    "type": "integer"
-                },
-                "page_size": {
-                    "description": "每页数量，用于分页",
-                    "type": "integer"
-                },
-                "search": {
-                    "description": "根据课程名搜索",
-                    "type": "string"
-                }
-            }
-        },
         "form_req.CreateCourseReq": {
             "type": "object",
             "required": [
@@ -1547,6 +1588,10 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "description": "用户ID",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }

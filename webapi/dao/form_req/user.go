@@ -11,11 +11,11 @@ type CreateUserReq struct {
 }
 
 type UserPasswordReq struct {
-	UserId   string `json:"user_id" validate:"required"`   //学生学号/教师工号
-	Role     int    `json:"role" validate:"required"`      //用户角色
-	UserName string `json:"user_name" validate:"required"` //用户名
-	Password string `json:"password" validate:"required"`  //新密码
-	Confirm  string `json:"confirm" validate:"required"`   //确认用户密码
+	UserId   string `form:"user_id" json:"user_id" validate:"required"`     //学生学号/教师工号
+	Role     int    `form:"role" json:"role" validate:"required"`           //用户角色
+	UserName string `form:"user_name" json:"user_name" validate:"required"` //用户名
+	Password string `form:"password" json:"password" validate:"required"`   //新密码
+	Confirm  string `form:"confirm" json:"confirm" validate:"required"`     //确认用户密码
 }
 
 type ChangePasswordReq struct {
