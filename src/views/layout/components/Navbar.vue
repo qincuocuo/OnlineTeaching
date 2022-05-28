@@ -2,9 +2,7 @@
   <div class="navbar">
     <div class="logo">阳光小学线上教学系统</div>
     <div class="user">
-      {{ $store.getters?.userInfo?.username }}（{{
-        $store.getters?.userInfo?.roleName === 2 ? "学生" : "教师"
-      }}）
+      {{ $store.getters?.userInfo?.username }}（{{ $store.getters?.userInfo?.roleName }}）
     </div>
     <div class="mine" @click="toMy"><el-button type="text">我的</el-button></div>
     <div class="logout" @click="logout"><el-button type="text">退出</el-button></div>
@@ -46,15 +44,12 @@ export default {
         type: "warning"
       })
         .then(() => {
-          logout()
-            .then(res => {
-              if (res && res.code === 200) {
-                this.$message.success(res.message);
-                this.$router.push("/login");
-                window.localStorage.removeItem("crmPermission");
-              }
-            })
-            .catch(() => {});
+          logout().then(res => {
+            if (res && res.code === 200) {
+              this.$router.push("/login");
+              window.localStorage.removeItem("crmPermission");
+            }
+          });
         })
         .catch(() => {});
     },

@@ -49,3 +49,8 @@ export function updateCourse(params){
   const url = "v1/course/update";
   return axios.post(url, params);
 }
+// 删除课程
+export function deleteCourse(params){
+  const url = "v1/course";
+  return axios.delete(url, params);
+}

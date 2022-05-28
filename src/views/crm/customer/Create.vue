@@ -142,9 +142,9 @@ export default {
           if (res && res.code === 200) {
             this.$emit("close");
             this.$emit("load");
-            this.$message.success(res.message);
+            this.$message.success(res.msg);
           } else {
-            this.$message.warning(res.error);
+            this.$message.warning(res.msg);
           }
         })
         .catch(() => {});
