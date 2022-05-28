@@ -67,7 +67,7 @@ func (course) FindSortByLimitAndSkip(ctx context.Context, query bson.M, page int
 	defer span.End()
 	limit := pageSize
 	skip := utils.GetPageStart(page, pageSize)
-	err = db.MongoCli.FindSortByLimitAndSkip(dbName, query, courseDoc, limit, skip, sorter)
+	err = db.MongoCli.FindSortByLimitAndSkip(dbName, query, &courseDoc, limit, skip, sorter)
 	return
 }
 
