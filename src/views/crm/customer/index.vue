@@ -232,7 +232,7 @@ export default {
     };
   },
   async mounted() {
-    if (hasFun("cus_query")) await this.loadData();
+    // if (hasFun("cus_query")) await this.loadData();
   },
   methods: {
     add() {

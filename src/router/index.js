@@ -12,7 +12,7 @@ const routes = [
     name: "login",
     component: () => import("@/views/login/index"),
     meta: {
-      title: "CRM"
+      title: "阳光小学线上教学系统"
     }
   },
   {
