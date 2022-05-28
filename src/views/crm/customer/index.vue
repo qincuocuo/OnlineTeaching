@@ -117,7 +117,6 @@ export default {
       url: {
         list: "/v1/course"
       },
-      disableMixinInit: true,
       formOptions: {
         fApi: {},
         options: {

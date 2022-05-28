@@ -46,7 +46,7 @@ service.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8"
 service.interceptors.request.use(
   config => {
     const TOKEN = localStorage.getItem("crmToken") || "";
-    if (TOKEN) config.headers["Authorization"] = TOKEN;
+    if (TOKEN) config.headers["Authorization"] = "Bearer " + TOKEN;
     return config;
   },
   error => {
