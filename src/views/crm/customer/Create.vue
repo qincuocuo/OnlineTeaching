@@ -13,7 +13,7 @@
 <script>
 import CreatePopupView from "@/components/CreatePopupView";
 import CreatePopupViewSection from "@/components/CreatePopupViewSection";
-import { addCustomer, updateCustomer } from "@/api/crm/customer";
+import { addCourse, updateCourse } from "@/api/crm/customer";
 import _ from "lodash";
 import { useStore } from "vuex";
 import { computed } from "vue";
@@ -66,7 +66,8 @@ export default {
           {
             type: "input",
             field: "course_name",
-            title: "课程名称"
+            title: "课程名称",
+            validate: [{ required: true, message: "请输入课程名称", trigger: "blur" }]
           },
           {
             type: "select",
@@ -97,13 +98,23 @@ export default {
                 value: 6,
                 label: "六年级"
               }
-            ]
+            ],
+            validate: [{ required: true, message: "请选择年级", trigger: "change" }]
           },
           {
             type: "input",
             field: "class",
-            title: "班级"
-          },
+            title: "班级",
+            props: {
+              placeholder: "仅允许输入数字"
+            },
+            validate: [{ required: true, message: "请输入班级名称", trigger: "blur" }],
+            on: {
+              input: val => {
+                this.form.class = val.replace(/[^\d]/g, "");
+              }
+            }
+          }
         ]
       }
     };
@@ -125,9 +136,10 @@ export default {
         .validate(async valid => {
           if (valid !== true) return this.$message.warning("请输入完整信息！");
           const params = _.cloneDeep(this.form);
-          const actionApi = this.action.type === "add" ? addCustomer : updateCustomer;
+          const actionApi = this.action.type === "add" ? addCourse : updateCourse;
+          params.class = Number(params.class);
           const res = await actionApi(params);
-          if (res && res.code === 0) {
+          if (res && res.code === 200) {
             this.$emit("close");
             this.$emit("load");
             this.$message.success(res.msg);

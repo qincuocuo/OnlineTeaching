@@ -38,3 +38,14 @@ export function queryCustomerDetail(params) {
   const url = "/crm/auth/api/customer/query_customer";
   return axios.post(url, params);
 }
+
+// 新增课程
+export function addCourse(params){
+  const url = "v1/course";
+  return axios.post(url, params);
+}
+// 编辑课程
+export function updateCourse(params){
+  const url = "v1/course/update";
+  return axios.post(url, params);
+}
