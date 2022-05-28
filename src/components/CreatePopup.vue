@@ -7,12 +7,14 @@
 import CreateCustomer from "@/views/crm/customer/Create";
 import CreateUser from "@/views/login/Create.vue";
 import UserInfo from "@/views/layout/components/UserInfo";
+import LearnPoup from "@/views/crm/customer/LearnPoup.vue";
 export default {
   name: "CreatePopup",
   components: {
     CreateCustomer,
     CreateUser,
-    UserInfo
+    UserInfo,
+    LearnPoup
   },
   inheritAttrs: false,
   props: {

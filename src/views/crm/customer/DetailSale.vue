@@ -53,7 +53,7 @@
             <el-button type="text">查看讨论情况</el-button>
           </div>
           <div v-has="'student'" class="table-btn-box">
-            <el-button type="text">进入学习</el-button>
+            <el-button type="text" @click="enterLearning(scope.row)">进入学习</el-button>
           </div>
           <div v-has="'student'" class="table-btn-box">
             <el-button type="text">查看通知</el-button>
@@ -262,9 +262,11 @@ export default {
       };
       this.popupShow = true;
     },
-
     gainAppoint() {
       return gainAppoint(...arguments);
+    },
+    enterLearning(item) {
+      this.$emit("enterLearning", item);
     }
   }
 };

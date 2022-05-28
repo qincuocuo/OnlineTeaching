@@ -22,33 +22,29 @@
       </div>
       <!-- tab区域 -->
       <div class="detail-tabs-box">
-          <detail-sale :customer="customer"></detail-sale>
+        <detail-sale :customer="customer" @enterLearning="enterLearning"></detail-sale>
       </div>
     </div>
     <create-popup
       :show="popupShow"
       :popup-type="popupType"
+      :showCancelButton="false"
+      :showConfirmButton="false"
       :action="createAction"
-      @load="editCompleted"
       @close="popupShow = false"
     />
   </slide-detail-view>
 </template>
 <script>
 import SlideDetailView from "@/components/SlideDetailView";
-import { queryCustomerDetail } from "@/api/crm/customer";
-import DetailInfo from "@/views/crm/customer/DetailInfo";
 import DetailSale from "@/views/crm/customer/DetailSale";
-import DetailVisit from "@/views/crm/customer/DetailVIsit";
 import CreatePopup from "@/components/CreatePopup";
 
 export default {
   name: "CustomerDetail",
   components: {
     SlideDetailView,
-    // DetailInfo,
     DetailSale,
-    // DetailVisit,
     CreatePopup
   },
   props: {
@@ -98,10 +94,11 @@ export default {
       ],
       tabActiveName: "detail",
       popupShow: false,
-      popupType: "CreateCustomer",
+      popupType: "LearnPoup",
       createAction: {
-        type: "edit",
-        id: ""
+        type: "add",
+        id: "",
+        data: {}
       }
     };
   },
@@ -111,96 +108,14 @@ export default {
     this.index = this.action.index;
     this.detailObj = this.action;
   },
-  async mounted() {
-    // this.queryCustomerDetail();
-  },
+  async mounted() {},
   methods: {
     afterEnter() {},
     handleClose() {
       if (this.$route.params.customerId) delete this.$route.params.customerId;
     },
-
-    /**
-     * 编辑客户
-     */
-    customerEdit() {
-      this.createAction = {
-        type: "edit",
-        id: this.detailObj.customerId
-      };
+    enterLearning(item) {
       this.popupShow = true;
-    },
-
-    /**
-     * 编辑客户完成回调
-     */
-    editCompleted() {
-      this.queryCustomerDetail();
-      this.$emit("load");
-    },
-
-    /**
-     * 更换
-     */
-    changePage(type) {
-      switch (type) {
-        case "back":
-          if (
-            (this.$route.params.customerId && this.index <= 0) ||
-            (!this.$route.params.customerId && this.index <= 1)
-          )
-            return this.$message.error("没有更多了！");
-          this.index--;
-          break;
-        case "next":
-          if (this.index >= this.action.list.length) return this.$message.error("没有更多了！");
-          this.index++;
-          break;
-        default:
-          break;
-      }
-      this.queryCustomerDetail();
-    },
-
-    /**
-     * tab切换
-     */
-    tabClick() {},
-
-    /**
-     * 查询详情
-     */
-    async queryCustomerDetail() {
-      this.loading = true;
-      const params = {
-        customerId: this.action.list[this.index - 1] || this.action.id
-      };
-      const res = await queryCustomerDetail(params).finally(() => {
-        this.loading = false;
-      });
-      if (res && res.code === 0) {
-        this.detailObj = res.data.obj;
-        this.customer = {
-          customerId: this.detailObj.customerId,
-          customerName: this.detailObj.customerName
-        };
-      } else {
-        this.$message.warning(res.msg);
-      }
-    }
-  },
-  watch: {
-    /**
-     * 点击列表换页
-     */
-    "action.index": {
-      handler(val) {
-        if (val !== this.index) {
-          this.index = val;
-          this.queryCustomerDetail();
-        }
-      },
-      deep: true
     }
   }
 };
