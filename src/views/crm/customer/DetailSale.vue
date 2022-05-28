@@ -36,7 +36,7 @@
             <el-button type="text">查看学习情况</el-button>
           </div>
           <div v-has="'visit_edit'" class="table-btn-box">
-            <el-button type="text" @click="edit(scope.row)">发起签到</el-button>
+            <el-button type="text" @click="qiandaoVisible = true">发起签到</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
             <el-button type="text">发起讨论</el-button>
@@ -84,6 +84,26 @@
           <el-button @click="addContentVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
+    </el-dialog>
+    <!-- 发起签到 -->
+    <el-dialog
+      v-model="qiandaoVisible"
+      title="发起签到"
+      width="40%"
+      center
+      :before-close="handleClose"
+    >
+      <div style="text-align: center;">
+        签到有效时间为
+        <el-input-number v-model="register_tm" :min="1" controls-position="right" />
+        分钟
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="qiandaoVisible = false">取消</el-button>
+          <el-button type="primary" @click="qiandaoVisible = false">发起签到</el-button>
+        </span>
+      </template>
     </el-dialog>
     <create-popup
       ref="refCreatePoup"
@@ -153,6 +173,7 @@ export default {
       disableMixinInit: true,
       popupShow: false,
       addContentVisible: false,
+      qiandaoVisible: false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -165,6 +186,7 @@ export default {
         title: "",
         content: ""
       },
+      register_tm: "", //签到时间限制
       //表单验证规则
       contentfFormRules: {
         title: [{ required: true, message: "请输入名称", trigger: "change" }],
@@ -189,7 +211,6 @@ export default {
         if (!valid) return;
         this.addContentVisible = false;
       });
-      
     },
     edit(item) {
       this.createAction = {
