@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/globalsign/mgo/bson"
+	"io"
 	"io/ioutil"
 	"os"
 	"webapi/dao/form_req"
@@ -11,6 +12,7 @@ import (
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
+	"webapi/utils"
 )
 
 func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
@@ -70,46 +72,46 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	}
 	defer file.Close()
 
-	//dir := fmt.Sprintf("%s/%d", "/workspace/data", req.CourseId)
-	////filePath := fmt.Sprintf("%s/%d/%s", ".", req.CourseId, fh.Filename)
-	//
-	//if !utils.IsExistDir(dir) {
-	//	err = os.MkdirAll(dir, os.ModePerm)
-	//	if err != nil {
-	//		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//		return nil
-	//	}
-	//}
-	//filePath := fmt.Sprintf("%s/%s", dir, fh.Filename)
-	//
-	//dest, err := os.Create(filePath)
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//	return nil
-	//}
-	//defer dest.Close()
-	//
-	//_, err = io.Copy(dest, file)
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//	return nil
-	//}
-	//query := bson.M{"course_id": req.CourseId}
-	//var courseDoc models.Course
-	//courseDoc, err = mongo.Course.FindOne(traceCtx, query)
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
-	//	return
-	//}
+	dir := fmt.Sprintf("%s/%d", "/workspace/data", req.CourseId)
+	//filePath := fmt.Sprintf("%s/%d/%s", ".", req.CourseId, fh.Filename)
+
+	if !utils.IsExistDir(dir) {
+		err = os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+			return nil
+		}
+	}
+	filePath := fmt.Sprintf("%s/%s", dir, fh.Filename)
+
+	dest, err := os.Create(filePath)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	defer dest.Close()
+
+	_, err = io.Copy(dest, file)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	query := bson.M{"course_id": req.CourseId}
+	var courseDoc models.Course
+	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
+		return
+	}
 
 	learningContent := models.LearningContent{
-		ContentId:   mongo.Content.GetMaxId(traceCtx),
-		CourseId:    req.CourseId,
-		Title:       fh.Filename,
-		FinishedNum: 0,
-		//UnfinishedNum: courseDoc.TotalMember,
-		Finished: nil,
-		//Unfinished:    courseDoc.StudentId,
+		ContentId:     mongo.Content.GetMaxId(traceCtx),
+		CourseId:      req.CourseId,
+		Title:         fh.Filename,
+		FinishedNum:   0,
+		UnfinishedNum: courseDoc.TotalMember,
+		Finished:      nil,
+		Unfinished:    courseDoc.StudentId,
 	}
 	err = mongo.Content.Create(traceCtx, learningContent)
 	if err != nil {
