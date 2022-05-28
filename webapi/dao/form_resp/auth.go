@@ -9,6 +9,7 @@ type AuthVerifyCodeResp struct {
 // AuthLoginResp 用户登录响应结构体
 type AuthLoginResp struct {
 	UserId        string `json:"user_id"`       //用户ID
+	Username      string `json:"username"`      //用户名
 	Role          int    `json:"role"`          //用户权限
 	Authorization string `json:"authorization"` //用户Token信息
 }

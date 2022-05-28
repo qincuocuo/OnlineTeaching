@@ -1,9 +1,13 @@
 package form_req
 
+type GetClassListReq struct {
+	Grade int `json:"grade" validate:"required"` //年级
+}
+
 type CreateCourseReq struct {
-	CourseName string `json:"course_name"` // 课程名称
-	Grade      int    `json:"grade"`       // 年级
-	Class      int    `json:"class"`       // 班级
+	CourseName string `json:"course_name" validate:"required"` // 课程名称
+	Grade      int    `json:"grade" validate:"required"`       // 年级
+	Class      int    `json:"class" validate:"required"`       // 班级
 }
 
 type CourseListReq struct {
@@ -19,16 +23,16 @@ type CourseListReq struct {
 }
 
 type UpdateCourseReq struct {
-	CourseId   int    `json:"course_id"`   // 课程id
+	CourseId   int    `json:"course_id" validate:"required"`   // 课程id
 	CourseName string `json:"course_name"` // 课程名称
 	Grade      int    `json:"grade"`       // 年级
 	Class      int    `json:"class"`       // 班级
 }
 
 type DeleteCourseReq struct {
-	CourseId int    `json:"course_id"` // 课程id
+	CourseId int    `json:"course_id" validate:"required"` // 课程id
 }
 
 type EnterCourseReq struct {
-	CourseId int    `json:"course_id"` //课程id
+	CourseId int    `json:"course_id" validate:"required"` //课程id
 }

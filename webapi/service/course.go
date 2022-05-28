@@ -10,10 +10,30 @@ import (
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
+	"webapi/internal/utils"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
 )
+
+func GetClassListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtc := ctx.Request().Context()
+	req := reqBody.(*form_req.GetClassListReq)
+	resp := form_resp.GetClassListResp{}
+	query := bson.M{"grade": req.Grade}
+	var courseDoc []models.Course
+	courseDoc, err = mongo.Course.FindAll(traceCtc, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetCourseFailed, 0)
+	}
+	for _, course := range courseDoc {
+		if !utils.IsContainIntInSlice(course.Class, resp) {
+			resp = append(resp, course.Class)
+		}
+	}
+	support.SendApiResponse(ctx, resp, "success")
+	return
+}
 
 func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()

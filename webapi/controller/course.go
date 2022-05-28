@@ -10,6 +10,20 @@ import (
 type CourseController struct {
 }
 
+// GetClassList
+// @Summary 获取班级列表
+// @Description get class list
+// @Tags course
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param auth query form_req.GetClassListReq true "request data"
+// @Success 200 {object} form_resp.GetClassListResp "response data"
+// @Router /v1/course/class [get]
+// @Security ApiKeyAuth
+func (c CourseController) GetClassList(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.GetClassListHandler, true, &form_req.GetClassListReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+}
+
 // CreateCourse
 // @Summary 新建课程
 // @Description create course

@@ -65,10 +65,10 @@ func ApiWrapper(ctx *Context, handler ApiHandler, paramChecker bool, reqBody int
 			if err, paramErr = checkParam(config.ReqType, reqBody); err != nil || paramErr != nil {
 				if err != nil {
 					mlog.Error("checker param error", zap.Error(err))
-					support.SendApiErrorResponse(ctx, "checker param failed failed", iris.StatusOK)
+					support.SendApiErrorResponse(ctx, "checker param failed failed", 0)
 				} else {
 					if msg, err := json.Marshal(paramErr); err == nil {
-						support.SendApiErrorResponse(ctx, string(msg), iris.StatusOK)
+						support.SendApiErrorResponse(ctx, string(msg), 0)
 					} else {
 						mlog.Error("marshal err param msg failed", zap.Error(err))
 						support.SendApiErrorResponse(ctx, "checker param failed failed", iris.StatusInternalServerError)

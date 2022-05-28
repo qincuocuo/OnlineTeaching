@@ -75,12 +75,13 @@ definitions:
       grade:
         description: 年级
         type: integer
+    required:
+    - class
+    - course_name
+    - grade
     type: object
   form_req.CreateExercisesReq:
     properties:
-      course_id:
-        description: 课程号
-        type: integer
       exercises:
         description: 练习题
         items:
@@ -89,44 +90,37 @@ definitions:
       learning_content_id:
         description: 学习内容id
         type: integer
-      user_id:
-        description: 教师工号
-        type: string
+    required:
+    - exercises
+    - learning_content_id
     type: object
   form_req.CreateLearningContentReq:
     properties:
       course_id:
         description: 课程id
         type: integer
-      user_id:
-        description: 教师工号
-        type: string
+    required:
+    - course_id
     type: object
   form_req.CreateRegisterReq:
     properties:
       content_id:
         description: 学习内容id
         type: integer
-      create_tm:
-        description: 创建时间
-        type: string
       register_tm:
         description: 签到时间限制，默认为2分钟
         type: integer
+    required:
+    - content_id
+    - register_tm
     type: object
   form_req.CreateTalkReq:
     properties:
-      course_id:
-        description: 课程号
-        type: integer
-      learning_content_id:
+      content_id:
         description: 学习内容id
         type: integer
       talk:
         description: 讨论主题
-        type: string
-      user_id:
-        description: 教师工号
         type: string
     type: object
   form_req.CreateUserReq:
@@ -156,6 +150,7 @@ definitions:
     - confirm
     - password
     - role
+    - user_id
     - username
     type: object
   form_req.DeleteCourseReq:
@@ -163,29 +158,63 @@ definitions:
       course_id:
         description: 课程id
         type: integer
+    required:
+    - course_id
     type: object
   form_req.EnterCourseReq:
     properties:
       course_id:
         description: 课程id
         type: integer
+    required:
+    - course_id
+    type: object
+  form_req.ExercisesAnswer:
+    properties:
+      answer:
+        description: 答案
+        type: string
+      id:
+        description: 习题id
+        type: integer
+    required:
+    - answer
+    - id
     type: object
   form_req.ExercisesItem:
     properties:
       answer:
         description: 答案
         type: string
-      question:
-        description: 题目
-        type: string
-    type: object
-  form_req.ExercisesReq:
-    properties:
-      answer:
-        description: 答案
+      options:
+        description: 选项
         items:
           type: string
         type: array
+      question:
+        description: 题目
+        type: string
+      type:
+        description: 类型 1-选择 2-判断
+        type: integer
+    required:
+    - answer
+    - question
+    - type
+    type: object
+  form_req.ExercisesReq:
+    properties:
+      answers:
+        description: 答案提交
+        items:
+          $ref: '#/definitions/form_req.ExercisesAnswer'
+        type: array
+      content_id:
+        description: 内容id
+        type: integer
+    required:
+    - answers
+    - content_id
     type: object
   form_req.LearningContentListReq:
     properties:
@@ -207,6 +236,8 @@ definitions:
       search:
         description: 根据学习内容搜索
         type: string
+    required:
+    - course_id
     type: object
   form_req.LearningReq:
     properties:
@@ -216,9 +247,9 @@ definitions:
       file_name:
         description: 文件名
         type: string
-      user_id:
-        description: 学生学号
-        type: string
+    required:
+    - content_id
+    - file_name
     type: object
   form_req.LearningResultReq:
     properties:
@@ -228,6 +259,9 @@ definitions:
       status:
         description: 学习状态 learned-已学习/unlearned-未学习
         type: string
+    required:
+    - content_id
+    - status
     type: object
   form_req.NoticeReq:
     properties:
@@ -246,6 +280,8 @@ definitions:
       content_id:
         description: 学习内容id
         type: integer
+    required:
+    - content_id
     type: object
   form_req.RegisterResultReq:
     properties:
@@ -254,7 +290,10 @@ definitions:
         type: integer
       register_result:
         description: 签到结果，unfinished-未签到/finished-已签到
-        type: integer
+        type: string
+    required:
+    - content_id
+    - register_result
     type: object
   form_req.TalkInfoReq:
     properties:
@@ -267,9 +306,6 @@ definitions:
       talk_id:
         description: 讨论id
         type: integer
-      user_id:
-        description: 教师工号
-        type: string
     type: object
   form_req.TalkReq:
     properties:
@@ -282,9 +318,6 @@ definitions:
       talk_id:
         description: 讨论id
         type: integer
-      user_id:
-        description: 教师工号/学生学号
-        type: string
     type: object
   form_req.UpdateCourseReq:
     properties:
@@ -300,6 +333,8 @@ definitions:
       grade:
         description: 年级
         type: integer
+    required:
+    - course_id
     type: object
   form_req.UserPasswordReq:
     properties:
@@ -318,6 +353,12 @@ definitions:
       user_name:
         description: 用户名
         type: string
+    required:
+    - confirm
+    - password
+    - role
+    - user_id
+    - user_name
     type: object
   form_resp.AuthLoginResp:
     properties:
@@ -327,9 +368,9 @@ definitions:
       role:
         description: 用户权限
         type: integer
-      uid:
+      user_id:
         description: 用户ID
-        type: integer
+        type: string
     type: object
   form_resp.AuthVerifyCodeResp:
     properties:
@@ -378,12 +419,43 @@ definitions:
       correct:
         description: 判断是否正确
         type: boolean
+      id:
+        description: 课后练习id
+        type: integer
+    type: object
+  form_resp.ExercisesItem:
+    properties:
+      id:
+        description: 课后练习id
+        type: integer
+      options:
+        description: 选项
+        items:
+          type: string
+        type: array
+      question:
+        description: 题目
+        type: string
+      type:
+        description: 类型 0-选择 1-判断
+        type: integer
     type: object
   form_resp.ExercisesResp:
     properties:
       results:
         items:
           $ref: '#/definitions/form_resp.ExerciseResult'
+        type: array
+    type: object
+  form_resp.GetExercisesResp:
+    properties:
+      count:
+        description: 习题数
+        type: integer
+      results:
+        description: 练习题
+        items:
+          $ref: '#/definitions/form_resp.ExercisesItem'
         type: array
     type: object
   form_resp.LearningContentItem:
@@ -394,9 +466,6 @@ definitions:
       content_id:
         description: 学习内容id
         type: integer
-      file_path:
-        description: 文件路径
-        type: string
       learned:
         description: 已学习
         type: integer
@@ -569,6 +638,35 @@ paths:
       summary: 基础接口 - 用户登出
       tags:
       - common
+  /auth/register/:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: request data
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/form_req.CreateUserReq'
+      - description: authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.StatusResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 创建用户
+      tags:
+      - 用户管理
   /auth/verifycode/:
     get:
       consumes:
@@ -633,6 +731,31 @@ paths:
       summary: 课程列表
       tags:
       - course
+  /v1/course/class:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: get class list
+      parameters:
+      - description: 年级
+        in: query
+        name: grade
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            items:
+              type: integer
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: 获取班级列表
+      tags:
+      - course
   /v1/course/enter:
     post:
       consumes:
@@ -682,6 +805,28 @@ paths:
       tags:
       - course
   /v1/exercises/:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: get exercises
+      parameters:
+      - description: 内容id
+        in: query
+        name: content_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response data
+          schema:
+            $ref: '#/definitions/form_resp.GetExercisesResp'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取课后练习
+      tags:
+      - exercises
     post:
       consumes:
       - application/x-www-form-urlencoded
@@ -1012,34 +1157,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户信息
-      tags:
-      - 用户管理
-    post:
-      consumes:
-      - application/json
-      description: create user
-      parameters:
-      - description: request data
-        in: body
-        name: auth
-        required: true
-        schema:
-          $ref: '#/definitions/form_req.CreateUserReq'
-      - description: authentication
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: response data
-          schema:
-            $ref: '#/definitions/form_resp.StatusResp'
-      security:
-      - ApiKeyAuth: []
-      summary: 创建用户
       tags:
       - 用户管理
   /v1/user/change_password/:

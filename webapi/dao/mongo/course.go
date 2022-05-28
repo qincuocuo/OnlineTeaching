@@ -21,6 +21,14 @@ func (course) FindOne(ctx context.Context, query bson.M) (courseDoc models.Cours
 	return
 }
 
+func (course) FindAll(ctx context.Context, query bson.M) (courseDoc []models.Course, err error) {
+	dbName := (&models.Course{}).CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	err = db.MongoCli.FindAll(dbName, query, &courseDoc)
+	return
+}
+
 func (course) Create(ctx context.Context, course models.Course) (err error) {
 	dbName := course.CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, course)

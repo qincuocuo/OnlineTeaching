@@ -10,7 +10,6 @@ type LearningContentItem struct {
 	Content   string `json:"content"`   // 学习内容
 	Learned   int    `json:"learned"`   // 已学习
 	Unlearned int    `json:"unlearned"` // 未学习
-	FilePath  string `json:"file_path"` // 文件路径
 }
 
 type LearningResultResp struct {

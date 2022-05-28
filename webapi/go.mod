@@ -16,6 +16,7 @@ require (
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -57,7 +58,6 @@ require (
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
 	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (

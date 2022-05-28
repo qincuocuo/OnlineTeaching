@@ -1,5 +1,7 @@
 package form_resp
 
+type GetClassListResp []int
+
 type CourseListResp struct {
 	Count  int              `json:"count"`
 	Result []CourseListItem `json:"result"`

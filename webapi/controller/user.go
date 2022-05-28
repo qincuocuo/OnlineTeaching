@@ -18,7 +18,7 @@ type UserController struct {
 // @Produce json
 // @Param auth body form_req.CreateUserReq true "request data"
 // @Success 200 {object} form_resp.StatusResp "response data"
-// @Router /v1/user/ [post]
+// @Router /auth/register/ [post]
 // @Security ApiKeyAuth
 // @Param Authorization header string true "authentication"
 func (u UserController) CreateUser(ctx *wrapper.Context) {

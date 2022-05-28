@@ -92,6 +92,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/register/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "create user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理"
+                ],
+                "summary": "创建用户",
+                "parameters": [
+                    {
+                        "description": "request data",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/form_req.CreateUserReq"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "authentication",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.StatusResp"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/verifycode/": {
             "get": {
                 "security": [
@@ -196,6 +242,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/course/class": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get class list",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "course"
+                ],
+                "summary": "获取班级列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "年级",
+                        "name": "grade",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/course/enter": {
             "post": {
                 "security": [
@@ -275,6 +361,41 @@ const docTemplate = `{
             }
         },
         "/v1/exercises/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get exercises",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "exercises"
+                ],
+                "summary": "获取课后练习",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "内容id",
+                        "name": "content_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.GetExercisesResp"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -812,50 +933,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "create user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户管理"
-                ],
-                "summary": "创建用户",
-                "parameters": [
-                    {
-                        "description": "request data",
-                        "name": "auth",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/form_req.CreateUserReq"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "authentication",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "response data",
-                        "schema": {
-                            "$ref": "#/definitions/form_resp.StatusResp"
-                        }
-                    }
-                }
             }
         },
         "/v1/user/change_password/": {
@@ -1043,6 +1120,11 @@ const docTemplate = `{
         },
         "form_req.CreateCourseReq": {
             "type": "object",
+            "required": [
+                "class",
+                "course_name",
+                "grade"
+            ],
             "properties": {
                 "class": {
                     "description": "班级",
@@ -1060,11 +1142,11 @@ const docTemplate = `{
         },
         "form_req.CreateExercisesReq": {
             "type": "object",
+            "required": [
+                "exercises",
+                "learning_content_id"
+            ],
             "properties": {
-                "course_id": {
-                    "description": "课程号",
-                    "type": "integer"
-                },
                 "exercises": {
                     "description": "练习题",
                     "type": "array",
@@ -1075,36 +1157,31 @@ const docTemplate = `{
                 "learning_content_id": {
                     "description": "学习内容id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
         "form_req.CreateLearningContentReq": {
             "type": "object",
+            "required": [
+                "course_id"
+            ],
             "properties": {
                 "course_id": {
                     "description": "课程id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
         "form_req.CreateRegisterReq": {
             "type": "object",
+            "required": [
+                "content_id",
+                "register_tm"
+            ],
             "properties": {
                 "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
-                },
-                "create_tm": {
-                    "description": "创建时间",
-                    "type": "string"
                 },
                 "register_tm": {
                     "description": "签到时间限制，默认为2分钟",
@@ -1115,20 +1192,12 @@ const docTemplate = `{
         "form_req.CreateTalkReq": {
             "type": "object",
             "properties": {
-                "course_id": {
-                    "description": "课程号",
-                    "type": "integer"
-                },
-                "learning_content_id": {
+                "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
                 },
                 "talk": {
                     "description": "讨论主题",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "教师工号",
                     "type": "string"
                 }
             }
@@ -1139,6 +1208,7 @@ const docTemplate = `{
                 "confirm",
                 "password",
                 "role",
+                "user_id",
                 "username"
             ],
             "properties": {
@@ -1174,6 +1244,9 @@ const docTemplate = `{
         },
         "form_req.DeleteCourseReq": {
             "type": "object",
+            "required": [
+                "course_id"
+            ],
             "properties": {
                 "course_id": {
                     "description": "课程id",
@@ -1183,6 +1256,9 @@ const docTemplate = `{
         },
         "form_req.EnterCourseReq": {
             "type": "object",
+            "required": [
+                "course_id"
+            ],
             "properties": {
                 "course_id": {
                     "description": "课程id",
@@ -1190,33 +1266,77 @@ const docTemplate = `{
                 }
             }
         },
-        "form_req.ExercisesItem": {
+        "form_req.ExercisesAnswer": {
             "type": "object",
+            "required": [
+                "answer",
+                "id"
+            ],
             "properties": {
                 "answer": {
                     "description": "答案",
                     "type": "string"
                 },
+                "id": {
+                    "description": "习题id",
+                    "type": "integer"
+                }
+            }
+        },
+        "form_req.ExercisesItem": {
+            "type": "object",
+            "required": [
+                "answer",
+                "question",
+                "type"
+            ],
+            "properties": {
+                "answer": {
+                    "description": "答案",
+                    "type": "string"
+                },
+                "options": {
+                    "description": "选项",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "question": {
                     "description": "题目",
                     "type": "string"
+                },
+                "type": {
+                    "description": "类型 1-选择 2-判断",
+                    "type": "integer"
                 }
             }
         },
         "form_req.ExercisesReq": {
             "type": "object",
+            "required": [
+                "answers",
+                "content_id"
+            ],
             "properties": {
-                "answer": {
-                    "description": "答案",
+                "answers": {
+                    "description": "答案提交",
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/form_req.ExercisesAnswer"
                     }
+                },
+                "content_id": {
+                    "description": "内容id",
+                    "type": "integer"
                 }
             }
         },
         "form_req.LearningContentListReq": {
             "type": "object",
+            "required": [
+                "course_id"
+            ],
             "properties": {
                 "course_id": {
                     "description": "课程id",
@@ -1246,6 +1366,10 @@ const docTemplate = `{
         },
         "form_req.LearningReq": {
             "type": "object",
+            "required": [
+                "content_id",
+                "file_name"
+            ],
             "properties": {
                 "content_id": {
                     "description": "学习内容id",
@@ -1254,15 +1378,15 @@ const docTemplate = `{
                 "file_name": {
                     "description": "文件名",
                     "type": "string"
-                },
-                "user_id": {
-                    "description": "学生学号",
-                    "type": "string"
                 }
             }
         },
         "form_req.LearningResultReq": {
             "type": "object",
+            "required": [
+                "content_id",
+                "status"
+            ],
             "properties": {
                 "content_id": {
                     "description": "学习内容id",
@@ -1293,6 +1417,9 @@ const docTemplate = `{
         },
         "form_req.RegisterReq": {
             "type": "object",
+            "required": [
+                "content_id"
+            ],
             "properties": {
                 "content_id": {
                     "description": "学习内容id",
@@ -1302,6 +1429,10 @@ const docTemplate = `{
         },
         "form_req.RegisterResultReq": {
             "type": "object",
+            "required": [
+                "content_id",
+                "register_result"
+            ],
             "properties": {
                 "content_id": {
                     "description": "学习内容id",
@@ -1309,7 +1440,7 @@ const docTemplate = `{
                 },
                 "register_result": {
                     "description": "签到结果，unfinished-未签到/finished-已签到",
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -1327,10 +1458,6 @@ const docTemplate = `{
                 "talk_id": {
                     "description": "讨论id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号",
-                    "type": "string"
                 }
             }
         },
@@ -1348,15 +1475,14 @@ const docTemplate = `{
                 "talk_id": {
                     "description": "讨论id",
                     "type": "integer"
-                },
-                "user_id": {
-                    "description": "教师工号/学生学号",
-                    "type": "string"
                 }
             }
         },
         "form_req.UpdateCourseReq": {
             "type": "object",
+            "required": [
+                "course_id"
+            ],
             "properties": {
                 "class": {
                     "description": "班级",
@@ -1378,6 +1504,13 @@ const docTemplate = `{
         },
         "form_req.UserPasswordReq": {
             "type": "object",
+            "required": [
+                "confirm",
+                "password",
+                "role",
+                "user_id",
+                "user_name"
+            ],
             "properties": {
                 "confirm": {
                     "description": "确认用户密码",
@@ -1412,9 +1545,9 @@ const docTemplate = `{
                     "description": "用户权限",
                     "type": "integer"
                 },
-                "uid": {
+                "user_id": {
                     "description": "用户ID",
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -1484,6 +1617,34 @@ const docTemplate = `{
                 "correct": {
                     "description": "判断是否正确",
                     "type": "boolean"
+                },
+                "id": {
+                    "description": "课后练习id",
+                    "type": "integer"
+                }
+            }
+        },
+        "form_resp.ExercisesItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "课后练习id",
+                    "type": "integer"
+                },
+                "options": {
+                    "description": "选项",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "question": {
+                    "description": "题目",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "类型 0-选择 1-判断",
+                    "type": "integer"
                 }
             }
         },
@@ -1498,6 +1659,22 @@ const docTemplate = `{
                 }
             }
         },
+        "form_resp.GetExercisesResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "习题数",
+                    "type": "integer"
+                },
+                "results": {
+                    "description": "练习题",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/form_resp.ExercisesItem"
+                    }
+                }
+            }
+        },
         "form_resp.LearningContentItem": {
             "type": "object",
             "properties": {
@@ -1508,10 +1685,6 @@ const docTemplate = `{
                 "content_id": {
                     "description": "学习内容id",
                     "type": "integer"
-                },
-                "file_path": {
-                    "description": "文件路径",
-                    "type": "string"
                 },
                 "learned": {
                     "description": "已学习",

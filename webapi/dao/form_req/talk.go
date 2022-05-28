@@ -6,13 +6,13 @@ type CreateTalkReq struct {
 }
 
 type TalkInfoReq struct {
-	CourseId          int    `json:"course_id"`           // 课程号
-	LearningContentId int    `json:"learning_content_id"` // 学习内容id
-	TalkId            int    `json:"talk_id"`             // 讨论id
+	CourseId          int `json:"course_id"`           // 课程号
+	LearningContentId int `json:"learning_content_id"` // 学习内容id
+	TalkId            int `json:"talk_id"`             // 讨论id
 }
 
 type TalkReq struct {
-	CourseId          int    `json:"course_id"`           // 课程号
-	LearningContentId int    `json:"learning_content_id"` // 学习内容id
-	TalkId            int    `json:"talk_id"`             // 讨论id
+	CourseId          int `json:"course_id"`           // 课程号
+	LearningContentId int `json:"learning_content_id"` // 学习内容id
+	TalkId            int `json:"talk_id"`             // 讨论id
 }

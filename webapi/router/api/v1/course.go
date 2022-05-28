@@ -7,6 +7,7 @@ import (
 )
 
 func RegisterCourseRouter(party router.Party) {
+	party.Handle("GET", "/class", wrapper.Handler(controller.CourseController{}.GetClassList)) //获取年级对应的班级
 	party.Handle("POST", "/", wrapper.Handler(controller.CourseController{}.CreateCourse)) //添加课程
 	party.Handle("DELETE", "/", wrapper.Handler(controller.CourseController{}.DeleteCourse)) //删除课程
 	party.Handle("POST", "/update", wrapper.Handler(controller.CourseController{}.UpdateCourse)) //编辑课程信息

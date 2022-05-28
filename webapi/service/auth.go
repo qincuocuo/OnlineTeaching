@@ -69,7 +69,8 @@ func LoginHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		mlog.Error("token add to whitelist failed", zap.Error(err))
 	}
 	resp = form_resp.AuthLoginResp{
-		UserId: userDoc.UserId,
+		UserId:        userDoc.UserId,
+		Username:      userDoc.UserName,
 		Role:          userDoc.Role,
 		Authorization: token,
 	}
