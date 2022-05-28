@@ -66,8 +66,8 @@ func UserInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		UserName:      userDoc.UserName,
 		Grade:         userDoc.Grade,
 		Class:         userDoc.Class,
-		LoginTime:     time.Now().String(),
-		LastLoginTime: userDoc.LastLoginTm.String(),
+		LoginTime:     utils.Time2String(time.Now()),
+		LastLoginTime: utils.Time2String(userDoc.LastLoginTm),
 	}
 	support.SendApiResponse(ctx, resp, "success")
 	return nil
