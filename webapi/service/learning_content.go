@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/globalsign/mgo/bson"
+	"io"
 	"io/ioutil"
 	"os"
 	"webapi/dao/form_req"
@@ -63,26 +64,26 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.CreateLearningContentReq)
 	resp := form_resp.StatusResp{Status: "ok"}
-	//file, fh, err := ctx.FormFile("file")
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//	return nil
-	//}
-	//defer file.Close()
-	//
-	//filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", req.CourseId, fh.Filename)
-	//dest, err := os.Create(filePath)
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//	return nil
-	//}
-	//defer dest.Close()
-	//
-	//_, err = io.Copy(dest, file)
-	//if err != nil {
-	//	support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
-	//	return nil
-	//}
+	file, fh, err := ctx.FormFile("file")
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	defer file.Close()
+
+	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", req.CourseId, fh.Filename)
+	dest, err := os.Create(filePath)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	defer dest.Close()
+
+	_, err = io.Copy(dest, file)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
 	query := bson.M{"course_id": req.CourseId}
 	var courseDoc models.Course
 	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
@@ -94,7 +95,7 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	learningContent := models.LearningContent{
 		ContentId:     mongo.Content.GetMaxId(traceCtx),
 		CourseId:      req.CourseId,
-		Title:         "xxx",
+		Title:         filePath,
 		FinishedNum:   0,
 		UnfinishedNum: courseDoc.TotalMember,
 		Finished:      nil,
