@@ -3,12 +3,14 @@ package service
 import (
 	"fmt"
 	"github.com/globalsign/mgo/bson"
+	"github.com/gorilla/websocket"
 	"io"
 	"io/ioutil"
 	"os"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
+	"webapi/internal/chat"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
@@ -73,7 +75,7 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	defer file.Close()
 
 	dir := fmt.Sprintf("%s/%d", "/workspace/data", req.CourseId)
-	//filePath := fmt.Sprintf("%s/%d/%s", ".", req.CourseId, fh.Filename)
+	//filePath := fmt.Sprintf("%s/%d/%s", ".", req.ContentId, fh.Filename)
 
 	if !utils.IsExistDir(dir) {
 		err = os.MkdirAll(dir, os.ModePerm)
@@ -232,6 +234,24 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
 	}
+
+	return
+}
+
+func StartChatHandler(ctx *wrapper.Context, conn *websocket.Conn, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.StartChatReq)
+
+	var contentDoc models.LearningContent
+
+	query := bson.M{"content_id": req.ContentId}
+	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+
+	chat.Process(traceCtx, contentDoc.ContentId, ctx.UserToken.UserId, conn)
 
 	return
 }

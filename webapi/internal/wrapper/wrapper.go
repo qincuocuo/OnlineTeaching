@@ -3,6 +3,7 @@ package wrapper
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/websocket"
 	"runtime/debug"
 	"webapi/support"
 
@@ -19,7 +20,8 @@ import (
 )
 
 type (
-	ApiHandler func(ctx *Context, reqBody interface{}) error
+	ApiHandler          func(ctx *Context, reqBody interface{}) error
+	WebsocketApiHandler func(ctx *Context, conn *websocket.Conn, reqBody interface{}) error
 )
 
 type ApiConfig struct {

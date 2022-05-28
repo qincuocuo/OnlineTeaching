@@ -37,21 +37,21 @@ func init() {
 	}()
 }
 
-func Process(ctx context.Context, courseId int, userId string, conn *websocket.Conn) {
-	room, ok := Rooms[courseId]
+func Process(ctx context.Context, contentId int, userId string, conn *websocket.Conn) {
+	room, ok := Rooms[contentId]
 	if !ok {
 		room = Pool.Get().(*Room)
-		room.CourseId = courseId
-		Rooms[courseId] = room
+		room.ContentId = contentId
+		Rooms[contentId] = room
 
-		mlog.Info("New room created", zap.Int("room id", courseId), zap.Any("room", room))
+		mlog.Info("New room created", zap.Int("room id", contentId), zap.Any("room", room))
 
 		go room.Broadcast()
 	}
-	room.Process(ctx, conn, userId)
+	go room.Process(ctx, conn, userId)
 }
 
 func release(room *Room) {
 	Pool.Put(room)
-	delete(Rooms, room.CourseId)
+	delete(Rooms, room.ContentId)
 }
