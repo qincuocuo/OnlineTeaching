@@ -19,7 +19,6 @@ type UserPasswordReq struct {
 }
 
 type ChangePasswordReq struct {
-	UserId      string `json:"user_id"`                          //学生学号/教师工号
 	Password    string `json:"password" validate:"required"`     //旧账户密码
 	NewPassword string `json:"new_password" validate:"required"` //新账户密码
 }

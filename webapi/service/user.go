@@ -106,7 +106,7 @@ func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.ChangePasswordReq)
 	var userDoc models.User
-	userDoc, err = mongo.User.FindByUserId(traceCtx, req.UserId)
+	userDoc, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
 		return nil
@@ -115,7 +115,7 @@ func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.PasswordFailed, 0)
 		return nil
 	}
-	query := bson.M{"user_id": req.UserId}
+	query := bson.M{"user_id": ctx.UserToken.UserId}
 	newPwd := password.MakePassword(req.Password)
 	upset := bson.M{"password": newPwd, "last_pwd_change_tm": time.Now()}
 	err = mongo.User.Update(traceCtx, query, upset)

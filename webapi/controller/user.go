@@ -47,7 +47,7 @@ func (u UserController) UserInfo(ctx *wrapper.Context) {
 // @Produce json
 // @Param auth body form_req.UserPasswordReq true "request data"
 // @Success 200 {object} form_resp.UserPasswordResp "response data"
-// @Router /v1/user/password/ [get]
+// @Router /v1/user/password/ [post]
 // @Security ApiKeyAuth
 // @Param Authorization header string true "authentication"
 func (u UserController) UserPassword(ctx *wrapper.Context) {
@@ -65,6 +65,6 @@ func (u UserController) UserPassword(ctx *wrapper.Context) {
 // @Router /v1/user/change_password/ [post]
 // @Security ApiKeyAuth
 // @Param authorization header string true "authorization"
-func (a AuthController) ChangePassword(ctx *wrapper.Context) {
+func (a UserController) ChangePassword(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.ChangePasswordHandler, true, form_req.ChangePasswordReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }

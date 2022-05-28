@@ -21,6 +21,22 @@ func (content) FindCount(ctx context.Context, query bson.M) (count int, err erro
 	return
 }
 
+func (content) Create(ctx context.Context, contentDoc models.LearningContent) (err error) {
+	dbName := contentDoc.CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName, contentDoc)
+	defer span.End()
+	err = db.MongoCli.Insert(dbName, contentDoc)
+	return
+}
+
+func (content) Update(ctx context.Context, query bson.M, updateSet bson.M) (err error) {
+	dbName := (&models.LearningContent{}).CollectName()
+	span, _ := tracking.DbTracking(ctx, dbName)
+	defer span.End()
+	err = db.MongoCli.Update(dbName, query, updateSet, false)
+	return
+}
+
 func (content) FindOne(ctx context.Context, query bson.M) (contentDoc models.LearningContent, err error) {
 	dbName := contentDoc.CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, query)
