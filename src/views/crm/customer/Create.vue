@@ -1,6 +1,6 @@
 <template>
   <create-popup-view :loading="loading" :title="title" @close="handleClose" @save="handleSave">
-    <create-popup-view-section title="基本信息">
+    <create-popup-view-section title="课程信息">
       <form-create
         v-model:api="formOptions.fApi"
         v-model="form"
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       loading: false,
-      title: "新增客户",
+      title: "新建课程",
       form: {},
       formOptions: {
         fApi: {},
@@ -65,58 +65,45 @@ export default {
         rule: [
           {
             type: "input",
-            field: "contacts",
-            title: "联系人"
-          },
-
-          {
-            type: "input",
-            field: "tel",
-            title: "联系电话",
-            validate: [{ min: 7, max: 30, message: "长度在 7 到 30 个数字" }],
-            props: {
-              minlength: 7,
-              maxlength: 30
-            },
-            on: {
-              input: val => {
-                this.form.tel = val.replace(/[^\d-]/g, "");
-              }
-            }
-          },
-          {
-            type: "input",
-            field: "email",
-            title: "邮箱"
+            field: "course_name",
+            title: "课程名称"
           },
           {
             type: "select",
-            field: "ipoFlag",
-            title: "是否上市",
+            field: "grade",
+            title: "年级",
             options: [
               {
-                label: "否",
-                value: false
+                value: 1,
+                label: "一年级"
               },
               {
-                label: "是",
-                value: true
+                value: 2,
+                label: "二年级"
+              },
+              {
+                value: 3,
+                label: "三年级"
+              },
+              {
+                value: 4,
+                label: "四年级"
+              },
+              {
+                value: 5,
+                label: "五年级"
+              },
+              {
+                value: 6,
+                label: "六年级"
               }
             ]
           },
           {
             type: "input",
-            field: "industryCooperation",
-            title: "业内合作情况",
-            props: {
-              type: "textarea",
-              maxlength: 2000,
-              rows: 4
-            },
-            col: {
-              span: 48
-            }
-          }
+            field: "class",
+            title: "班级"
+          },
         ]
       }
     };

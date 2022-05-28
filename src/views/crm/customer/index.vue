@@ -213,7 +213,9 @@ export default {
       }
     };
   },
-  async mounted() {},
+  async mounted() {
+    // if (hasFun("cus_query")) await this.loadData();
+  },
   methods: {
     add() {
       this.createAction = this.$options.data().createAction;
