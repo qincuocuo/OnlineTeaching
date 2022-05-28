@@ -13,6 +13,14 @@ type course struct{}
 
 var Course course
 
+func (course) FindCount(ctx context.Context, query bson.M) (count int, err error) {
+		dbName := (&models.Course{}).CollectName()
+		span, _ := tracking.DbTracking(ctx, dbName, query)
+		defer span.End()
+		count, err = db.MongoCli.FindCount(dbName, query)
+		return
+}
+
 func (course) FindOne(ctx context.Context, query bson.M) (courseDoc models.Course, err error) {
 	dbName := courseDoc.CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, query)
