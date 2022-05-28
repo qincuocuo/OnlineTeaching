@@ -179,7 +179,7 @@
           <el-form-item label="答案" prop="answer">
             <el-select v-model="item.answer">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectOption.slice(0, item.option.length)"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -269,7 +269,7 @@ export default {
       talkVisible: false,
       qiandaoDetail: false,
       learningDetail: false,
-      homeworkVisible: true,
+      homeworkVisible: false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
