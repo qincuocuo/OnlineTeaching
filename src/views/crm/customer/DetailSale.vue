@@ -39,7 +39,7 @@
             <el-button type="text" @click="qiandaoVisible = true">发起签到</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
-            <el-button type="text">发起讨论</el-button>
+            <el-button type="text" @click="talkVisible = true">发起讨论</el-button>
           </div>
           <div v-has="'visit_edit'" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">查看签到结果</el-button>
@@ -90,7 +90,6 @@
       v-model="qiandaoVisible"
       title="发起签到"
       width="40%"
-      center
       :before-close="handleClose"
     >
       <div style="text-align: center;">
@@ -102,6 +101,21 @@
         <span class="dialog-footer">
           <el-button @click="qiandaoVisible = false">取消</el-button>
           <el-button type="primary" @click="qiandaoVisible = false">发起签到</el-button>
+        </span>
+      </template>
+    </el-dialog>
+        <!-- 发起讨论 -->
+    <el-dialog
+      v-model="talkVisible"
+      title="讨论话题"
+      width="40%"
+      :before-close="handleClose"
+    >
+      <el-input type="textarea" v-model="talk"></el-input>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="talkVisible = false">取消</el-button>
+          <el-button type="primary" @click="talkVisible = false">发起讨论</el-button>
         </span>
       </template>
     </el-dialog>
@@ -174,6 +188,7 @@ export default {
       popupShow: false,
       addContentVisible: false,
       qiandaoVisible: false,
+      talkVisible:false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -187,6 +202,7 @@ export default {
         content: ""
       },
       register_tm: "", //签到时间限制
+      talk: '', // 讨论话题
       //表单验证规则
       contentfFormRules: {
         title: [{ required: true, message: "请输入名称", trigger: "change" }],
