@@ -13,7 +13,13 @@ export default {
         field: "list" // response字段
       },
       /* 数据源 */
-      dataSource: [],
+      dataSource: [{
+        course_name:'科目三',
+        grade: '1',
+        class: '1401',
+        total_member: '20',
+        create_tm: '2022-5-20 12:50:00'
+      }],
       /* 分页参数 */
       ipagination: {
         page: 1,
@@ -75,8 +81,8 @@ export default {
           this.loading = false;
         });
       if (!res) return;
-      if (res.code === 0) {
-        this.dataSource = res.data.list || res.data[this.url.field] || [];
+      if (res.code === 200) {
+        this.dataSource = res?.data?.list || res?.data[this.url.field] || [];
         this.dataSource.forEach((item, index) => {
           item.index = index + 1 + (params.page - 1) * params.page_size;
         });

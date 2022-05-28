@@ -3,7 +3,15 @@
     <div class="table-head-container">
       <div class="query-add-btns-container">
         <div class="add-btns">
-          <el-button v-has="'sale_add'" @click="add" type="primary">新增</el-button>
+          <el-input
+            v-model="searchContent"
+            class="content-search"
+            placeholder="请输入学习内容"
+            prefix-icon="Search"
+          />
+          <el-button class="content-add" @click="addContentVisible = true" type="primary">
+            新增学习内容
+          </el-button>
         </div>
       </div>
     </div>
@@ -22,14 +30,61 @@
         </template>
         <template v-slot:operate="scope">
           <div v-has="'visit_edit'" class="table-btn-box">
-            <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+            <el-button type="text" @click="edit(scope.row)">查看学习内容</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
-            <el-button type="text">删除</el-button>
+            <el-button type="text">查看学习情况</el-button>
+          </div>
+          <div v-has="'visit_edit'" class="table-btn-box">
+            <el-button type="text" @click="edit(scope.row)">发起签到</el-button>
+          </div>
+          <div v-has="'del'" class="table-btn-box">
+            <el-button type="text">发起讨论</el-button>
+          </div>
+          <div v-has="'visit_edit'" class="table-btn-box">
+            <el-button type="text" @click="edit(scope.row)">查看签到结果</el-button>
+          </div>
+          <div v-has="'del'" class="table-btn-box">
+            <el-button type="text">查看讨论情况</el-button>
           </div>
         </template>
       </table-view>
     </div>
+    <!-- 新增课程内容 -->
+    <el-dialog
+      v-model="addContentVisible"
+      title="新增课程内容"
+      width="40%"
+      :before-close="handleClose"
+    >
+      <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules">
+        <el-form-item prop="title" class="login-email" label="名称">
+          <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>
+        </el-form-item>
+        <el-form-item prop="content" class="password" label="内容">
+          <el-input placeholder="" v-model.trim="content_form.content" type="text"></el-input>
+        </el-form-item>
+        <el-upload
+          class="upload-demo"
+          drag
+          action="https://jsonplaceholder.typicode.com/posts/"
+          multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            拖拽文件或
+            <em>点击图标上传文件</em>
+          </div>
+          <template #tip>
+            <div class="el-upload__tip">上传文件限制</div>
+          </template>
+        </el-upload>
+        <el-form-item class="login-button">
+          <el-button type="primary" @click="addContent">提交</el-button>
+          <el-button @click="addContentVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
     <create-popup
       ref="refCreatePoup"
       :show="popupShow"
@@ -71,29 +126,24 @@ export default {
     return {
       columns: [
         {
-          label: "机会名称",
-          prop: "salesLeadName",
+          label: "学习内容",
+          prop: "content",
           width: 140
         },
         {
-          label: "公司",
-          prop: "customerName",
-          width: 180
+          label: "已学人数",
+          prop: "learned",
+          width: 50
         },
         {
-          label: "来源",
-          slot: "salesLeadSourceId",
-          width: 100
-        },
-        {
-          label: "跟进人",
-          prop: "salesmanName",
-          width: 100
+          label: "未学人数",
+          slot: "unlearned",
+          width: 50
         },
         {
           label: "操作",
           slot: "operate",
-          width: 120
+          width: 250
         }
       ],
       url: {
@@ -102,13 +152,24 @@ export default {
       },
       disableMixinInit: true,
       popupShow: false,
+      addContentVisible: false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
         id: "",
         data: {}
       },
-      sourceOption: []
+      sourceOption: [],
+      searchContent: "",
+      content_form: {
+        title: "",
+        content: ""
+      },
+      //表单验证规则
+      contentfFormRules: {
+        title: [{ required: true, message: "请输入名称", trigger: "change" }],
+        content: [{ required: true, message: "请输入内容", trigger: "change" }]
+      }
     };
   },
 
@@ -123,10 +184,12 @@ export default {
     }
   },
   methods: {
-    add() {
-      this.createAction = this.$options.data().createAction;
-      this.createAction.data = this.customer;
-      this.popupShow = true;
+    addContent() {
+      this.$refs.contentFormRef.validate(async valid => {
+        if (!valid) return;
+        this.addContentVisible = false;
+      });
+      
     },
     edit(item) {
       this.createAction = {
@@ -149,9 +212,21 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  .add-btns {
+    display: inline-flex;
+    .content-search {
+      padding-right: 20px;
+    }
+    .content-add {
+      width: 150px;
+    }
+  }
   .table-view-container {
     flex: 1;
     width: 100%;
+    /deep/ .el-table .cell {
+      white-space: pre-line;
+    }
   }
 }
 </style>

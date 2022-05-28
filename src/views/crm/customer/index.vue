@@ -31,6 +31,11 @@
         v-model:ipagination="ipagination"
         @load="loadData"
       >
+        <template v-slot:course_name="scope">
+          <div class="table-visit--underline" @click="viewDetails(scope.row)">
+            {{ scope.row.course_name || "--" }}
+          </div>
+        </template>
         <template v-slot:operate="scope">
           <div v-if="scope.row.status === 2" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
@@ -62,7 +67,7 @@ import TableView from "@/views/crm/components/TableView";
 import TableMixin from "@/views/crm/mixins/Table";
 import CreatePopup from "@/components/CreatePopup";
 import SlideDetail from "@/components/SlideDetail";
-import { customerRemove } from "@/api/crm/customer";
+import { deleteCourse } from "@/api/crm/customer";
 import { computed } from "vue";
 import { useStore } from "vuex";
 
@@ -82,30 +87,28 @@ export default {
       columns: [
         {
           label: "课程名",
-          prop: "customerName",
-          slot: "customerName",
+          prop: "course_name",
+          slot: "course_name",
           width: 140
         },
         {
           label: "年级",
-          prop: "industry",
+          prop: "grade",
           width: 120
         },
         {
           label: "班级",
-          prop: "lifecycle",
+          prop: "class",
           width: 100
         },
         {
           label: "班级人数",
-          prop: "ipoFlag",
-          slot: "ipoFlag",
-          sortable: true,
+          prop: "total_member",
           width: 100
         },
         {
           label: "创建时间",
-          prop: "address",
+          prop: "create_tm",
           width: 200
         },
         {
@@ -245,6 +248,7 @@ export default {
         index: item.index,
         tabName: item.tabName
       };
+      this.detailAction = Object.assign(this.detailAction,item)
       this.slideShow = true;
     },
 
@@ -259,8 +263,8 @@ export default {
           type: "warning"
         })
           .then(async () => {
-            const res = await customerRemove({ customerId: item.customerId }).catch(() => {});
-            if (res && res.code === 0) {
+            const res = await deleteCourse({ customerId: item.customerId }).catch(() => {});
+            if (res && res.code === 200) {
               this.$message.success(res.msg);
               this.loadData();
             } else {

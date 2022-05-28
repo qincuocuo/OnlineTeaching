@@ -2,37 +2,7 @@
   <slide-detail-view :loading="loading" @close="handleClose" @after-enter="afterEnter">
     <div class="detail-box">
       <div class="detail-heaher-box">
-        <div class="type-name">客户</div>
-        <!-- 名称和操作区域 -->
-        <div class="detail-name-operate-box">
-          <div class="detail-name-page-box">
-            <div class="detail-name-box">
-              <el-tooltip
-                class="name-box-item"
-                effect="dark"
-                :content="detailObj.customerName"
-                placement="top"
-              >
-                <span class="deatil-name">
-                  {{ detailObj.customerName }}
-                </span>
-              </el-tooltip>
-            </div>
-            <div class="header-page-btn">
-              <el-button-group>
-                <el-button type="text" @click="changePage('back')">
-                  <el-icon><arrow-left /></el-icon>
-                </el-button>
-                <el-button type="text" @click="changePage('next')">
-                  <el-icon><arrow-right /></el-icon>
-                </el-button>
-              </el-button-group>
-            </div>
-          </div>
-          <div class="detail-operate-box">
-            <el-button v-has="'cus_edit'" type="primary" @click="customerEdit">编辑</el-button>
-          </div>
-        </div>
+        <div class="type-name">课程详情</div>
         <!-- 简要信息展示 -->
         <div class="detail-summary-box">
           <div class="base-item" v-for="item in summaryColumns" :key="item.prop">
@@ -52,17 +22,7 @@
       </div>
       <!-- tab区域 -->
       <div class="detail-tabs-box">
-        <el-tabs v-model="tabActiveName" class="detail" @tab-click="tabClick">
-          <el-tab-pane label="详细信息" name="detail" :lazy="true">
-            <detail-info :detailObj="detailObj"></detail-info>
-          </el-tab-pane>
-          <el-tab-pane v-has="'cus_detial_visit'" label="拜访记录" name="visit" :lazy="true">
-            <detail-visit :customer="customer"></detail-visit>
-          </el-tab-pane>
-          <el-tab-pane v-has="'cus_detial_sale'" label="销售机会" name="sale" :lazy="true">
-            <detail-sale :customer="customer"></detail-sale>
-          </el-tab-pane>
-        </el-tabs>
+          <detail-sale :customer="customer"></detail-sale>
       </div>
     </div>
     <create-popup
@@ -86,9 +46,9 @@ export default {
   name: "CustomerDetail",
   components: {
     SlideDetailView,
-    DetailInfo,
+    // DetailInfo,
     DetailSale,
-    DetailVisit,
+    // DetailVisit,
     CreatePopup
   },
   props: {
@@ -116,24 +76,24 @@ export default {
       index: 1,
       summaryColumns: [
         {
-          label: "联系人",
-          prop: "contacts"
+          label: "课程名称",
+          prop: "course_name"
         },
         {
-          label: "联系电话",
-          prop: "tel"
+          label: "年级",
+          prop: "grade"
         },
         {
-          label: "邮箱",
-          prop: "email"
+          label: "班级",
+          prop: "class"
         },
         {
-          label: "客户归属",
-          prop: "salesmanName"
+          label: "班级人数",
+          prop: "total_member"
         },
         {
-          label: "所属行业",
-          prop: "industry"
+          label: "创建时间",
+          prop: "create_tm"
         }
       ],
       tabActiveName: "detail",
@@ -149,9 +109,10 @@ export default {
     // 定位tab
     this.tabActiveName = this.action.tabName || this.tabActiveName;
     this.index = this.action.index;
+    this.detailObj = this.action;
   },
   async mounted() {
-    this.queryCustomerDetail();
+    // this.queryCustomerDetail();
   },
   methods: {
     afterEnter() {},
