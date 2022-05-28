@@ -104,13 +104,11 @@ export default {
         login(this.form)
           .then(res => {
             if (res && res.code === 200) {
-              let permission = res.data;
-              let token = res.data.token;
+              let token = res.data.authorization;
               localStorage.setItem("crmToken", token);
-              localStorage.setItem("crmPermission", JSON.stringify(permission));
-              this.$store.commit("set_userInfo", permission.loginUser);
-
+              this.$store.commit("set_userInfo", res.data);
               this.$message.success("登录成功");
+              this.$router.push("/crm/customer");
             } else {
               this.$message.warning(res.message);
             }
