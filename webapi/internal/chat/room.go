@@ -13,7 +13,7 @@ import (
 )
 
 type Room struct {
-	CourseId int
+	ContentId int
 
 	onlineNum int
 
@@ -30,7 +30,7 @@ type Room struct {
 
 func NewChatRoom(courseId int) *Room {
 	return &Room{
-		CourseId: courseId,
+		ContentId: courseId,
 
 		Clients:     make([]*ClientId, 0),
 		OnlineChan:  make(chan *Client, 10),
@@ -69,11 +69,11 @@ func (r *Room) Process(ctx context.Context, conn *websocket.Conn, userId string)
 	r.mux.Unlock()
 
 	r.OnlineChan <- client
-	mlog.Info("user online", zap.String("user id", userId), zap.String("user name", user.UserName), zap.Int("online", r.OnlineNum()), zap.Int("room", r.CourseId))
+	mlog.Info("user online", zap.String("user id", userId), zap.String("user name", user.UserName), zap.Int("online", r.OnlineNum()), zap.Int("room", r.ContentId))
 
 	defer func() {
 		r.OfflineChan <- client
-		mlog.Info("user offline", zap.String("user id", userId), zap.String("user name", user.UserName), zap.Int("online", r.OnlineNum()), zap.Int("room", r.CourseId))
+		mlog.Info("user offline", zap.String("user id", userId), zap.String("user name", user.UserName), zap.Int("online", r.OnlineNum()), zap.Int("room", r.ContentId))
 
 		r.mux.Lock()
 		for i, client := range r.Clients {
@@ -89,7 +89,7 @@ func (r *Room) Process(ctx context.Context, conn *websocket.Conn, userId string)
 		if r.OnlineNum() == 0 {
 			r.stopChan <- struct{}{}
 			release(r)
-			mlog.Info("chat room closed", zap.Int("room", r.CourseId))
+			mlog.Info("chat room closed", zap.Int("room", r.ContentId))
 		}
 		conn.Close()
 	}()
@@ -148,7 +148,7 @@ func (r *Room) Broadcast() {
 			fmt.Println("broadcast", msg.Name)
 			r.SendMessage(msg)
 		case <-time.After(time.Second * 60 * 2):
-			mlog.Info("online number", zap.Int("room id", r.CourseId), zap.Int("online", r.OnlineNum()))
+			mlog.Info("online number", zap.Int("room id", r.ContentId), zap.Int("online", r.OnlineNum()))
 		case <-r.stopChan:
 			return
 		}
@@ -169,26 +169,22 @@ func (r *Room) SendMessage(msg *Message) {
 	case MsgRobot:
 
 	case MsgCommon:
-		//var msgs []*models.TalkRecord
 		for _, clientId := range r.Clients {
 			err := clientId.Client.Conn.WriteJSON(msg)
 			if err != nil {
 				mlog.Error("send message", zap.Error(err))
 			}
-			//msgs = append(msgs, &models.TalkRecord{
-			//	RoomId:   clientId.Id,
-			//	CourseId: r.CourseId,
-			//	From:     0,
-			//	To:       clientId.Client.User.Id,
-			//	SentTm:   time.Unix(msg.SendTime, 0),
-			//	InsertTm: time.Now(),
-			//})
-		}
+			record := models.TalkRecord{
+				ContentId: r.ContentId,
+				UserId:    clientId.Client.User.UserId,
+				Text:      msg.Msg,
+				CreateTm:  time.Now(),
+			}
 
-		// TODO 改成mongo
-		//err := dao.Create(context.TODO(), &msgs)
-		//if err != nil {
-		//	mlog.Error("save message", zap.Error(err))
-		//}
+			err = mongo.TalkRecord.Create(context.TODO(), record)
+			if err != nil {
+				mlog.Error("save talk record", zap.Int("content id", r.ContentId), zap.String("user id", record.UserId), zap.Error(err))
+			}
+		}
 	}
 }

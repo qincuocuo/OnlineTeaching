@@ -14,7 +14,7 @@ func (t Talk) CollectName() string {
 
 type TalkRecord struct {
 	ContentId int       `json:"content_id"` //学习内容id
-	UserId    int       `json:"user_id"`    //用户id
+	UserId    string    `json:"user_id"`    //用户id
 	Text      string    `json:"text"`       //用户讨论内容
 	CreateTm  time.Time `json:"create_tm"`  //参与讨论时间
 }

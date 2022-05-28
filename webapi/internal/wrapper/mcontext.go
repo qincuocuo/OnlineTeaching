@@ -1,6 +1,8 @@
 package wrapper
 
 import (
+	"github.com/gorilla/websocket"
+	"net/http"
 	"sync"
 	"webapi/common"
 	"webapi/middleware/jwts"
@@ -15,9 +17,19 @@ type Context struct {
 	AllowWrite  []int
 }
 
-var contextPool = sync.Pool{New: func() interface{} {
-	return &Context{}
-}}
+var (
+	contextPool = sync.Pool{New: func() interface{} {
+		return &Context{}
+	}}
+
+	upgrade = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
+)
 
 // 获取用户Token相关信息
 func acquire(original iris.Context) *Context {
@@ -45,5 +57,22 @@ func Handler(handler func(*Context)) iris.Handler {
 		ctx := acquire(original)
 		handler(ctx)
 		release(ctx)
+	}
+}
+
+func WebsocketHandler(handler WebsocketApiHandler) ApiHandler {
+	return func(ctx *Context, reqBody interface{}) error {
+		conn, err := upgrade.Upgrade(ctx.Context.ResponseWriter(), ctx.Context.Request(), nil)
+		if err != nil {
+			return err
+		}
+		defer conn.Close()
+
+		err = handler(ctx, conn, reqBody)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
 }
