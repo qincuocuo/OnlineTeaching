@@ -1,7 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"github.com/globalsign/mgo/bson"
+	"io"
+	"os"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
@@ -57,6 +60,45 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 }
 
 func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.CreateLearningContentReq)
+
+	file, fh, err := ctx.FormFile("file")
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	defer file.Close()
+
+	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", req.CourseId, fh.Filename)
+	dest, err := os.Create(filePath)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+	defer dest.Close()
+
+	_, err = io.Copy(dest, file)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UploadLearningContentFailed, 0)
+		return nil
+	}
+
+	learningContent := models.LearningContent{
+		ContentId:     mongo.Content.GetMaxId(traceCtx),
+		CourseId:      req.CourseId,
+		Title:         filePath,
+		FinishedNum:   0,
+		UnfinishedNum: 0, // TODO
+		Finished:      nil,
+		Unfinished:    nil, // TODO
+	}
+	err = mongo.Content.Create(traceCtx, learningContent)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.CreateLearningContentFailed, 0)
+		return nil
+	}
+
 	return
 }
 
