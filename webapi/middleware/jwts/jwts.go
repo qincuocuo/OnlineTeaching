@@ -133,9 +133,10 @@ func (j *Jwts) CheckJWT(ctx context.Context) error {
 		return fmt.Errorf(support.TokenParseFailedAndInvalid)
 	}
 	if claims, ok := parseToken.Claims.(jwt.MapClaims); ok {
+		fmt.Println(claims)
 		user := &common.UserToken{
 			UserId: claims["userId"].(string),
-			Role:   claims["role"].(int),
+			Role:   int(claims["role"].(float64)),
 		}
 		ctx.Values().Set(j.Config.ContextKey, user)
 		if config.IrisConf.JWT.JwtRenewSwitch {
@@ -184,6 +185,6 @@ func (j *Jwts) logf(format string, args ...interface{}) {
 
 type Claims struct {
 	UserId string `json:"userId"`
-	Role   int `json:"role"`
+	Role   int    `json:"role"`
 	jwt.StandardClaims
 }
