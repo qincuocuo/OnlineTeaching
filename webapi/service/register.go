@@ -18,6 +18,10 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
+	if mongo.Register.IsExists(traceCtx, req.ContentId) {
+		support.SendApiErrorResponse(ctx, support.RegisterExists, 0)
+		return nil
+	}
 	var contentDoc models.LearningContent
 	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
 	if err != nil {
@@ -34,14 +38,15 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
-	endTm := time.Now().Add(time.Duration(req.RegisterTm) * time.Second)
+	startTm := time.Now().Add(time.Duration(8) * time.Hour)
+	endTm := startTm.Add(time.Duration(req.RegisterTm) * time.Minute)
 	var userList = make([]string, 0)
 	registerDoc := models.Register{
 		ManagerId:  ctx.UserToken.UserId,
 		ContentId:  req.ContentId,
 		Finished:   userList,
 		Unfinished: courseDoc.StudentId,
-		CreateTime: time.Now(),
+		CreateTime: startTm,
 		EndTime:    endTm,
 	}
 	err = mongo.Register.Create(traceCtx, registerDoc)
@@ -119,10 +124,7 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.RegisterExpired, 0)
 		return nil
 	}
-	if registerDoc.ManagerId != ctx.UserToken.UserId {
-		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
-		return nil
-	}
+
 	finish := append(registerDoc.Finished, ctx.UserToken.UserId)
 	unfinish := make([]string, 0)
 	for _, s := range registerDoc.Unfinished {

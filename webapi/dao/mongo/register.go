@@ -28,11 +28,23 @@ func (register) Update(ctx context.Context, query bson.M, updateSet bson.M) (err
 	return
 }
 
-func (register) FindOne(ctx context.Context, query bson.M) (contentDoc models.Register, err error) {
-	dbName := contentDoc.CollectName()
+func (register) FindOne(ctx context.Context, query bson.M) (registerDoc models.Register, err error) {
+	dbName := registerDoc.CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, query)
 	defer span.End()
-	_, err = db.MongoCli.FindOne(dbName, query, &contentDoc)
+	_, err = db.MongoCli.FindOne(dbName, query, &registerDoc)
 	return
+}
+
+func (register) IsExists(ctx context.Context, contentId int) (exists bool) {
+	dbName := (&models.Register{}).CollectName()
+	query := bson.M{"content_id": contentId}
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+	count, _ := db.MongoCli.FindCount(dbName, query)
+	if count > 0 {
+		return true
+	}
+	return false
 }
 

@@ -26,6 +26,7 @@ const (
 	CreateLearningContentFailed  string = "创建学习章节失败"
 	UpdateContentFailed          string = "更新学习结果失败"
 
+	RegisterExists       string = "签到任务已存在"
 	RegisterNotFount     string = "签到任务不存在"
 	CreateRegisterFailed string = "创建签到任务失败"
 	JoinInRegisterFailed string = "参与签到失败"
