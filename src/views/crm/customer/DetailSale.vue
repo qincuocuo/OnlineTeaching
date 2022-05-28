@@ -86,13 +86,8 @@
       </el-form>
     </el-dialog>
     <!-- 发起签到 -->
-    <el-dialog
-      v-model="qiandaoVisible"
-      title="发起签到"
-      width="40%"
-      :before-close="handleClose"
-    >
-      <div style="text-align: center;">
+    <el-dialog v-model="qiandaoVisible" title="发起签到" width="40%" :before-close="handleClose">
+      <div style="text-align: center">
         签到有效时间为
         <el-input-number v-model="register_tm" :min="1" controls-position="right" />
         分钟
@@ -104,13 +99,8 @@
         </span>
       </template>
     </el-dialog>
-        <!-- 发起讨论 -->
-    <el-dialog
-      v-model="talkVisible"
-      title="讨论话题"
-      width="40%"
-      :before-close="handleClose"
-    >
+    <!-- 发起讨论 -->
+    <el-dialog v-model="talkVisible" title="讨论话题" width="40%" :before-close="handleClose">
       <el-input type="textarea" v-model="talk"></el-input>
       <template #footer>
         <span class="dialog-footer">
@@ -188,7 +178,7 @@ export default {
       popupShow: false,
       addContentVisible: false,
       qiandaoVisible: false,
-      talkVisible:false,
+      talkVisible: false,
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -202,7 +192,7 @@ export default {
         content: ""
       },
       register_tm: "", //签到时间限制
-      talk: '', // 讨论话题
+      talk: "", // 讨论话题
       //表单验证规则
       contentfFormRules: {
         title: [{ required: true, message: "请输入名称", trigger: "change" }],
