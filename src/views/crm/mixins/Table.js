@@ -13,13 +13,15 @@ export default {
         field: "list" // response字段
       },
       /* 数据源 */
-      dataSource: [{
-        course_name:'科目三',
-        grade: '1',
-        class: '1401',
-        total_member: '20',
-        create_tm: '2022-5-20 12:50:00'
-      }],
+      dataSource: [
+        {
+          course_name: "科目三",
+          grade: "1",
+          class: "1401",
+          total_member: "20",
+          create_tm: "2022-5-20 12:50:00"
+        }
+      ],
       /* 分页参数 */
       ipagination: {
         page: 1,
@@ -88,7 +90,7 @@ export default {
         });
         this.ipagination.total = res.data.total;
       } else {
-        this.$message.warning(res.msg);
+        this.$message.warning(res.error);
       }
     },
 

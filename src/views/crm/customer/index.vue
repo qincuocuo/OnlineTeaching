@@ -37,7 +37,7 @@
           </div>
         </template>
         <template v-slot:operate="scope">
-          <div v-if="scope.row.status === 2" class="table-btn-box">
+          <div class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
@@ -248,7 +248,7 @@ export default {
         index: item.index,
         tabName: item.tabName
       };
-      this.detailAction = Object.assign(this.detailAction,item)
+      this.detailAction = Object.assign(this.detailAction, item);
       this.slideShow = true;
     },
 

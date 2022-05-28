@@ -158,8 +158,11 @@ export default {
         return;
       }
       this.title = "编辑";
-      // this.loading = true;
-      // 查询数据
+      for (let key in this.form) {
+        if (Object.prototype.hasOwnProperty.call(this.action.data, key)) {
+          this.form[key] = this.action.data[key];
+        }
+      }
     }
   }
 };

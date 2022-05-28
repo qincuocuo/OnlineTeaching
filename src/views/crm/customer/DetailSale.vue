@@ -212,6 +212,7 @@ export default {
     }
   },
   methods: {
+    handleClose() {},
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
