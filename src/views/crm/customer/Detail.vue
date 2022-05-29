@@ -11,7 +11,7 @@
               <el-tooltip
                 class="name-box-item"
                 effect="dark"
-                :content="detailObj[item.prop] || '--'"
+                :content="detailObj[item.prop].toString() || '--'"
                 placement="top"
               >
                 {{ detailObj[item.prop] }}

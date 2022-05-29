@@ -71,7 +71,12 @@
     </div>
     <!-- 新增课程内容 -->
     <el-dialog v-model="addContentVisible" title="新增课程内容" width="40%">
-      <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules">
+      <el-form
+        ref="contentFormRef"
+        :model="content_form"
+        :rules="contentfFormRules"
+        v-loading="addContentLoading"
+      >
         <el-form-item prop="title" class="login-email" label="名称">
           <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>
         </el-form-item>
@@ -79,8 +84,8 @@
           class="upload-demo"
           drag
           action="https://jsonplaceholder.typicode.com/posts/"
-          :before-upload="beforeUpload"
-          multiple
+          :on-change="beforeUpload"
+          :auto-upload="false"
         >
           <el-icon class="el-icon--upload">
             <upload-filled />
@@ -89,9 +94,6 @@
             拖拽文件或
             <em>点击图标上传文件</em>
           </div>
-          <template #tip>
-            <div class="el-upload__tip">上传文件限制</div>
-          </template>
         </el-upload>
         <el-form-item class="login-button">
           <el-button type="primary" @click="addContent">提交</el-button>
@@ -275,6 +277,7 @@ export default {
       },
       popupShow: false,
       addContentVisible: false,
+      addContentLoading: false,
       qiandaoVisible: false,
       talkVisible: false,
       qiandaoDetail: false,
@@ -368,20 +371,29 @@ export default {
     handleClick() {},
     // 文件上传
     beforeUpload(file) {
-      this.content_form.file = file;
+      this.content_form.file = file.raw;
     },
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
-        const params = { ...this.content_form, course_id: this.customer.course_id };
-        addContent(params).then(res => {
-          if (res && res.code === 200) {
-            this.$message.success(res.message);
-            this.addContentVisible = false;
-          } else {
-            this.$message.warning(res.message);
-          }
-        });
+        this.addContentLoading = true;
+        const formData = new FormData();
+        formData.append("file", this.content_form.file);
+        formData.append("title", this.content_form.title);
+        formData.append("course_id", this.customer.course_id);
+        addContent(formData)
+          .then(res => {
+            if (res && res.code === 200) {
+              this.$message.success(res.message);
+              this.addContentVisible = false;
+              this.loadData();
+            } else {
+              this.$message.warning(res.message);
+            }
+          })
+          .finally(() => {
+            this.addContentLoading = false;
+          });
       });
     },
     edit(item) {
