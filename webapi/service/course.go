@@ -40,6 +40,10 @@ func CreateCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.CreateCourseReq)
 	resp := form_resp.StatusResp{}
+	if ctx.UserToken.Role == 2 {
+		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
+		return nil
+	}
 	query := bson.M{"manager_id": ctx.UserToken.UserId}
 	if req.Grade > 0 {
 		query["grade"] = req.Grade
@@ -82,7 +86,7 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	if ctx.UserToken.Role == 1 {
 		query["manager_id"] = ctx.UserToken.UserId
 	} else if ctx.UserToken.Role == 2 {
-		query["student_id"] = bson.M{"$elemMatch": ctx.UserToken.UserId}
+		query["student_id"] = bson.M{"$elemMatch": bson.M{"$in": []string{ctx.UserToken.UserId}}}
 	}
 	if req.Grade > 0 {
 		query["grade"] = req.Grade
