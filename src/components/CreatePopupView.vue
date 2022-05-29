@@ -9,7 +9,7 @@
       <div class="create-popup-view__body">
         <slot />
       </div>
-      <div class="create-popup-view__footer">
+      <div class="create-popup-view__footer" v-if="showConfirmButton || showCancelButton">
         <slot name="footer-left" />
         <el-button v-if="showCancelButton" @click="close">
           {{ cancelButtonText || "取消" }}
