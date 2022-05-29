@@ -4,11 +4,19 @@
       <div class="query-add-btns-container">
         <div class="add-btns">
           <el-input
-            v-model="searchContent"
+            v-model="queryParam.search"
             class="content-search"
             placeholder="请输入学习内容"
             prefix-icon="Search"
           />
+          <el-button
+            v-has="'teach'"
+            class="content-add"
+            @click="searchQuery"
+            type="primary"
+          >
+            查询
+          </el-button>
           <el-button
             v-has="'teach'"
             class="content-add"
@@ -26,6 +34,8 @@
         :columns="columns"
         :dataSource="dataSource"
         :refDataTable="refDataTable"
+        v-model:ipagination="ipagination"
+        @load="loadData"
       >
         <template v-slot:salesLeadSourceId="scope">
           {{
@@ -70,13 +80,11 @@
         <el-form-item prop="title" class="login-email" label="名称">
           <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>
         </el-form-item>
-        <el-form-item prop="content" class="password" label="内容">
-          <el-input placeholder="" v-model.trim="content_form.content" type="text"></el-input>
-        </el-form-item>
         <el-upload
           class="upload-demo"
           drag
           action="https://jsonplaceholder.typicode.com/posts/"
+           :before-upload="beforeUpload"
           multiple
         >
           <el-icon class="el-icon--upload">
@@ -217,8 +225,10 @@ import TableView from "@/views/crm/components/TableView";
 import TableMixin from "@/views/crm/mixins/Table";
 import CreatePopup from "@/components/CreatePopup";
 import { gainAppoint } from "@/utils/utils";
+import { addContent } from "@/api/crm/customer";
 import { useStore } from "vuex";
 import { computed } from "vue";
+
 export default {
   name: "DetailSale",
   mixins: [TableMixin],
@@ -262,7 +272,7 @@ export default {
         }
       ],
       url: {
-        list: "/crm/admin/api/sales_lead/query/list_in_customer",
+        list: "/api/v1/learning_content",
         type: "get"
       },
       disableMixinInit: true,
@@ -280,10 +290,10 @@ export default {
         data: {}
       },
       sourceOption: [],
-      searchContent: "",
+      search: "",
       content_form: {
         title: "",
-        content: ""
+        file: []
       },
       register_tm: 1, //签到时间限制
       talk: "", // 讨论话题
@@ -330,9 +340,10 @@ export default {
   },
 
   watch: {
-    "customer.customerId": {
+    "customer.course_id": {
       handler(val) {
-        this.queryParam.customerId = val;
+        this.queryParam.course_id = val;
+        console.log(val);
         if (val) this.loadData();
       },
       immediate: true,
@@ -370,10 +381,22 @@ export default {
     },
     handleClose() {},
     handleClick() {},
+    // 文件上传
+    beforeUpload(file){
+      this.content_form.file = file;
+    },
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
-        this.addContentVisible = false;
+        const params = {...this.content_form, course_id: this.customer.course_id}
+        addContent(params).then(res =>{
+          if (res && res.code === 200) {
+            this.$message.success(res.message);
+            this.addContentVisible = false;
+          } else {
+            this.$message.warning(res.message);
+          }
+        })
       });
     },
     edit(item) {

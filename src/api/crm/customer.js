@@ -59,3 +59,9 @@ export function deleteCourse(params){
     data: params
   })
 }
+
+// 新增学习内容
+export function addContent(params){
+  const url = "/api/v1/learning_content";
+  return axios.post(url, params);
+}

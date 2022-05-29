@@ -14,7 +14,7 @@
                 :content="detailObj[item.prop] || '--'"
                 placement="top"
               >
-                {{ detailObj[item.prop] || "--" }}
+                {{ detailObj[item.prop] }}
               </el-tooltip>
             </div>
           </div>
@@ -22,7 +22,7 @@
       </div>
       <!-- tab区域 -->
       <div class="detail-tabs-box">
-        <detail-sale :customer="customer" @enterLearning="enterLearning"></detail-sale>
+        <detail-sale :customer="detailObj" @enterLearning="enterLearning"></detail-sale>
       </div>
     </div>
     <create-popup
