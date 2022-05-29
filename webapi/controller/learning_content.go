@@ -63,7 +63,7 @@ func (l LearningController) LearningResult(ctx *wrapper.Context) {
 // @Router /v1/learning_content/learning/ [post]
 // @Security ApiKeyAuth
 func (l LearningController) Learning(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.LearningHandler, true, &form_req.LearningReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.LearningHandler, true, &form_req.LearningReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 func (l LearningController) StartChat(ctx *wrapper.Context) {

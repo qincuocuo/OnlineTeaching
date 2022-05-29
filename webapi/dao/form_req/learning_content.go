@@ -19,8 +19,7 @@ type LearningResultReq struct {
 }
 
 type LearningReq struct {
-	ContentId int    `json:"content_id" validate:"required"` // 学习内容id
-	FileName  string `json:"file_name" validate:"required"`  // 文件名
+	ContentId int `json:"content_id" form:"content_id" validate:"required"` // 学习内容id
 }
 
 type StartChatReq struct {
