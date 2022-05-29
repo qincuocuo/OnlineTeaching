@@ -100,7 +100,7 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		}
 	}
 	if len(req.Search) > 0 {
-		query["name"] = req.Search
+		query["ip"] = bson.M{"$regex": req.Search}
 	}
 	var sorter string
 	sorter = "-create_tm"

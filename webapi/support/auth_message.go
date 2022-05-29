@@ -6,6 +6,7 @@ const (
 	UpdatePasswordFailed   string = "修改账户密码失败"
 	PasswordFailed         string = "账户或者密码错误"
 	PasswordNotConfirm     string = "输入的密码不一致"
+	PasswordWrong          string = "密码错误，请重新输入"
 	PasswordStrengthFailed string = "密码强度过低"
 	CreateUserFailed       string = "创建用户失败"
 	UserLockFailed         string = "用户被锁定"

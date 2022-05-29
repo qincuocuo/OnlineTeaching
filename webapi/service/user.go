@@ -112,7 +112,7 @@ func ChangePasswordHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		return nil
 	}
 	if !password.CheckPassword(req.Password, userDoc.Password) {
-		support.SendApiErrorResponse(ctx, support.PasswordFailed, 0)
+		support.SendApiErrorResponse(ctx, support.PasswordWrong, 0)
 		return nil
 	}
 	query := bson.M{"user_id": ctx.UserToken.UserId}
