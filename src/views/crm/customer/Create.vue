@@ -138,6 +138,7 @@ export default {
           const params = _.cloneDeep(this.form);
           const actionApi = this.action.type === "add" ? addCourse : updateCourse;
           params.class = Number(params.class);
+          params.course_id = this.action.course_id;
           const res = await actionApi(params);
           if (res && res.code === 200) {
             this.$emit("close");
@@ -158,6 +159,7 @@ export default {
         return;
       }
       this.title = "编辑";
+      this.form = this.action
       // this.loading = true;
       // 查询数据
     }

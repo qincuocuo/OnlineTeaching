@@ -100,6 +100,7 @@ export default {
     getQueryParams() {
       //获取查询条件
       const param = Object.assign({}, this.queryParam);
+      param.create_tm = param?.create_tm?.join('--');
       param.page = this.ipagination.page;
       param.page_size = this.ipagination.page_size;
       return filterObj(param);

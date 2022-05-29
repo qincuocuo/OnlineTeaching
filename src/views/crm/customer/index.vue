@@ -73,7 +73,7 @@ import SlideDetail from "@/components/SlideDetail";
 import { deleteCourse } from "@/api/crm/customer";
 import { computed } from "vue";
 import { useStore } from "vuex";
-
+import { getClass } from "@/api/crm/common";
 export default {
   /** 客户管理 的 客户列表 */
   name: "CustomerIndex",
@@ -121,7 +121,8 @@ export default {
         }
       ],
       url: {
-        list: "/api/v1/course"
+        list: "/api/v1/course",
+        type: "get"
       },
       formOptions: {
         fApi: {},
@@ -171,7 +172,16 @@ export default {
                 value: 6,
                 label: "六年级"
               }
-            ]
+            ],
+            on: {
+              change: val => {
+                // console.log(val);
+                getClass({ grade: val }).then(res => {
+                  // console.log(res.data);
+                  this.formOptions.rule[1].options = res.data.map(item => ({ value: item }));
+                });
+              }
+            }
           },
           {
             type: "select",
@@ -185,7 +195,7 @@ export default {
           },
           {
             type: "DatePicker",
-            field: "section_day",
+            field: "create_tm",
             title: "创建时间",
             props: {
               type: "datetimerange",
@@ -194,7 +204,7 @@ export default {
           },
           {
             type: "input",
-            field: "course",
+            field: "search",
             title: "课程名",
             props: {
               "suffix-icon": "Search"
@@ -236,6 +246,7 @@ export default {
         id: item.customerId,
         data: item
       };
+      this.createAction = Object.assign(this.detailAction, item);
       this.popupShow = true;
     },
 
@@ -266,7 +277,7 @@ export default {
           type: "warning"
         })
           .then(async () => {
-            const res = await deleteCourse({ customerId: item.customerId }).catch(() => {});
+            const res = await deleteCourse({ course_id: item.course_id }).catch(() => {});
             if (res && res.code === 200) {
               this.$message.success(res.msg);
               this.loadData();
@@ -285,9 +296,11 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+
   .table-head-container {
     padding: 8px 0 0;
   }
+
   .table-view-container {
     flex: 1;
     height: 0;
