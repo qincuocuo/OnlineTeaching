@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/globalsign/mgo/bson"
 	"webapi/internal/db"
-	"webapi/internal/utils"
 	"webapi/middleware/tracking"
 	"webapi/models"
+	"webapi/utils"
 )
 
 type content struct{}
@@ -68,4 +68,3 @@ func (content) GetMaxId(ctx context.Context) (uid int) {
 	}
 	return
 }
-

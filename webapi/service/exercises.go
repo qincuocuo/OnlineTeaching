@@ -7,10 +7,10 @@ import (
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
-	"webapi/internal/utils"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
+	"webapi/utils"
 )
 
 func CreateExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
@@ -45,11 +45,11 @@ func CreateExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err erro
 	exercisesDoc.CreateTm = time.Now()
 	for _, item := range req.Exercises {
 		msg := models.QuestionsItem{
-			Id: rand.Int(),
-			Type: item.Type,
+			Id:       rand.Int(),
+			Type:     item.Type,
 			Question: item.Question,
-			Answer: item.Answer,
-			Options: item.Options,
+			Answer:   item.Answer,
+			Options:  item.Options,
 		}
 		exercisesDoc.Questions = append(exercisesDoc.Questions, msg)
 	}
@@ -96,10 +96,10 @@ func GetExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	resp.Count = len(exercisesDoc.Questions)
 	for _, item := range exercisesDoc.Questions {
 		msg := form_resp.ExercisesItem{
-			Id: item.Id,
-			Type: item.Type,
+			Id:       item.Id,
+			Type:     item.Type,
 			Question: item.Question,
-			Options: item.Options,
+			Options:  item.Options,
 		}
 		resp.Exercises = append(resp.Exercises, msg)
 	}
@@ -130,9 +130,9 @@ func ExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 				}
 			}
 			msg := form_resp.ExerciseResult{
-				Id: answer.Id,
+				Id:      answer.Id,
 				Correct: flag,
-				Answer: question.Answer,
+				Answer:  question.Answer,
 			}
 			resp.Results = append(resp.Results, msg)
 		}

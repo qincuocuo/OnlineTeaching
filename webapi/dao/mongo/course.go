@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/globalsign/mgo/bson"
 	"webapi/internal/db"
-	"webapi/internal/utils"
 	"webapi/middleware/tracking"
 	"webapi/models"
+	"webapi/utils"
 )
 
 type course struct{}
@@ -77,7 +77,7 @@ func (course) GetMaxId(ctx context.Context) (uid int) {
 	span, _ := tracking.DbTracking(ctx, dbName, bson.M{})
 	defer span.End()
 	_ = db.MongoCli.FindSortByLimitAndSkip(dbName, bson.M{}, &courseDoc, 1, 0, "-course_id")
-	if len(courseDoc) == 0{
+	if len(courseDoc) == 0 {
 		uid = 1
 	} else {
 		uid = courseDoc[0].CourseId + 1
