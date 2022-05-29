@@ -10,10 +10,11 @@ import (
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
-	"webapi/internal/utils"
 	"webapi/internal/wrapper"
 	"webapi/models"
 	"webapi/support"
+	"webapi/utils"
+	utils2 "webapi/utils"
 )
 
 func GetClassListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
@@ -27,7 +28,7 @@ func GetClassListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 		support.SendApiErrorResponse(ctx, support.GetCourseFailed, 0)
 	}
 	for _, course := range courseDoc {
-		if !utils.IsContainIntInSlice(course.Class, resp) {
+		if !utils2.IsContainIntInSlice(course.Class, resp) {
 			resp = append(resp, course.Class)
 		}
 	}
@@ -124,7 +125,7 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 			Grade:       item.Grade,
 			Class:       item.Class,
 			TotalMember: item.TotalMember,
-			CreateTm:    item.CreateTm.String(),
+			CreateTm:    utils.Time2String(item.CreateTm),
 		}
 		resp.Result = append(resp.Result, msg)
 	}
