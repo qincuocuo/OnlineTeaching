@@ -1,6 +1,6 @@
 import axios from "@/utils/request";
 
-export function queryList(type = "post", url, params) {
+export function queryList(type = "get", url, params) {
   return axios({
     method: type,
     url: url,

@@ -3,19 +3,34 @@
     <div class="table-head-container">
       <div class="query-add-btns-container">
         <div class="add-btns">
-          <el-input v-model="searchContent" class="content-search" placeholder="请输入学习内容" prefix-icon="Search" />
-          <el-button v-has="'teach'" class="content-add" @click="addContentVisible = true" type="primary">
+          <el-input
+            v-model="searchContent"
+            class="content-search"
+            placeholder="请输入学习内容"
+            prefix-icon="Search"
+          />
+          <el-button
+            v-has="'teach'"
+            class="content-add"
+            @click="addContentVisible = true"
+            type="primary"
+          >
             新增学习内容
           </el-button>
         </div>
       </div>
     </div>
     <div class="table-view-container" v-loading="loading">
-      <table-view ref="refTableView" :columns="columns" :dataSource="dataSource" :refDataTable="refDataTable">
+      <table-view
+        ref="refTableView"
+        :columns="columns"
+        :dataSource="dataSource"
+        :refDataTable="refDataTable"
+      >
         <template v-slot:salesLeadSourceId="scope">
           {{
-              gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
-                .customerSource || "--"
+            gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
+              .customerSource || "--"
           }}
         </template>
         <template v-slot:operate="scope">
@@ -37,7 +52,7 @@
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text">查看讨论情况</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="homeworkVisible = true">发布课后练习</el-button>
           </div>
           <div v-has="'student'" class="table-btn-box">
@@ -58,7 +73,12 @@
         <el-form-item prop="content" class="password" label="内容">
           <el-input placeholder="" v-model.trim="content_form.content" type="text"></el-input>
         </el-form-item>
-        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
+        <el-upload
+          class="upload-demo"
+          drag
+          action="https://jsonplaceholder.typicode.com/posts/"
+          multiple
+        >
           <el-icon class="el-icon--upload">
             <upload-filled />
           </el-icon>
@@ -142,7 +162,12 @@
             <el-form-item label="选项" prop="option">
               <div v-for="(optionItem, optionIndex) in item.option" :key="optionItem">
                 <span>{{ selectOption[optionIndex]?.label }}:</span>
-                <el-input style="padding-right: 10px" v-model="option" placeholder="请输入选项内容" class="input-with-select">
+                <el-input
+                  style="padding-right: 10px"
+                  v-model="option"
+                  placeholder="请输入选项内容"
+                  class="input-with-select"
+                >
                   <template #prepend>
                     <el-button icon="Plus" @click="addOption(index)" />
                   </template>
@@ -154,8 +179,12 @@
             </el-form-item>
             <el-form-item label="答案" prop="answer">
               <el-select v-model="item.answer">
-                <el-option v-for="item in selectOption.slice(0, item.option.length)" :key="item.value"
-                  :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in selectOption.slice(0, item.option.length)"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </el-form-item>
             <el-button type="primary" @click="deleteQuestion(index)">删除题目</el-button>
@@ -171,8 +200,15 @@
       </el-dialog>
     </div>
 
-    <create-popup ref="refCreatePoup" :show="popupShow" :popup-type="popupType" :action="createAction"
-      :sourceOption="sourceOption" @update="loadData" @close="popupShow = false" />
+    <create-popup
+      ref="refCreatePoup"
+      :show="popupShow"
+      :popup-type="popupType"
+      :action="createAction"
+      :sourceOption="sourceOption"
+      @update="loadData"
+      @close="popupShow = false"
+    />
   </div>
 </template>
 
@@ -332,8 +368,8 @@ export default {
       }
       this.exercises[index].option.splice(optionIndex, 1);
     },
-    handleClose() { },
-    handleClick() { },
+    handleClose() {},
+    handleClick() {},
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;

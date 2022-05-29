@@ -22,13 +22,15 @@
       </div>
       <!-- tab区域 -->
       <div class="detail-tabs-box">
-          <detail-sale :customer="customer"></detail-sale>
+        <detail-sale :customer="customer" @enterLearning="enterLearning"></detail-sale>
       </div>
     </div>
     <create-popup
       :show="popupShow"
       :popup-type="popupType"
       :action="createAction"
+      :showCancelButton="false"
+      :showConfirmButton="false"
       @load="editCompleted"
       @close="popupShow = false"
     />
@@ -37,9 +39,7 @@
 <script>
 import SlideDetailView from "@/components/SlideDetailView";
 import { queryCustomerDetail } from "@/api/crm/customer";
-import DetailInfo from "@/views/crm/customer/DetailInfo";
 import DetailSale from "@/views/crm/customer/DetailSale";
-import DetailVisit from "@/views/crm/customer/DetailVIsit";
 import CreatePopup from "@/components/CreatePopup";
 
 export default {

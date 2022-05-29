@@ -77,11 +77,11 @@ export default {
             options: [
               {
                 label: "教师",
-                value: 0
+                value: 1
               },
               {
                 label: "学生",
-                value: 1
+                value: 2
               }
             ],
             on: {

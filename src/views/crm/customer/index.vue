@@ -11,7 +11,7 @@
         />
         <div class="query-add-btns-container">
           <div class="add-btns">
-            <el-button v-has="'_add'" @click="add" :disabled="slideShow" type="primary">
+            <el-button v-has="'teach'" @click="add" :disabled="slideShow" type="primary">
               新增
             </el-button>
           </div>
@@ -37,11 +37,14 @@
           </div>
         </template>
         <template v-slot:operate="scope">
-          <div v-if="scope.row.status === 2" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
           </div>
-          <div v-has="'del'" class="table-btn-box">
+          <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="itemHandle('del', scope.row)">删除</el-button>
+          </div>
+          <div v-has="'student'" class="table-btn-box">
+            <el-button type="text" @click="viewDetails(scope.row)">详情</el-button>
           </div>
         </template>
       </table-view>
@@ -248,7 +251,7 @@ export default {
         index: item.index,
         tabName: item.tabName
       };
-      this.detailAction = Object.assign(this.detailAction,item)
+      this.detailAction = Object.assign(this.detailAction, item);
       this.slideShow = true;
     },
 
