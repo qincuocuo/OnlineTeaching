@@ -8,12 +8,12 @@ import (
 )
 
 func InitRouters(app *iris.Application) {
-	commonRouter := app.Party("/")
-	{
-		// 基础认证与登录接口
-		common.RegisterAuthRouter(commonRouter)
-	}
-	appRouter := app.Party("/v1/")
+	api := app.Party("/api")
+
+	// 基础认证与登录接口
+	common.RegisterAuthRouter(api)
+
+	appRouter := api.Party("/v1/")
 	{
 		// 用户接口
 		appUserRouter := appRouter.Party("/user")
