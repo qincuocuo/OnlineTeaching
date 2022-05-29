@@ -2,13 +2,8 @@
   <div class="customer">
     <div class="table-head-container">
       <div class="filter-container">
-        <form-create
-          v-model:api="formOptions.fApi"
-          v-model="queryParam"
-          :rule="formOptions.rule"
-          :option="formOptions.options"
-          @keyup.enter="searchQuery"
-        />
+        <form-create v-model:api="formOptions.fApi" v-model="queryParam" :rule="formOptions.rule"
+          :option="formOptions.options" @keyup.enter="searchQuery" />
         <div class="query-add-btns-container">
           <div class="add-btns">
             <el-button v-has="'_add'" @click="add" :disabled="slideShow" type="primary">
@@ -23,21 +18,15 @@
       </div>
     </div>
     <div class="table-view-container" v-loading="loading">
-      <table-view
-        ref="refTableView"
-        :columns="columns"
-        :dataSource="dataSource"
-        :refDataTable="refDataTable"
-        v-model:ipagination="ipagination"
-        @load="loadData"
-      >
+      <table-view ref="refTableView" :columns="columns" :dataSource="dataSource" :refDataTable="refDataTable"
+        v-model:ipagination="ipagination" @load="loadData">
         <template v-slot:course_name="scope">
           <div class="table-visit--underline" @click="viewDetails(scope.row)">
             {{ scope.row.course_name || "--" }}
           </div>
         </template>
         <template v-slot:operate="scope">
-          <div v-if="scope.row.status === 2" class="table-btn-box">
+          <div  class="table-btn-box">
             <el-button type="text" @click="edit(scope.row)">编辑</el-button>
           </div>
           <div v-has="'del'" class="table-btn-box">
@@ -46,20 +35,10 @@
         </template>
       </table-view>
     </div>
-    <create-popup
-      :show="popupShow"
-      :popup-type="popupType"
-      :action="createAction"
-      @load="loadData"
-      @close="popupShow = false"
-    />
-    <slide-detail
-      :show="slideShow"
-      :action="detailAction"
-      :slide-type="slideType"
-      @load="loadData"
-      @close="slideShow = false"
-    ></slide-detail>
+    <create-popup :show="popupShow" :popup-type="popupType" :action="createAction" @load="loadData"
+      @close="popupShow = false" />
+    <slide-detail :show="slideShow" :action="detailAction" :slide-type="slideType" @load="loadData"
+      @close="slideShow = false"></slide-detail>
   </div>
 </template>
 <script>
@@ -70,7 +49,7 @@ import SlideDetail from "@/components/SlideDetail";
 import { deleteCourse } from "@/api/crm/customer";
 import { computed } from "vue";
 import { useStore } from "vuex";
-
+import { getClass } from "@/api/crm/common";
 export default {
   /** 客户管理 的 客户列表 */
   name: "CustomerIndex",
@@ -118,7 +97,8 @@ export default {
         }
       ],
       url: {
-        list: "/api/v1/course"
+        list: "/api/v1/course",
+        type: "get"
       },
       formOptions: {
         fApi: {},
@@ -168,7 +148,16 @@ export default {
                 value: 6,
                 label: "六年级"
               }
-            ]
+            ],
+            on: {
+              change: val => {
+                // console.log(val);
+                getClass({grade: val}).then(res=> {
+                  // console.log(res.data);
+                  this.formOptions.rule[1].options = res.data.map(item => ({value: item}));
+                })
+              }
+            }
           },
           {
             type: "select",
@@ -182,7 +171,7 @@ export default {
           },
           {
             type: "DatePicker",
-            field: "section_day",
+            field: "create_tm",
             title: "创建时间",
             props: {
               type: "datetimerange",
@@ -191,7 +180,7 @@ export default {
           },
           {
             type: "input",
-            field: "course",
+            field: "search",
             title: "课程名",
             props: {
               "suffix-icon": "Search"
@@ -233,6 +222,7 @@ export default {
         id: item.customerId,
         data: item
       };
+      this.createAction = Object.assign(this.detailAction, item)
       this.popupShow = true;
     },
 
@@ -248,7 +238,7 @@ export default {
         index: item.index,
         tabName: item.tabName
       };
-      this.detailAction = Object.assign(this.detailAction,item)
+      this.detailAction = Object.assign(this.detailAction, item)
       this.slideShow = true;
     },
 
@@ -263,7 +253,7 @@ export default {
           type: "warning"
         })
           .then(async () => {
-            const res = await deleteCourse({ customerId: item.customerId }).catch(() => {});
+            const res = await deleteCourse({ course_id: item.course_id }).catch(() => { });
             if (res && res.code === 200) {
               this.$message.success(res.msg);
               this.loadData();
@@ -271,7 +261,7 @@ export default {
               this.$message.warning(res.msg);
             }
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     }
   }
@@ -282,9 +272,11 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+
   .table-head-container {
     padding: 8px 0 0;
   }
+
   .table-view-container {
     flex: 1;
     height: 0;

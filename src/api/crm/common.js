@@ -8,3 +8,13 @@ export function queryList(type = "post", url, params) {
     data: type === "post" ? params : null
   });
 }
+// 查询班级
+export function getClass(params){
+  let url = "/api/v1/course/class";
+  return axios({
+    method: 'get',
+    url: url,
+    params: params,
+    data: null
+  })
+}

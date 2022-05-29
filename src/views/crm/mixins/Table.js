@@ -82,11 +82,11 @@ export default {
         });
       if (!res) return;
       if (res.code === 200) {
-        this.dataSource = res?.data?.list || res?.data[this.url.field] || [];
+        this.dataSource = res?.data?.result || res?.data[this.url.field] || [];
         this.dataSource.forEach((item, index) => {
           item.index = index + 1 + (params.page - 1) * params.page_size;
         });
-        this.ipagination.total = res.data.total;
+        this.ipagination.total = res.data.count;
       } else {
         this.$message.warning(res.msg);
       }
@@ -98,6 +98,7 @@ export default {
     getQueryParams() {
       //获取查询条件
       const param = Object.assign({}, this.queryParam);
+      param.create_tm = param?.create_tm?.join('--');
       param.page = this.ipagination.page;
       param.page_size = this.ipagination.page_size;
       return filterObj(param);

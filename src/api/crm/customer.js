@@ -46,11 +46,16 @@ export function addCourse(params){
 }
 // 编辑课程
 export function updateCourse(params){
-  const url = "/apiv1/course/update";
+  const url = "/api/v1/course/update";
   return axios.post(url, params);
 }
 // 删除课程
 export function deleteCourse(params){
-  const url = "/apiv1/course";
-  return axios.delete(url, params);
+  const url = "/api/v1/course";
+  return axios({
+    method: 'delete',
+    url: url,
+    params: params,
+    data: null
+  })
 }

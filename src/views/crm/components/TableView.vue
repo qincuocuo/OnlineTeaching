@@ -51,7 +51,7 @@
               <!-- 插槽-自定义内容 ( 在columns该列对应属性中添加slot属性名。) -->
               <slot v-if="item.slot" :name="item.slot" :row="scope.row"></slot>
               <!-- 默认显示文字 -->
-              <span v-else>{{ scope.row[item.prop] || "--" }}</span>
+              <span v-else>{{ scope.row[item.prop]}}</span>
             </template>
           </el-table-column>
         </template>
