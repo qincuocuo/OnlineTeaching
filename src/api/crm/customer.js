@@ -65,3 +65,40 @@ export function addContent(params){
   const url = "/api/v1/learning_content";
   return axios.post(url, params);
 }
+
+// 查询学习情况
+export function getLearningDetail(params){
+  let url = "/api/v1/learning_content/result";
+  return axios({
+    method: 'get',
+    url: url,
+    params: params,
+    data: null
+  })
+}
+// 查询签到情况
+export function getQianDaoDetail(params){
+  let url = "/api/v1/register/result";
+  return axios({
+    method: 'get',
+    url: url,
+    params: params,
+    data: null
+  })
+}
+
+// 新增签到任务
+export function addQianDao(params){
+  const url = "/api/v1/register";
+  return axios.post(url, params);
+}
+// 创建讨论话题
+export function addtalk(params){
+  const url = "/api/v1/talk";
+  return axios.post(url, params);
+}
+// 创建课后练习
+export function addExercises(params){
+  const url = "/api/v1/exercises";
+  return axios.post(url, params);
+}

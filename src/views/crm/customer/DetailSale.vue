@@ -3,39 +3,23 @@
     <div class="table-head-container">
       <div class="query-add-btns-container">
         <div class="add-btns">
-          <el-input
-            v-model="queryParam.search"
-            class="content-search"
-            placeholder="请输入学习内容"
-            prefix-icon="Search"
-          />
+          <el-input v-model="queryParam.search" class="content-search" placeholder="请输入学习内容" prefix-icon="Search" />
           <el-button v-has="'teach'" class="content-add" @click="searchQuery" type="primary">
             查询
           </el-button>
-          <el-button
-            v-has="'teach'"
-            class="content-add"
-            @click="addContentVisible = true"
-            type="primary"
-          >
+          <el-button v-has="'teach'" class="content-add" @click="addContentVisible = true" type="primary">
             新增学习内容
           </el-button>
         </div>
       </div>
     </div>
     <div class="table-view-container" v-loading="loading">
-      <table-view
-        ref="refTableView"
-        :columns="columns"
-        :dataSource="dataSource"
-        :refDataTable="refDataTable"
-        v-model:ipagination="ipagination"
-        @load="loadData"
-      >
+      <table-view ref="refTableView" :columns="columns" :dataSource="dataSource" :refDataTable="refDataTable"
+        v-model:ipagination="ipagination" @load="loadData">
         <template v-slot:salesLeadSourceId="scope">
           {{
-            gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
-              .customerSource || "--"
+              gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
+                .customerSource || "--"
           }}
         </template>
         <template v-slot:operate="scope">
@@ -43,22 +27,25 @@
             <el-button type="text" @click="edit(scope.row)">查看学习内容</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="learningDetail = true">查看学习情况</el-button>
+            <el-button type="text" @click="getLearningDetail(scope.row)">查看学习情况</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="qiandaoVisible = true">发起签到</el-button>
+            <el-button type="text" @click="() => { this.qiandaoVisible = true; this.chooseRow = scope.row }">发起签到
+            </el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="talkVisible = true">发起讨论</el-button>
+            <el-button type="text" @click="getQianDaoDetail(scope.row)">查看签到结果</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="qiandaoDetail = true">查看签到结果</el-button>
+            <el-button type="text" @click="() => { this.talkVisible = true; this.chooseRow = scope.row }">发起讨论
+            </el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text">查看讨论情况</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="homeworkVisible = true">发布课后练习</el-button>
+            <el-button type="text" @click="() => { this.homeworkVisible = true; this.chooseRow = scope.row }">发布课后练习
+            </el-button>
           </div>
           <div v-has="'student'" class="table-btn-box">
             <el-button type="text" @click="enterLearning(scope.row)">进入学习</el-button>
@@ -71,22 +58,12 @@
     </div>
     <!-- 新增课程内容 -->
     <el-dialog v-model="addContentVisible" title="新增课程内容" width="40%">
-      <el-form
-        ref="contentFormRef"
-        :model="content_form"
-        :rules="contentfFormRules"
-        v-loading="addContentLoading"
-      >
+      <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules" v-loading="addContentLoading">
         <el-form-item prop="title" class="login-email" label="名称">
           <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>
         </el-form-item>
-        <el-upload
-          class="upload-demo"
-          drag
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="beforeUpload"
-          :auto-upload="false"
-        >
+        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/"
+          :on-change="beforeUpload" :auto-upload="false">
           <el-icon class="el-icon--upload">
             <upload-filled />
           </el-icon>
@@ -111,7 +88,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="qiandaoVisible = false">取消</el-button>
-          <el-button type="primary" @click="qiandaoVisible = false">发起签到</el-button>
+          <el-button type="primary" @click="addQianDaoTask">发起签到</el-button>
         </span>
       </template>
     </el-dialog>
@@ -121,36 +98,36 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="talkVisible = false">取消</el-button>
-          <el-button type="primary" @click="talkVisible = false">发起讨论</el-button>
+          <el-button type="primary" @click="addtalk">发起讨论</el-button>
         </span>
       </template>
     </el-dialog>
     <!-- 查看签到情况 -->
-    <el-drawer v-model="qiandaoDetail" title="签到结果" direction="rtl" size="20%">
-      <el-tabs v-model="qiandaoDetailActiveName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane :label="`已签到(${12})`" name="qiandao">
-          <div v-for="item in finalishList" :key="item">{{ item }}</div>
+    <el-drawer v-model="qiandaoDetailVisable" title="签到结果" direction="rtl" size="20%">
+      <el-tabs v-model="qiandaoDetailActiveName" class="demo-tabs" @tab-change="qiandaoDetailTabChange">
+        <el-tab-pane :label="`已签到`" name="finished">
+          <div v-for="item in resultList" :key="item">{{ item }}</div>
         </el-tab-pane>
-        <el-tab-pane :label="`未签到(${23})`" name="notQiandao">
-          <div v-for="item in notFinalishList" :key="item">{{ item }}</div>
+        <el-tab-pane :label="`未签到`" name="unfinished">
+          <div v-for="item in resultList" :key="item">{{ item }}</div>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
     <!-- 查看学习情况 -->
-    <el-drawer v-model="learningDetail" :title="`${'背影'}学习结果`" direction="rtl" size="20%">
-      <el-tabs v-model="learningDetailActiveName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane :label="`已学习(${12})`" name="learning">
-          <div v-for="item in finalishList" :key="item">{{ item }}</div>
+    <el-drawer v-model="learningDetailVisable" :title="`${chooseRow?.content}学习结果`" direction="rtl" size="20%">
+      <el-tabs v-model="learningDetailActiveName" class="demo-tabs" @tab-change="learningDetailTabChange">
+        <el-tab-pane :label="`已学习`" name="learned">
+          <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
-        <el-tab-pane :label="`未学习(${23})`" name="notLearningDetail">
-          <div v-for="item in notFinalishList" :key="item">{{ item }}</div>
+        <el-tab-pane :label="`未学习`" name="unlearned">
+          <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
     <!-- 课后练习 -->
     <div class="homework">
       <el-dialog v-model="homeworkVisible" title="课后练习" width="50%">
-        <el-form ref="homeworkRef" :model="homeworkForm">
+        <el-form ref="homeworkRef">
           <div v-for="(item, index) in exercises" :key="item.question" style="padding-bottom: 20px">
             <el-form-item prop="index">
               <h4>第{{ index + 1 }}题</h4>
@@ -160,19 +137,14 @@
             </el-form-item>
             <el-form-item label="题目类型" prop="type">
               <el-radio-group v-model="item.type" class="ml-4">
-                <el-radio label="1" size="large">判断题</el-radio>
-                <el-radio label="2" size="large">选择题</el-radio>
+                <el-radio :label="1" size="large">判断题</el-radio>
+                <el-radio :label="2" size="large">选择题</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="选项" prop="option">
-              <div v-for="(optionItem, optionIndex) in item.option" :key="optionItem">
+              <div v-for="(optionItem, optionIndex) in item?.option" :key="optionItem">
                 <span>{{ selectOption[optionIndex]?.label }}:</span>
-                <el-input
-                  style="padding-right: 10px"
-                  v-model="option"
-                  placeholder="请输入选项内容"
-                  class="input-with-select"
-                >
+                <el-input style="padding-right: 10px" v-model="item.option[optionIndex]" placeholder="请输入选项内容" class="input-with-select">
                   <template #prepend>
                     <el-button icon="Plus" @click="addOption(index)" />
                   </template>
@@ -184,12 +156,8 @@
             </el-form-item>
             <el-form-item label="答案" prop="answer">
               <el-select v-model="item.answer">
-                <el-option
-                  v-for="item in selectOption.slice(0, item.option.length)"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+                <el-option v-for="item in selectOption.slice(0, item.option.length)" :key="item.value"
+                  :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-button type="primary" @click="deleteQuestion(index)">删除题目</el-button>
@@ -199,21 +167,14 @@
         <template #footer>
           <span class="dialog-footer">
             <el-button @click="homeworkVisible = false">取消</el-button>
-            <el-button type="primary" @click="homeworkVisible = false">提交</el-button>
+            <el-button type="primary" @click="addExercises">提交</el-button>
           </span>
         </template>
       </el-dialog>
     </div>
 
-    <create-popup
-      ref="refCreatePoup"
-      :show="popupShow"
-      :popup-type="popupType"
-      :action="createAction"
-      :sourceOption="sourceOption"
-      @update="loadData"
-      @close="popupShow = false"
-    />
+    <create-popup ref="refCreatePoup" :show="popupShow" :popup-type="popupType" :action="createAction"
+      :sourceOption="sourceOption" @update="loadData" @close="popupShow = false" />
   </div>
 </template>
 
@@ -222,7 +183,7 @@ import TableView from "@/views/crm/components/TableView";
 import TableMixin from "@/views/crm/mixins/Table";
 import CreatePopup from "@/components/CreatePopup";
 import { gainAppoint } from "@/utils/utils";
-import { addContent } from "@/api/crm/customer";
+import { addContent, getLearningDetail, getQianDaoDetail, addQianDao, addtalk, addExercises } from "@/api/crm/customer";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
@@ -280,8 +241,9 @@ export default {
       addContentLoading: false,
       qiandaoVisible: false,
       talkVisible: false,
-      qiandaoDetail: false,
-      learningDetail: false,
+      qiandaoDetailVisable: false,
+      learningDetailVisable: false,
+      chooseRow: null,
       homeworkVisible: false,
       popupType: "CreateOpportunity",
       createAction: {
@@ -295,7 +257,7 @@ export default {
         title: "",
         file: []
       },
-      register_tm: 1, //签到时间限制
+      register_tm: 2, //签到时间限制
       talk: "", // 讨论话题
       //表单验证规则
       contentfFormRules: {
@@ -303,9 +265,8 @@ export default {
         content: [{ required: true, message: "请输入内容", trigger: "change" }]
       },
       qiandaoDetailActiveName: "qiandao",
-      finalishList: ["zhangsan", "lisi"],
-      notFinalishList: ["zhangsan", "lisi"],
-      learningDetailActiveName: "learning",
+      resultList: ["zhangsan", "lisi"],
+      learningDetailActiveName: "learned",
       exercises: [
         {
           question: "",
@@ -367,12 +328,13 @@ export default {
       }
       this.exercises[index].option.splice(optionIndex, 1);
     },
-    handleClose() {},
-    handleClick() {},
+    handleClose() { },
+    handleClick() { },
     // 文件上传
     beforeUpload(file) {
       this.content_form.file = file.raw;
     },
+    // 添加学习内容
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
@@ -395,6 +357,97 @@ export default {
             this.addContentLoading = false;
           });
       });
+    },
+
+    // 查看学习情况
+    getLearningDetail(row) {
+      this.learningDetailVisable = true;
+      this.chooseRow = row;
+      getLearningDetail({ course_id: this.customer.course_id, content_id: row.content_id, status: "learned" }).then(res => {
+        // console.log(res.data);
+        if (res && res.code === 200) {
+          this.resultList = res.data.student_info || []
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+    },
+    learningDetailTabChange(tabName) {
+      getLearningDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, status: tabName }).then(res => {
+        if (res && res.code === 200) {
+          this.resultList = res.data.student_info || []
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+    },
+    // 查看签到结果
+    getQianDaoDetail(row) {
+      this.qiandaoDetailVisable = true;
+      this.chooseRow = row;
+      getQianDaoDetail({ course_id: this.customer.course_id, content_id: row.content_id, register_result: "finished" }).then(res => {
+        // console.log(res.data);
+        if (res && res.code === 200) {
+          this.resultList = res.data.student_info || []
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+    },
+    qiandaoDetailTabChange(tabName) {
+      getQianDaoDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, register_result: tabName }).then(res => {
+        if (res && res.code === 200) {
+          this.resultList = res.data.student_info || []
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+    },
+    // 创建签到任务
+    addQianDaoTask() {
+      addQianDao({
+        content_id: this.chooseRow.content_id,
+        register_tm: this.register_tm,
+      }).then(res => {
+        if (res && res.code === 200) {
+          this.$message.success(res.message);
+          this.qiandaoVisible = false;
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+
+    },
+    // 创建讨论话题
+    addtalk() {
+      addtalk({
+        course_id: this.customer.course_id,
+        content_id: this.chooseRow.content_id,
+        talk: this.talk
+      }).then(res => {
+        if (res && res.code === 200) {
+          this.$message.success(res.message);
+          this.talkVisible = false;
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
+
+    },
+    // 创建课后练习
+    addExercises() {
+      addExercises({
+        course_id: this.customer.course_id,
+        learning_content_id: this.chooseRow.content_id,
+        exercises: this.exercises
+      }).then(res => {
+        if (res && res.code === 200) {
+          this.$message.success(res.message);
+          this.homeworkVisible = false;
+        } else {
+          this.$message.warning(res.message);
+        }
+      })
     },
     edit(item) {
       this.createAction = {
