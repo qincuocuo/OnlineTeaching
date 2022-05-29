@@ -277,12 +277,12 @@ export default {
           type: "warning"
         })
           .then(async () => {
-            const res = await deleteCourse({ course_id: item.course_id }).catch(() => {});
+            const res = await deleteCourse({ course_id: item.course_id , user_id: this.userInfo.user_id}).catch(() => { });
             if (res && res.code === 200) {
-              this.$message.success(res.msg);
+              this.$message.success(res.message);
               this.loadData();
             } else {
-              this.$message.warning(res.msg);
+              this.$message.warning(res.message);
             }
           })
           .catch(() => {});

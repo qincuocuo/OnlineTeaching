@@ -55,7 +55,7 @@ export function deleteCourse(params){
   return axios({
     method: 'delete',
     url: url,
-    params: params,
-    data: null
+    params: null,
+    data: params
   })
 }
