@@ -128,12 +128,12 @@
     <div class="homework">
       <el-dialog v-model="homeworkVisible" title="课后练习" width="50%">
         <el-form ref="homeworkRef">
-          <div v-for="(item, index) in exercises" :key="item.question" style="padding-bottom: 20px">
+          <div v-for="(item, index) in exercises" :key="index" style="padding-bottom: 20px">
             <el-form-item prop="index">
               <h4>第{{ index + 1 }}题</h4>
             </el-form-item>
             <el-form-item label="题目" prop="question">
-              <el-input type="textarea" v-model="item.question"></el-input>
+              <el-input type="textarea" v-model="exercises[index].question"></el-input>
             </el-form-item>
             <el-form-item label="题目类型" prop="type">
               <el-radio-group v-model="item.type" class="ml-4">
@@ -142,9 +142,9 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="选项" prop="option">
-              <div v-for="(optionItem, optionIndex) in item?.option" :key="optionItem">
+              <div v-for="(optionItem, optionIndex) in item?.option" :key="optionIndex">
                 <span>{{ selectOption[optionIndex]?.label }}:</span>
-                <el-input style="padding-right: 10px" v-model="item.option[optionIndex]" placeholder="请输入选项内容" class="input-with-select">
+                <el-input style="padding-right: 10px" v-model="exercises[index].option[optionIndex]" placeholder="请输入选项内容" class="input-with-select">
                   <template #prepend>
                     <el-button icon="Plus" @click="addOption(index)" />
                   </template>
@@ -271,7 +271,7 @@ export default {
         {
           question: "",
           type: "",
-          option: [""],
+          option: ["",""],
           answer: ""
         }
       ],
@@ -305,7 +305,7 @@ export default {
       this.exercises.push({
         question: "",
         type: "",
-        option: [""],
+        option: ["",""],
         answer: ""
       });
     },
