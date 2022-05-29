@@ -77,7 +77,7 @@ func (c CourseController) UpdateCourse(ctx *wrapper.Context) {
 // @Router /v1/course/ [delete]
 // @Security ApiKeyAuth
 func (c CourseController) DeleteCourse(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.DeleteCourseHandler, true, &form_req.DeleteCourseReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	wrapper.ApiWrapper(ctx, service.DeleteCourseHandler, true, &form_req.DeleteCourseReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
 // EnterCourse
