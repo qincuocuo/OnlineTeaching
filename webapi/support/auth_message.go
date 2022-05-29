@@ -27,6 +27,8 @@ const (
 	CreateLearningContentFailed  string = "创建学习章节失败"
 	UpdateContentFailed          string = "更新学习结果失败"
 
+	OpenFileFailed string = "打开文件失败"
+
 	RegisterExists       string = "签到任务已存在"
 	RegisterNotFount     string = "签到任务不存在"
 	RegisterFinished     string = "用户已完成签到，请勿重复提交"

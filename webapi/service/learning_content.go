@@ -194,7 +194,7 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", contentDoc.CourseId, contentDoc.Title)
 	file, err := os.Open(filePath)
 	if err != nil {
-		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		support.SendApiErrorResponse(ctx, support.OpenFileFailed, 0)
 		return nil
 	}
 	defer file.Close()
