@@ -73,7 +73,6 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		return nil
 	}
 	defer file.Close()
-
 	dir := fmt.Sprintf("%s/%d", "/workspace/data", req.CourseId)
 	//filePath := fmt.Sprintf("%s/%d/%s", ".", req.ContentId, fh.Filename)
 
