@@ -24,7 +24,7 @@
         </template>
         <template v-slot:operate="scope">
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="edit(scope.row)">查看学习内容</el-button>
+            <el-button type="text" @click="viewLearnDetail(scope.row)">查看学习内容</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="getLearningDetail(scope.row)">查看学习情况</el-button>
@@ -41,7 +41,7 @@
             </el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text">查看讨论情况</el-button>
+            <el-button type="text" @click="chatRoomVisable = true">查看讨论情况</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="() => { this.homeworkVisible = true; this.chooseRow = scope.row }">发布课后练习
@@ -56,6 +56,14 @@
         </template>
       </table-view>
     </div>
+    <!-- 查看学习内容 -->
+    <el-dialog v-model="viewLearnDetailVisable" ref="video">
+      <!-- <video :src="viewLearnDetailFileUrL"></video> -->
+      <video width="400" height="650" controls autoplay="autoplay" loop="loop" mute="muted">
+        <source :src="viewLearnDetailFileUrL" >
+      </video>
+
+    </el-dialog>
     <!-- 新增课程内容 -->
     <el-dialog v-model="addContentVisible" title="新增课程内容" width="40%">
       <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules" v-loading="addContentLoading">
@@ -102,14 +110,18 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 查看讨论情况 -->
+    <el-drawer v-model="chatRoomVisable">
+      <chat-room></chat-room>
+    </el-drawer>
     <!-- 查看签到情况 -->
     <el-drawer v-model="qiandaoDetailVisable" title="签到结果" direction="rtl" size="20%">
       <el-tabs v-model="qiandaoDetailActiveName" class="demo-tabs" @tab-change="qiandaoDetailTabChange">
         <el-tab-pane :label="`已签到`" name="finished">
-          <div v-for="item in resultList" :key="item">{{ item }}</div>
+          <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
         <el-tab-pane :label="`未签到`" name="unfinished">
-          <div v-for="item in resultList" :key="item">{{ item }}</div>
+          <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -144,7 +156,8 @@
             <el-form-item label="选项" prop="option">
               <div v-for="(optionItem, optionIndex) in item?.option" :key="optionIndex">
                 <span>{{ selectOption[optionIndex]?.label }}:</span>
-                <el-input style="padding-right: 10px" v-model="exercises[index].option[optionIndex]" placeholder="请输入选项内容" class="input-with-select">
+                <el-input style="padding-right: 10px" v-model="exercises[index].option[optionIndex]"
+                  placeholder="请输入选项内容" class="input-with-select">
                   <template #prepend>
                     <el-button icon="Plus" @click="addOption(index)" />
                   </template>
@@ -181,16 +194,17 @@
 <script>
 import TableView from "@/views/crm/components/TableView";
 import TableMixin from "@/views/crm/mixins/Table";
+import chatRoom from "../components/chatRoom.vue";
 import CreatePopup from "@/components/CreatePopup";
 import { gainAppoint } from "@/utils/utils";
-import { addContent, getLearningDetail, getQianDaoDetail, addQianDao, addtalk, addExercises } from "@/api/crm/customer";
+import { addContent, getLearningDetail, getQianDaoDetail, addQianDao, addtalk, addExercises, getlearnContentDetail } from "@/api/crm/customer";
 import { useStore } from "vuex";
 import { computed } from "vue";
-
+// import VueCoreVideoPlayer from 'vue-core-video-player'
 export default {
   name: "DetailSale",
   mixins: [TableMixin],
-  components: { TableView, CreatePopup },
+  components: { TableView, CreatePopup, chatRoom },
   props: {
     customer: {
       type: Object,
@@ -245,6 +259,9 @@ export default {
       learningDetailVisable: false,
       chooseRow: null,
       homeworkVisible: false,
+      viewLearnDetailVisable: false,
+      chatRoomVisable: false,
+      viewLearnDetailFileUrL: "",
       popupType: "CreateOpportunity",
       createAction: {
         type: "add",
@@ -271,7 +288,7 @@ export default {
         {
           question: "",
           type: "",
-          option: ["",""],
+          option: ["", ""],
           answer: ""
         }
       ],
@@ -305,7 +322,7 @@ export default {
       this.exercises.push({
         question: "",
         type: "",
-        option: ["",""],
+        option: ["", ""],
         answer: ""
       });
     },
@@ -330,6 +347,16 @@ export default {
     },
     handleClose() { },
     handleClick() { },
+    // 查看学习内容
+    viewLearnDetail(row) {
+      // console.log(this.$refs.video.width);
+      this.viewLearnDetailVisable = true;
+      getlearnContentDetail({ content_id: row.content_id }).then(res => {
+        const blob = [];
+        blob.push(res);
+        this.viewLearnDetailFileUrL = window.URL.createObjectURL(new Blob(blob));
+      })
+    },
     // 文件上传
     beforeUpload(file) {
       this.content_form.file = file.raw;
@@ -362,6 +389,7 @@ export default {
     // 查看学习情况
     getLearningDetail(row) {
       this.learningDetailVisable = true;
+      this.resultList = [];
       this.chooseRow = row;
       getLearningDetail({ course_id: this.customer.course_id, content_id: row.content_id, status: "learned" }).then(res => {
         // console.log(res.data);
@@ -373,6 +401,7 @@ export default {
       })
     },
     learningDetailTabChange(tabName) {
+      this.resultList = [];
       getLearningDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, status: tabName }).then(res => {
         if (res && res.code === 200) {
           this.resultList = res.data.student_info || []
@@ -384,6 +413,7 @@ export default {
     // 查看签到结果
     getQianDaoDetail(row) {
       this.qiandaoDetailVisable = true;
+      this.resultList = [];
       this.chooseRow = row;
       getQianDaoDetail({ course_id: this.customer.course_id, content_id: row.content_id, register_result: "finished" }).then(res => {
         // console.log(res.data);
@@ -395,6 +425,7 @@ export default {
       })
     },
     qiandaoDetailTabChange(tabName) {
+      this.resultList = [];
       getQianDaoDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, register_result: tabName }).then(res => {
         if (res && res.code === 200) {
           this.resultList = res.data.student_info || []

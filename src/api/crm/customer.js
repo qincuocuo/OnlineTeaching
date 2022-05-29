@@ -102,3 +102,13 @@ export function addExercises(params){
   const url = "/api/v1/exercises";
   return axios.post(url, params);
 }
+// 查看学习内容
+export function getlearnContentDetail(params){
+  let url = "api/v1/learning_content/learning";
+  return axios({
+    method: 'get',
+    url: url,
+    params: params,
+    data: null
+  })
+}
