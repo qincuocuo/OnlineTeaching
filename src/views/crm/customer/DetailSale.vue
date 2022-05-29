@@ -9,12 +9,7 @@
             placeholder="请输入学习内容"
             prefix-icon="Search"
           />
-          <el-button
-            v-has="'teach'"
-            class="content-add"
-            @click="searchQuery"
-            type="primary"
-          >
+          <el-button v-has="'teach'" class="content-add" @click="searchQuery" type="primary">
             查询
           </el-button>
           <el-button
@@ -84,7 +79,7 @@
           class="upload-demo"
           drag
           action="https://jsonplaceholder.typicode.com/posts/"
-           :before-upload="beforeUpload"
+          :before-upload="beforeUpload"
           multiple
         >
           <el-icon class="el-icon--upload">
@@ -152,7 +147,7 @@
     </el-drawer>
     <!-- 课后练习 -->
     <div class="homework">
-      <el-dialog v-model="homeworkVisible" title="课后练习" width="50%" height="100px">
+      <el-dialog v-model="homeworkVisible" title="课后练习" width="50%">
         <el-form ref="homeworkRef" :model="homeworkForm">
           <div v-for="(item, index) in exercises" :key="item.question" style="padding-bottom: 20px">
             <el-form-item prop="index">
@@ -247,6 +242,9 @@ export default {
       visitMode: computed(() => store.getters.visitMode)
     };
   },
+  created() {
+    this.queryParam.course_id = this.customer.course_id;
+  },
   data() {
     return {
       columns: [
@@ -262,7 +260,7 @@ export default {
         },
         {
           label: "未学人数",
-          slot: "unlearned",
+          prop: "unlearned",
           width: 50
         },
         {
@@ -275,7 +273,6 @@ export default {
         list: "/api/v1/learning_content",
         type: "get"
       },
-      disableMixinInit: true,
       popupShow: false,
       addContentVisible: false,
       qiandaoVisible: false,
@@ -338,18 +335,6 @@ export default {
       ]
     };
   },
-
-  watch: {
-    "customer.course_id": {
-      handler(val) {
-        this.queryParam.course_id = val;
-        console.log(val);
-        if (val) this.loadData();
-      },
-      immediate: true,
-      deep: true
-    }
-  },
   methods: {
     // 添加题目
     addQuestion() {
@@ -382,21 +367,21 @@ export default {
     handleClose() {},
     handleClick() {},
     // 文件上传
-    beforeUpload(file){
+    beforeUpload(file) {
       this.content_form.file = file;
     },
     addContent() {
       this.$refs.contentFormRef.validate(async valid => {
         if (!valid) return;
-        const params = {...this.content_form, course_id: this.customer.course_id}
-        addContent(params).then(res =>{
+        const params = { ...this.content_form, course_id: this.customer.course_id };
+        addContent(params).then(res => {
           if (res && res.code === 200) {
             this.$message.success(res.message);
             this.addContentVisible = false;
           } else {
             this.$message.warning(res.message);
           }
-        })
+        });
       });
     },
     edit(item) {

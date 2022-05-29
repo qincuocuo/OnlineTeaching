@@ -255,12 +255,7 @@ export default {
      */
     viewDetails(item) {
       this.detailAction = {
-        id: item.customerId,
-        list: this.dataSource.map(it => {
-          return it.customerId;
-        }),
-        index: item.index,
-        tabName: item.tabName
+        id: item.course_id
       };
       this.detailAction = Object.assign(this.detailAction, item);
       this.slideShow = true;
@@ -277,7 +272,10 @@ export default {
           type: "warning"
         })
           .then(async () => {
-            const res = await deleteCourse({ course_id: item.course_id , user_id: this.userInfo.user_id}).catch(() => { });
+            const res = await deleteCourse({
+              course_id: item.course_id,
+              user_id: this.userInfo.user_id
+            }).catch(() => {});
             if (res && res.code === 200) {
               this.$message.success(res.message);
               this.loadData();

@@ -103,7 +103,9 @@ export default {
       }
     };
   },
-  created() {},
+  created() {
+    this.detailObj = this.action;
+  },
   async mounted() {
     // this.queryCustomerDetail();
   },
