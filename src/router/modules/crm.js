@@ -15,7 +15,7 @@ const crmRouter = {
       path: "customer", // 客户管理
       component: () => import("@/views/crm/customer"),
       meta: {
-        title: "课程管理",
+        title: "阳光小学线上教学系统",
         icon: "board"
       }
     }

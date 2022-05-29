@@ -118,7 +118,7 @@ export default {
         }
       ],
       url: {
-        list: "/v1/course"
+        list: "/api/v1/course"
       },
       formOptions: {
         fApi: {},

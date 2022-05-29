@@ -4,7 +4,7 @@
       <el-row class="logo-row">
         <el-col class="logo-col">
           <!-- <img class="logo-img" src="@/assets/images/login_logo.svg" alt="" /> -->
-          CRM
+          阳光小学线上教学系统
         </el-col>
       </el-row>
       <!-- 表单 -->
