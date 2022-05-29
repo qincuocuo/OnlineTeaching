@@ -27,9 +27,6 @@ definitions:
       password:
         description: 旧账户密码
         type: string
-      user_id:
-        description: 学生学号/教师工号
-        type: string
     required:
     - new_password
     - password
@@ -194,7 +191,7 @@ definitions:
       ordering_learned:
         description: 根据已学习人数排序 learned/-learned
         type: string
-      ordering_unlearned:
+      ordering_un_learned:
         description: 根据未学习人数排序 unlearned/-unlearned
         type: string
       page:
@@ -208,18 +205,6 @@ definitions:
         type: string
     required:
     - course_id
-    type: object
-  form_req.LearningReq:
-    properties:
-      content_id:
-        description: 学习内容id
-        type: integer
-      file_name:
-        description: 文件名
-        type: string
-    required:
-    - content_id
-    - file_name
     type: object
   form_req.LearningResultReq:
     properties:
@@ -948,17 +933,16 @@ paths:
       tags:
       - learning
   /v1/learning_content/learning/:
-    post:
+    get:
       consumes:
       - application/x-www-form-urlencoded
       description: learning
       parameters:
-      - description: request data
-        in: body
-        name: auth
+      - description: 学习内容id
+        in: query
+        name: content_id
         required: true
-        schema:
-          $ref: '#/definitions/form_req.LearningReq'
+        type: integer
       produces:
       - application/json
       responses:
@@ -1215,7 +1199,7 @@ paths:
       tags:
       - 用户管理
   /v1/user/password/:
-    get:
+    post:
       consumes:
       - application/json
       description: get user password

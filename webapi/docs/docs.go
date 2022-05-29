@@ -632,7 +632,7 @@ const docTemplate = `{
             }
         },
         "/v1/learning_content/learning/": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -651,13 +651,11 @@ const docTemplate = `{
                 "summary": "进入学习",
                 "parameters": [
                     {
-                        "description": "request data",
-                        "name": "auth",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/form_req.LearningReq"
-                        }
+                        "type": "integer",
+                        "description": "学习内容id",
+                        "name": "content_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1064,7 +1062,7 @@ const docTemplate = `{
             }
         },
         "/v1/user/password/": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1151,10 +1149,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "description": "旧账户密码",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "学生学号/教师工号",
                     "type": "string"
                 }
             }
@@ -1387,7 +1381,7 @@ const docTemplate = `{
                     "description": "根据已学习人数排序 learned/-learned",
                     "type": "string"
                 },
-                "ordering_unlearned": {
+                "ordering_un_learned": {
                     "description": "根据未学习人数排序 unlearned/-unlearned",
                     "type": "string"
                 },
@@ -1401,23 +1395,6 @@ const docTemplate = `{
                 },
                 "search": {
                     "description": "根据学习内容搜索",
-                    "type": "string"
-                }
-            }
-        },
-        "form_req.LearningReq": {
-            "type": "object",
-            "required": [
-                "content_id",
-                "file_name"
-            ],
-            "properties": {
-                "content_id": {
-                    "description": "学习内容id",
-                    "type": "integer"
-                },
-                "file_name": {
-                    "description": "文件名",
                     "type": "string"
                 }
             }
