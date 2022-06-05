@@ -205,17 +205,23 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		return nil
 	}
 
-	finished := append(contentDoc.Finished, ctx.UserToken.UserId)
-	unfinished := make([]string, 0)
-	for _, s := range contentDoc.Unfinished {
-		if s == ctx.UserToken.UserId {
-			continue
+	finished := contentDoc.Finished
+	unfinished := contentDoc.Unfinished
+	finishNum := contentDoc.FinishedNum
+	unfinishedNum := contentDoc.UnfinishedNum
+	if ctx.UserToken.Role == 2 {
+		finished = append(contentDoc.Finished, ctx.UserToken.UserId)
+		unfinished = make([]string, 0)
+		for _, s := range contentDoc.Unfinished {
+			if s == ctx.UserToken.UserId {
+				continue
+			}
+			unfinished = append(unfinished, s)
 		}
-		unfinished = append(unfinished, s)
+		finishNum = contentDoc.FinishedNum + 1
+		unfinishedNum = contentDoc.UnfinishedNum - 1
 	}
 
-	finishNum := contentDoc.FinishedNum + 1
-	unfinishedNum := contentDoc.UnfinishedNum + 1
 	upset := bson.M{"finished_num": finishNum, "unfinished_num": unfinishedNum, "finished": finished, "unfinished": unfinished}
 	err = mongo.Content.Update(traceCtx, query, upset)
 	if err != nil {
