@@ -31,7 +31,7 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 		return nil
 	}
 	if len(req.Search) > 0 {
-		query["title"] = req.Search
+		query["title"] = bson.M{"$regex": req.Search}
 	}
 	sorter := "-learned"
 	if len(req.OrderingLearned) > 0 {
