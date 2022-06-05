@@ -6,7 +6,10 @@ import (
 	"github.com/gorilla/websocket"
 	"io"
 	"io/ioutil"
+	"net/url"
 	"os"
+	"path/filepath"
+	"strings"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
@@ -237,6 +240,18 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
 	}
+
+	if strings.HasSuffix(filePath, ".pdf") {
+		ctx.Write(data)
+		return nil
+	} else if strings.HasSuffix(filePath, ".mp4") {
+		ctx.ResponseWriter().Header().Set("Content-Type", "video/mp4")
+		ctx.Write(data)
+		return nil
+	}
+
+	ctx.ResponseWriter().Header().Set("Content-Disposition", "attachment;filename="+url.QueryEscape(filepath.Base(filePath)))
+	_, err = ctx.Write(data)
 
 	_, err = ctx.Write(data)
 	if err != nil {
