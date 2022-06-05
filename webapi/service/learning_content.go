@@ -104,11 +104,15 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return
 	}
+	title := fh.Filename
+	if len(req.Title) > 0 {
+		title = req.Title
+	}
 
 	learningContent := models.LearningContent{
 		ContentId:     mongo.Content.GetMaxId(traceCtx),
 		CourseId:      req.CourseId,
-		Title:         fh.Filename,
+		Title:         title,
 		FinishedNum:   0,
 		UnfinishedNum: courseDoc.TotalMember,
 		Finished:      nil,
