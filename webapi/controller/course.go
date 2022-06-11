@@ -93,3 +93,17 @@ func (c CourseController) DeleteCourse(ctx *wrapper.Context) {
 func (c CourseController) EnterCourse(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.EnterCourseHandler, true, &form_req.EnterCourseReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
+
+// CourseInfo
+// @Summary 根据班级获取课程信息
+// @Description course info
+// @Tags course
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Param auth body form_req.CourseInfoReq true "request data"
+// @Success 200 {object} form_resp.CourseInfoResp "response data"
+// @Router /v1/course/info [get]
+// @Security ApiKeyAuth
+func (c CourseController) CourseInfo(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.CourseInfoHandler, true, &form_req.CourseInfoReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
+}

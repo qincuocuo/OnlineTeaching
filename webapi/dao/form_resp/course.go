@@ -15,3 +15,13 @@ type CourseListItem struct {
 	TotalMember int    `json:"total_member"` // 总人数
 	CreateTm    string `json:"create_tm"`    // 创建时间
 }
+
+type CourseInfoResp struct {
+	Results []CourseInfoItem `json:"results"`
+	Count int `json:"count"`
+}
+
+type CourseInfoItem struct {
+	CourseId    int    `json:"course_id"`    // 课程ID
+	CourseName  string `json:"course_name"`  // 课程名称
+}

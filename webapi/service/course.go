@@ -209,3 +209,32 @@ func EnterCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	support.SendApiResponse(ctx, resp, "success")
 	return
 }
+
+func CourseInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.CourseInfoReq)
+	resp := form_resp.CourseInfoResp{}
+	query := bson.M{}
+	if req.Grade > 0 {
+		query["grade"] = req.Grade
+	}
+	if req.Class > 0 {
+		query["class"] = req.Class
+	}
+	var courseDoc []models.Course
+	courseDoc, err = mongo.Course.FindAll(traceCtx, query)
+	if len(courseDoc) == 0 {
+		support.SendApiErrorResponse(ctx, support.CourseNotFound, 0)
+		return nil
+	}
+	for _, item := range courseDoc {
+		msg := form_resp.CourseInfoItem{
+			CourseId: item.CourseId,
+			CourseName: item.Name,
+		}
+		resp.Results = append(resp.Results, msg)
+	}
+	resp.Count = len(courseDoc)
+	support.SendApiResponse(ctx, resp, "success")
+	return
+}
