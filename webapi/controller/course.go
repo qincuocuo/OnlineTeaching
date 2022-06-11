@@ -100,7 +100,7 @@ func (c CourseController) EnterCourse(ctx *wrapper.Context) {
 // @Tags course
 // @Accept x-www-form-urlencoded
 // @Produce json
-// @Param auth body form_req.CourseInfoReq true "request data"
+// @Param auth query form_req.CourseInfoReq true "request data"
 // @Success 200 {object} form_resp.CourseInfoResp "response data"
 // @Router /v1/course/info [get]
 // @Security ApiKeyAuth

@@ -18,10 +18,10 @@ type CourseListItem struct {
 
 type CourseInfoResp struct {
 	Results []CourseInfoItem `json:"results"`
-	Count int `json:"count"`
+	Count   int              `json:"count"`
 }
 
 type CourseInfoItem struct {
-	CourseId    int    `json:"course_id"`    // 课程ID
-	CourseName  string `json:"course_name"`  // 课程名称
+	CourseId   int    `json:"course_id"`   // 课程ID
+	CourseName string `json:"course_name"` // 课程名称
 }

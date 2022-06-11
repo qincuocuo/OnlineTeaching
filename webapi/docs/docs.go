@@ -403,6 +403,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/course/info": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "course info",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "course"
+                ],
+                "summary": "根据班级获取课程信息",
+                "parameters": [
+                    {
+                        "description": "request data",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/form_req.CourseInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response data",
+                        "schema": {
+                            "$ref": "#/definitions/form_resp.CourseInfoResp"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/course/update/": {
             "post": {
                 "security": [
@@ -1153,6 +1192,27 @@ const docTemplate = `{
                 }
             }
         },
+        "form_req.CourseInfoReq": {
+            "type": "object",
+            "required": [
+                "class",
+                "grade"
+            ],
+            "properties": {
+                "class": {
+                    "description": "班级",
+                    "type": "integer"
+                },
+                "grade": {
+                    "description": "年级",
+                    "type": "integer"
+                },
+                "search": {
+                    "description": "根据课程名称搜索",
+                    "type": "string"
+                }
+            }
+        },
         "form_req.CreateCourseReq": {
             "type": "object",
             "required": [
@@ -1204,6 +1264,10 @@ const docTemplate = `{
                 "course_id": {
                     "description": "课程id",
                     "type": "integer"
+                },
+                "title": {
+                    "description": "课程标题",
+                    "type": "string"
                 }
             }
         },
@@ -1583,6 +1647,33 @@ const docTemplate = `{
                 "image": {
                     "description": "验证码图片数据",
                     "type": "string"
+                }
+            }
+        },
+        "form_resp.CourseInfoItem": {
+            "type": "object",
+            "properties": {
+                "course_id": {
+                    "description": "课程ID",
+                    "type": "integer"
+                },
+                "course_name": {
+                    "description": "课程名称",
+                    "type": "string"
+                }
+            }
+        },
+        "form_resp.CourseInfoResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/form_resp.CourseInfoItem"
+                    }
                 }
             }
         },

@@ -218,13 +218,14 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	unfinishedNum := contentDoc.UnfinishedNum
 	if ctx.UserToken.Role == 2 {
 		finished = append(contentDoc.Finished, ctx.UserToken.UserId)
-		unfinished = make([]string, 0)
+		unfinishedDoc := make([]string, 0)
 		for _, s := range contentDoc.Unfinished {
 			if s == ctx.UserToken.UserId {
 				continue
 			}
-			unfinished = append(unfinished, s)
+			unfinishedDoc = append(unfinishedDoc, s)
 		}
+		unfinished = unfinishedDoc
 		finishNum = contentDoc.FinishedNum + 1
 		unfinishedNum = contentDoc.UnfinishedNum - 1
 	}
