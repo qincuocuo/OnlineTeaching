@@ -24,5 +24,6 @@ type LearningReq struct {
 }
 
 type StartChatReq struct {
-	ContentId int `json:"content_id" validate:"required"` // 学习内容id
+	ContentId int    `json:"content_id" form:"content_id" validate:"required"` // 学习内容id
+	UserId    string `json:"user_id" form:"user_id"`
 }

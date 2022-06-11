@@ -133,7 +133,6 @@ func (j *Jwts) CheckJWT(ctx context.Context) error {
 		return fmt.Errorf(support.TokenParseFailedAndInvalid)
 	}
 	if claims, ok := parseToken.Claims.(jwt.MapClaims); ok {
-		fmt.Println(claims)
 		user := &common.UserToken{
 			UserId: claims["userId"].(string),
 			Role:   int(claims["role"].(float64)),
