@@ -48,7 +48,7 @@ func Process(ctx context.Context, contentId int, userId string, conn *websocket.
 
 		go room.Broadcast()
 	}
-	go room.Process(ctx, conn, userId)
+	room.Process(ctx, conn, userId)
 }
 
 func release(room *Room) {

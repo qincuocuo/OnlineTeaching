@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"github.com/gorilla/websocket"
@@ -276,7 +277,8 @@ func StartChatHandler(ctx *wrapper.Context, conn *websocket.Conn, reqBody interf
 		return nil
 	}
 
-	chat.Process(traceCtx, contentDoc.ContentId, ctx.UserToken.UserId, conn)
+	//go chat.Process(traceCtx, contentDoc.ContentId, req.UserId, conn)
+	go chat.Process(context.TODO(), contentDoc.ContentId, req.UserId, conn)
 
 	return
 }

@@ -162,7 +162,7 @@ func (r *Room) SendMessage(msg *Message) {
 			//if clientId.Client.User.Name != msg.Name {
 			err := clientId.Client.Conn.WriteJSON(msg)
 			if err != nil {
-				mlog.Info("send message", zap.Error(err))
+				mlog.Info("send message", zap.Any("msg", msg), zap.Error(err))
 			}
 		}
 		//}

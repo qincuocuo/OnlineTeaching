@@ -5,29 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ba32dbd-44c0-42dd-b89d-6fc6c2c0c986" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/edu_sun.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/edu_sun.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/exercises.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/exercises.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/learning_content.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/learning_content.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/notice.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/notice.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/register.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/register.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/controller/talk.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/controller/talk.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/middleware/jwts/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/middleware/jwts/token.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/AUTHORS" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/AUTHORS" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CODE_OF_CONDUCT.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/CONTRIBUTING.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/HISTORY.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/HISTORY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/iris/v12/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CODE_OF_CONDUCT.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/CONTRIBUTING.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/vendor/github.com/kataras/sitemap/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/dao/form_req/learning_content.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/dao/form_req/learning_content.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapi/service/learning_content.go" beforeDir="false" afterPath="$PROJECT_DIR$/webapi/service/learning_content.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
