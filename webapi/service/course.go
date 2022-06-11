@@ -221,6 +221,9 @@ func CourseInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	if req.Class > 0 {
 		query["class"] = req.Class
 	}
+	if len(req.Search) > 0 {
+		query["name"] = bson.M{"$regex": req.Search}
+	}
 	var courseDoc []models.Course
 	courseDoc, err = mongo.Course.FindAll(traceCtx, query)
 	if len(courseDoc) == 0 {

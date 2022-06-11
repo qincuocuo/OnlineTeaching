@@ -40,4 +40,5 @@ type EnterCourseReq struct {
 type CourseInfoReq struct {
 	Grade int `form:"grade" json:"grade" validate:"required"` // 年级
 	Class int `form:"class" json:"class" validate:"required"` // 班级
+	Search string `form:"search" json:"search"` // 根据课程名称搜索
 }
