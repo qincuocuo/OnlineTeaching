@@ -19,6 +19,7 @@ const (
 	DeleteCourseFailed string = "删除课程失败"
 	EnterCourseFailed  string = "加入课程失败"
 	GetCourseFailed    string = "获取课程信息失败"
+	CourseNotFound     string = "本班级还没有创建课程"
 
 	LearningContentNotFound      string = "章节不存在"
 	GetLearningContentListFailed string = "获取学习章节信息失败"
