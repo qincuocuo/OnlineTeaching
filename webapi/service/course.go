@@ -139,14 +139,15 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 			Class:      item.Class,
 			CreateTm:   utils.Time2String(item.CreateTm),
 		}
-		if ctx.UserToken.Role == 1 {
-			total, err := mongo.User.CountByGradeAndClass(traceCtx, item.Grade, item.Class)
-			if err != nil {
-				support.SendApiErrorResponse(ctx, "get user count failed", 0)
-				return err
-			}
-			msg.TotalMember = total
 
+		total, err := mongo.User.CountByGradeAndClass(traceCtx, item.Grade, item.Class)
+		if err != nil {
+			support.SendApiErrorResponse(ctx, "get user count failed", 0)
+			return err
+		}
+		msg.TotalMember = total
+
+		if ctx.UserToken.Role == 1 {
 			if ok, _ := IsCourseRegister(ctx, item.CourseId); ok {
 				msg.Register = true
 			}

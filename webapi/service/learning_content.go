@@ -315,7 +315,6 @@ func StartChatHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, "创建websocket失败", 0)
 		return err
 	}
-	defer conn.Close()
 
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.StartChatReq)
