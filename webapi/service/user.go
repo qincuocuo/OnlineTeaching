@@ -42,7 +42,10 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		LastPwdChangeTm: time.Now(),
 		LastLoginTm:     time.Now(),
 	}
-
+	if req.Role == 2 {
+		userDoc.Grade = req.Grade
+		userDoc.Class = req.Class
+	}
 	if err = mongo.User.Create(traceCtx, userDoc); err != nil {
 		support.SendApiErrorResponse(ctx, support.CreateUserFailed, 0)
 		return nil
