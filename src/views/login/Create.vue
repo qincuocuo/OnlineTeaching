@@ -1,5 +1,11 @@
 <template>
-  <create-popup-view :loading="loading" :title="title" @close="handleClose" @save="handleSave">
+  <create-popup-view
+    :loading="loading"
+    :title="title"
+    confirmButtonText="确定"
+    @close="handleClose"
+    @save="handleSave"
+  >
     <create-popup-view-section title="基本信息">
       <form-create
         v-model:api="formOptions.fApi"
@@ -13,7 +19,7 @@
 <script>
 import CreatePopupView from "@/components/CreatePopupView";
 import CreatePopupViewSection from "@/components/CreatePopupViewSection";
-import { register } from "@/api/login";
+import { register, password } from "@/api/login";
 import _ from "lodash";
 import { useStore } from "vuex";
 import { computed } from "vue";
@@ -63,6 +69,12 @@ export default {
           }
         },
         rule: [
+          {
+            type: "input",
+            field: "user_id",
+            title: "学生学号/教师工号",
+            validate: { required: true, message: "请输入学生学号/教师工号", trigger: "change" }
+          },
           {
             type: "input",
             field: "username",
@@ -148,30 +160,28 @@ export default {
           {
             type: "input",
             field: "password",
-            title: "用户密码",
+            title: this.action.type === "forgot" ? "新密码" : "用户密码",
             validate: { required: true, message: "请输入密码", trigger: "change" },
             props: {
               type: "password"
             }
           },
+
           {
             type: "input",
             field: "confirm",
-            title: "确认密码",
+            title: this.action.type === "forgot" ? "新密码确认" : "确认密码",
             validate: { required: true, message: "请输入密码", trigger: "change" },
             props: {
               type: "password"
             }
-          },
-          {
-            type: "input",
-            field: "user_id",
-            title: "学生学号/教师工号",
-            validate: { required: true, message: "请输入学生学号/教师工号", trigger: "change" }
           }
         ]
       }
     };
+  },
+  created() {
+    this.title = this.action.type === "add" ? "注册用户" : "忘记密码";
   },
   async mounted() {},
   methods: {
@@ -185,7 +195,10 @@ export default {
         .validate(async valid => {
           if (valid !== true) return this.$message.warning("请输入完整信息！");
           const params = _.cloneDeep(this.form);
-          const res = await register(params);
+          params.user_name = params.username;
+          const action = this.action.type === "add" ? register : password;
+          const res = await action(params);
+
           if (res && res.code === 200) {
             this.$emit("close");
             this.$message.success("成功");

@@ -28,6 +28,7 @@
         </el-form-item>
         <div class="add-box">
           <el-button class="add-btn" type="text" @click="add">注册</el-button>
+          <el-button class="add-btn" type="text" @click="forgotPassword">忘记密码</el-button>
         </div>
       </el-form>
     </div>
@@ -133,6 +134,14 @@ export default {
     // 注册
     add() {
       this.createAction = this.$options.data().createAction;
+      this.popupShow = true;
+    },
+    forgotPassword() {
+      this.createAction = {
+        type: "forgot",
+        id: "",
+        data: {}
+      };
       this.popupShow = true;
     }
   }

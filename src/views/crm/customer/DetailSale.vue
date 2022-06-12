@@ -451,7 +451,7 @@ export default {
       this.viewLearnDetailVisable = true;
       getlearnContentDetail({ content_id: row.content_id });
       this.learnContent =
-        "http://localhost:8090/api/v1/learning_content/learning_content?content_id=" +
+        "http://121.199.167.227:5002/api/v1/learning_content/learning_content?content_id=" +
         row.content_id;
     },
     // 文件上传

@@ -7,16 +7,18 @@
       <div
         v-for="item in list"
         :key="item"
-        :class="{ 'comment-item': true, 'my-comment': item.user_id === userInfo.user_id }"
+        :class="{ 'comment-item': true, 'my-comment': item.sender === userInfo.user_id }"
       >
-        <div v-if="item.user_id !== userInfo.user_id" class="personal-information">
+        <div v-if="item.sender !== userInfo.user_id" class="personal-information">
           <img src="/head_logo.svg" alt="" />
         </div>
         <div class="comment-box">
-          <span>{{ item.name }} ({{ getTime(item.send_time) }})</span>
+          <div>
+            <span>{{ item.name }} ({{ getTime(item.send_time) }})</span>
+          </div>
           <div class="comment-content">{{ item.msg }}</div>
         </div>
-        <div v-if="item.user_id === userInfo.user_id" class="personal-information">
+        <div v-if="item.sender === userInfo.user_id" class="personal-information">
           <img src="/head_logo.svg" alt="" />
         </div>
       </div>
@@ -49,7 +51,7 @@ export default {
   data() {
     return {
       comment: "",
-      path: `ws://192.168.3.17:5002/api/v1/learning_content/learning/chat?content_id=${this.id}&user_id=${this.userInfo.user_id}`,
+      path: `ws://121.199.167.227:5002/api/v1/learning_content/learning/chat?content_id=${this.id}&user_id=${this.userInfo.user_id}`,
       socket: null,
       list: []
     };
@@ -141,6 +143,7 @@ export default {
     background-color: #f3f3f3;
     .comment-item {
       display: flex;
+      width: 100%;
       margin: 10px 0;
       .personal-information {
         margin: 0 8px;
@@ -150,10 +153,12 @@ export default {
         }
       }
       .comment-box {
+        flex: 1;
         span {
           color: rgb(109, 109, 109);
         }
         .comment-content {
+          display: inline-block;
           max-width: 80%;
           background-color: #fff;
           padding: 8px;
@@ -172,6 +177,8 @@ export default {
       }
     }
     .my-comment {
+      width: 100%;
+      justify-content: right;
       .comment-box {
         display: flex;
         flex-direction: column;
