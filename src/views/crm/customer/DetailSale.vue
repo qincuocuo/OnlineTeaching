@@ -3,75 +3,107 @@
     <div class="table-head-container">
       <div class="query-add-btns-container">
         <div class="add-btns">
-          <el-input v-model="queryParam.search" class="content-search" placeholder="请输入学习内容" prefix-icon="Search" />
-          <el-button v-has="'teach'" class="content-add" @click="searchQuery" type="primary">
-            查询
-          </el-button>
-          <el-button v-has="'teach'" class="content-add" @click="addContentVisible = true" type="primary">
+          <el-input
+            v-model="queryParam.search"
+            class="content-search"
+            placeholder="请输入学习内容"
+            prefix-icon="Search"
+          />
+          <el-button class="content-add" @click="searchQuery" type="primary">查询</el-button>
+          <el-button
+            v-has="'teach'"
+            class="content-add"
+            @click="addContentVisible = true"
+            type="primary"
+          >
             新增学习内容
           </el-button>
         </div>
       </div>
     </div>
     <div class="table-view-container" v-loading="loading">
-      <table-view ref="refTableView" :columns="columns" :dataSource="dataSource" :refDataTable="refDataTable"
-        v-model:ipagination="ipagination" @load="loadData">
+      <table-view
+        ref="refTableView"
+        :columns="columns"
+        :dataSource="dataSource"
+        :refDataTable="refDataTable"
+        v-model:ipagination="ipagination"
+        @load="loadData"
+      >
         <template v-slot:salesLeadSourceId="scope">
           {{
-              gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
-                .customerSource || "--"
+            gainAppoint(sourceOption, scope.row.salesLeadSourceId, "customerSourceId")
+              .customerSource || "--"
           }}
         </template>
+        <template v-slot:register="scope">
+          <span v-if="scope.row.register">是</span>
+          <span v-else>否</span>
+        </template>
         <template v-slot:operate="scope">
-          <div v-has="'teach'" class="table-btn-box">
+          <div class="table-btn-box">
             <el-button type="text" @click="viewLearnDetail(scope.row)">查看学习内容</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="getLearningDetail(scope.row)">查看学习情况</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="() => { this.qiandaoVisible = true; this.chooseRow = scope.row }">发起签到
+            <el-button
+              type="text"
+              @click="
+                () => {
+                  this.qiandaoVisible = true;
+                  this.chooseRow = scope.row;
+                }
+              "
+            >
+              发起签到
             </el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
             <el-button type="text" @click="getQianDaoDetail(scope.row)">查看签到结果</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="() => { this.talkVisible = true; this.chooseRow = scope.row }">发起讨论
-            </el-button>
+            <el-button type="text" @click="viewDiscussion(scope.row)">查看讨论情况</el-button>
           </div>
           <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="chatRoomVisable = true">查看讨论情况</el-button>
-          </div>
-          <div v-has="'teach'" class="table-btn-box">
-            <el-button type="text" @click="() => { this.homeworkVisible = true; this.chooseRow = scope.row }">发布课后练习
-            </el-button>
+            <el-button type="text" @click="postRlease(scope.row)">发布课后练习</el-button>
           </div>
           <div v-has="'student'" class="table-btn-box">
             <el-button type="text" @click="enterLearning(scope.row)">进入学习</el-button>
-          </div>
-          <div v-has="'student'" class="table-btn-box">
-            <el-button type="text">查看通知</el-button>
           </div>
         </template>
       </table-view>
     </div>
     <!-- 查看学习内容 -->
-    <el-dialog v-model="viewLearnDetailVisable" ref="video">
-      <!-- <video :src="viewLearnDetailFileUrL"></video> -->
-      <video width="400" height="650" controls autoplay="autoplay" loop="loop" mute="muted">
-        <source :src="viewLearnDetailFileUrL" >
+    <el-dialog
+      destroy-on-close
+      v-model="viewLearnDetailVisable"
+      custom-class="learn-video-box"
+      ref="video"
+    >
+      <video class="learn-video" controls autoplay="autoplay" loop="loop" mute="muted">
+        <source :src="learnContent" />
       </video>
-
     </el-dialog>
     <!-- 新增课程内容 -->
     <el-dialog v-model="addContentVisible" title="新增课程内容" width="40%">
-      <el-form ref="contentFormRef" :model="content_form" :rules="contentfFormRules" v-loading="addContentLoading">
+      <el-form
+        ref="contentFormRef"
+        :model="content_form"
+        :rules="contentfFormRules"
+        v-loading="addContentLoading"
+      >
         <el-form-item prop="title" class="login-email" label="名称">
           <el-input placeholder="" v-model.trim="content_form.title" class="email-input"></el-input>
         </el-form-item>
-        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="beforeUpload" :auto-upload="false">
+        <el-upload
+          class="upload-demo"
+          drag
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-change="beforeUpload"
+          :auto-upload="false"
+        >
           <el-icon class="el-icon--upload">
             <upload-filled />
           </el-icon>
@@ -112,11 +144,15 @@
     </el-dialog>
     <!-- 查看讨论情况 -->
     <el-drawer v-model="chatRoomVisable">
-      <chat-room></chat-room>
+      <chat-room :id="chooseRow.content_id"></chat-room>
     </el-drawer>
     <!-- 查看签到情况 -->
     <el-drawer v-model="qiandaoDetailVisable" title="签到结果" direction="rtl" size="20%">
-      <el-tabs v-model="qiandaoDetailActiveName" class="demo-tabs" @tab-change="qiandaoDetailTabChange">
+      <el-tabs
+        v-model="qiandaoDetailActiveName"
+        class="demo-tabs"
+        @tab-click="qiandaoDetailTabChange"
+      >
         <el-tab-pane :label="`已签到`" name="finished">
           <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
@@ -126,8 +162,17 @@
       </el-tabs>
     </el-drawer>
     <!-- 查看学习情况 -->
-    <el-drawer v-model="learningDetailVisable" :title="`${chooseRow?.content}学习结果`" direction="rtl" size="20%">
-      <el-tabs v-model="learningDetailActiveName" class="demo-tabs" @tab-change="learningDetailTabChange">
+    <el-drawer
+      v-model="learningDetailVisable"
+      :title="`${chooseRow?.content}学习结果`"
+      direction="rtl"
+      size="20%"
+    >
+      <el-tabs
+        v-model="learningDetailActiveName"
+        class="demo-tabs"
+        @tab-click="learningDetailTabChange"
+      >
         <el-tab-pane :label="`已学习`" name="learned">
           <div v-for="item in resultList" :key="item">{{ item.name }}</div>
         </el-tab-pane>
@@ -138,7 +183,13 @@
     </el-drawer>
     <!-- 课后练习 -->
     <div class="homework">
-      <el-dialog v-model="homeworkVisible" title="课后练习" width="50%">
+      <el-dialog
+        v-model="homeworkVisible"
+        custom-class="homework-box"
+        title="课后练习"
+        width="50%"
+        destroy-on-close
+      >
         <el-form ref="homeworkRef">
           <div v-for="(item, index) in exercises" :key="index" style="padding-bottom: 20px">
             <el-form-item prop="index">
@@ -153,11 +204,15 @@
                 <el-radio :label="2" size="large">选择题</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="选项" prop="option">
-              <div v-for="(optionItem, optionIndex) in item?.option" :key="optionIndex">
+            <el-form-item v-if="item.type === 2" label="选项" prop="option">
+              <div v-for="(optionItem, optionIndex) in item?.options" :key="optionIndex">
                 <span>{{ selectOption[optionIndex]?.label }}:</span>
-                <el-input style="padding-right: 10px" v-model="exercises[index].option[optionIndex]"
-                  placeholder="请输入选项内容" class="input-with-select">
+                <el-input
+                  style="padding-right: 10px"
+                  v-model="exercises[index].options[optionIndex]"
+                  placeholder="请输入选项内容"
+                  class="input-with-select"
+                >
                   <template #prepend>
                     <el-button icon="Plus" @click="addOption(index)" />
                   </template>
@@ -168,11 +223,20 @@
               </div>
             </el-form-item>
             <el-form-item label="答案" prop="answer">
-              <el-select v-model="item.answer">
-                <el-option v-for="item in selectOption.slice(0, item.option.length)" :key="item.value"
-                  :label="item.label" :value="item.value" />
+              <el-select v-if="item.type === 2" v-model="item.answer">
+                <el-option
+                  v-for="item in selectOption.slice(0, item.options.length)"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+              <el-select v-else v-model="item.answer">
+                <el-option label="对" value="1" />
+                <el-option label="错" value="2" />
               </el-select>
             </el-form-item>
+
             <el-button type="primary" @click="deleteQuestion(index)">删除题目</el-button>
           </div>
           <el-button type="primary" @click="addQuestion">添加题目</el-button>
@@ -185,9 +249,15 @@
         </template>
       </el-dialog>
     </div>
-
-    <create-popup ref="refCreatePoup" :show="popupShow" :popup-type="popupType" :action="createAction"
-      :sourceOption="sourceOption" @update="loadData" @close="popupShow = false" />
+    <create-popup
+      ref="refCreatePoup"
+      :show="popupShow"
+      :popup-type="popupType"
+      :action="createAction"
+      :sourceOption="sourceOption"
+      @update="loadData"
+      @close="popupShow = false"
+    />
   </div>
 </template>
 
@@ -197,7 +267,16 @@ import TableMixin from "@/views/crm/mixins/Table";
 import chatRoom from "../components/chatRoom.vue";
 import CreatePopup from "@/components/CreatePopup";
 import { gainAppoint } from "@/utils/utils";
-import { addContent, getLearningDetail, getQianDaoDetail, addQianDao, addtalk, addExercises, getlearnContentDetail } from "@/api/crm/customer";
+import {
+  addContent,
+  getLearningDetail,
+  getQianDaoDetail,
+  addQianDao,
+  addtalk,
+  addExercises,
+  getlearnContentDetail,
+  exercises
+} from "@/api/crm/customer";
 import { useStore } from "vuex";
 import { computed } from "vue";
 // import VueCoreVideoPlayer from 'vue-core-video-player'
@@ -228,6 +307,12 @@ export default {
         {
           label: "学习内容",
           prop: "content",
+          width: 140
+        },
+        {
+          label: "需要签到",
+          props: "register",
+          slot: "register",
           width: 140
         },
         {
@@ -281,15 +366,15 @@ export default {
         title: [{ required: true, message: "请输入名称", trigger: "change" }],
         content: [{ required: true, message: "请输入内容", trigger: "change" }]
       },
-      qiandaoDetailActiveName: "qiandao",
+      qiandaoDetailActiveName: "finished",
       resultList: ["zhangsan", "lisi"],
       learningDetailActiveName: "learned",
       exercises: [
         {
           question: "",
-          type: "",
-          option: ["", ""],
-          answer: ""
+          type: 2,
+          options: ["", ""],
+          answer: "1"
         }
       ],
       selectOption: [
@@ -317,13 +402,27 @@ export default {
     };
   },
   methods: {
+    // 课后作业（先查询再添加）
+    postRlease(row) {
+      this.homeworkVisible = true;
+      this.chooseRow = row;
+      exercises({
+        content_id: row.content_id
+      }).then(res => {
+        if (res.code === 200 && res.data) {
+          this.exercises = res.data.results;
+        } else {
+          this.exercises = this.$options.data().exercises;
+        }
+      });
+    },
     // 添加题目
     addQuestion() {
       this.exercises.push({
         question: "",
-        type: "",
-        option: ["", ""],
-        answer: ""
+        type: 2,
+        options: ["", ""],
+        answer: "1"
       });
     },
     // 删除题目
@@ -332,30 +431,28 @@ export default {
     },
     // 添加选项
     addOption(index) {
-      if (this.exercises[index].option.length === 5) {
+      if (this.exercises[index].options.length === 5) {
         this.$message.warning("选项最多为5个");
         return;
       }
-      this.exercises[index].option.push("");
+      this.exercises[index].options.push("");
     },
     deleteOption(index, optionIndex) {
-      if (this.exercises[index].option.length === 2) {
+      if (this.exercises[index].options.length === 2) {
         this.$message.warning("选项至少2个");
         return;
       }
-      this.exercises[index].option.splice(optionIndex, 1);
+      this.exercises[index].options.splice(optionIndex, 1);
     },
-    handleClose() { },
-    handleClick() { },
-    // 查看学习内容
+    handleClose() {},
+    handleClick() {},
+    // 查看学习内容（确认学习）
     viewLearnDetail(row) {
-      // console.log(this.$refs.video.width);
       this.viewLearnDetailVisable = true;
-      getlearnContentDetail({ content_id: row.content_id }).then(res => {
-        const blob = [];
-        blob.push(res);
-        this.viewLearnDetailFileUrL = window.URL.createObjectURL(new Blob(blob));
-      })
+      getlearnContentDetail({ content_id: row.content_id });
+      this.learnContent =
+        "http://localhost:8090/api/v1/learning_content/learning_content?content_id=" +
+        row.content_id;
     },
     // 文件上传
     beforeUpload(file) {
@@ -385,60 +482,54 @@ export default {
           });
       });
     },
-
     // 查看学习情况
     getLearningDetail(row) {
       this.learningDetailVisable = true;
       this.resultList = [];
       this.chooseRow = row;
-      getLearningDetail({ course_id: this.customer.course_id, content_id: row.content_id, status: "learned" }).then(res => {
-        // console.log(res.data);
-        if (res && res.code === 200) {
-          this.resultList = res.data.student_info || []
-        } else {
-          this.$message.warning(res.message);
-        }
-      })
+      this.learningDetailTabChange();
     },
-    learningDetailTabChange(tabName) {
-      this.resultList = [];
-      getLearningDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, status: tabName }).then(res => {
+    // 学习情况 切换
+    learningDetailTabChange() {
+      getLearningDetail({
+        course_id: this.customer.course_id,
+        content_id: this.chooseRow.content_id,
+        status: this.learningDetailActiveName
+      }).then(res => {
         if (res && res.code === 200) {
-          this.resultList = res.data.student_info || []
+          this.resultList = res.data.student_info || [];
         } else {
           this.$message.warning(res.message);
         }
-      })
+      });
     },
     // 查看签到结果
     getQianDaoDetail(row) {
       this.qiandaoDetailVisable = true;
       this.resultList = [];
       this.chooseRow = row;
-      getQianDaoDetail({ course_id: this.customer.course_id, content_id: row.content_id, register_result: "finished" }).then(res => {
-        // console.log(res.data);
-        if (res && res.code === 200) {
-          this.resultList = res.data.student_info || []
-        } else {
-          this.$message.warning(res.message);
-        }
-      })
+      this.qiandaoDetailTabChange();
     },
-    qiandaoDetailTabChange(tabName) {
+    // 查看签到结果 切换
+    qiandaoDetailTabChange() {
       this.resultList = [];
-      getQianDaoDetail({ course_id: this.customer.course_id, content_id: this.chooseRow.content_id, register_result: tabName }).then(res => {
+      getQianDaoDetail({
+        course_id: this.customer.course_id,
+        content_id: this.chooseRow.content_id,
+        register_result: this.qiandaoDetailActiveName
+      }).then(res => {
         if (res && res.code === 200) {
-          this.resultList = res.data.student_info || []
+          this.resultList = res.data.student_info || [];
         } else {
           this.$message.warning(res.message);
         }
-      })
+      });
     },
     // 创建签到任务
     addQianDaoTask() {
       addQianDao({
         content_id: this.chooseRow.content_id,
-        register_tm: this.register_tm,
+        register_tm: this.register_tm
       }).then(res => {
         if (res && res.code === 200) {
           this.$message.success(res.message);
@@ -446,8 +537,7 @@ export default {
         } else {
           this.$message.warning(res.message);
         }
-      })
-
+      });
     },
     // 创建讨论话题
     addtalk() {
@@ -462,13 +552,12 @@ export default {
         } else {
           this.$message.warning(res.message);
         }
-      })
-
+      });
     },
     // 创建课后练习
     addExercises() {
       addExercises({
-        course_id: this.customer.course_id,
+        content_id: this.chooseRow.content_id,
         learning_content_id: this.chooseRow.content_id,
         exercises: this.exercises
       }).then(res => {
@@ -478,7 +567,12 @@ export default {
         } else {
           this.$message.warning(res.message);
         }
-      })
+      });
+    },
+    // 查看讨论情况
+    viewDiscussion(row) {
+      this.chatRoomVisable = true;
+      this.chooseRow = row;
     },
     edit(item) {
       this.createAction = {
@@ -525,11 +619,25 @@ export default {
     }
   }
 }
+/deep/.learn-video-box {
+  .el-dialog__body {
+    display: flex;
+    justify-content: center;
+  }
+  .learn-video {
+    margin: 0 auto;
+    max-height: 60vh;
+    max-width: 50vw;
+  }
+}
 
 .homework {
   /deep/ .el-dialog {
-    height: 565px;
-    overflow: auto;
+    .el-dialog__body {
+      overflow: auto;
+      max-height: 60vh;
+      overflow: auto;
+    }
   }
 }
 </style>

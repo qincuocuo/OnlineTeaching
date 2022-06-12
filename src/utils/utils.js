@@ -1,3 +1,11 @@
+/*
+ * @Author: qiubenyang qiubenyang@mycaiwen.com
+ * @Date: 2022-06-05 13:54:24
+ * @LastEditors: qiubenyang qiubenyang@mycaiwen.com
+ * @LastEditTime: 2022-06-11 22:34:26
+ * @FilePath: /OnlineTeaching/src/utils/utils.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import JSEncrypt from "jsencrypt";
 
 /**
@@ -77,4 +85,19 @@ export function timeStr(dataStr) {
   let ss = date.getSeconds();
   ss = ss < 10 ? "0" + ss : ss;
   return y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + ss;
+}
+
+/**
+ * 格式化默认时间
+ * @param dataStr
+ * @returns {*}
+ */
+export function getTime(dataStr) {
+  let date = new Date(dataStr);
+  let h = date.getHours();
+  h = h < 10 ? "0" + h : h;
+  let mm = date.getMinutes();
+  mm = mm < 10 ? "0" + mm : mm;
+
+  return h + ":" + mm;
 }

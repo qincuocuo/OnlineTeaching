@@ -40,75 +40,117 @@ export function queryCustomerDetail(params) {
 }
 
 // 新增课程
-export function addCourse(params){
+export function addCourse(params) {
   const url = "/api/v1/course";
   return axios.post(url, params);
 }
 // 编辑课程
-export function updateCourse(params){
+export function updateCourse(params) {
   const url = "/api/v1/course/update";
   return axios.post(url, params);
 }
 // 删除课程
-export function deleteCourse(params){
+export function deleteCourse(params) {
   const url = "/api/v1/course";
   return axios({
-    method: 'delete',
+    method: "delete",
     url: url,
     params: null,
     data: params
-  })
+  });
 }
 
 // 新增学习内容
-export function addContent(params){
+export function addContent(params) {
   const url = "/api/v1/learning_content";
   return axios.post(url, params);
 }
 
 // 查询学习情况
-export function getLearningDetail(params){
+export function getLearningDetail(params) {
   let url = "/api/v1/learning_content/result";
   return axios({
-    method: 'get',
+    method: "get",
     url: url,
     params: params,
     data: null
-  })
+  });
 }
 // 查询签到情况
-export function getQianDaoDetail(params){
+export function getQianDaoDetail(params) {
   let url = "/api/v1/register/result";
   return axios({
-    method: 'get',
+    method: "get",
     url: url,
     params: params,
     data: null
-  })
+  });
 }
 
 // 新增签到任务
-export function addQianDao(params){
+export function addQianDao(params) {
   const url = "/api/v1/register";
   return axios.post(url, params);
 }
 // 创建讨论话题
-export function addtalk(params){
+export function addtalk(params) {
   const url = "/api/v1/talk";
   return axios.post(url, params);
 }
 // 创建课后练习
-export function addExercises(params){
+export function addExercises(params) {
   const url = "/api/v1/exercises";
   return axios.post(url, params);
 }
 // 查看学习内容
-export function getlearnContentDetail(params){
+export function getlearnContentDetail(params) {
   let url = "api/v1/learning_content/learning";
   return axios({
-    method: 'get',
+    method: "get",
     url: url,
     params: params,
     data: null
-  })
+  });
+}
+
+// 查看学习内容
+export function getlearnContentDetailContent(params) {
+  let url = "api/v1/learning_content/learning_content";
+  return axios({
+    method: "get",
+    url: url,
+    params: params,
+    data: null
+  });
+}
+
+// 查看学习内容
+export function exercises(params) {
+  let url = "api/v1/exercises";
+  return axios({
+    method: "get",
+    url: url,
+    params: params,
+    data: null
+  });
+}
+
+// 签到
+export function register(params) {
+  let url = "/api/v1/register/do";
+  return axios({
+    method: "post",
+    url: url,
+    data: params
+  });
+}
+
+// 签到
+export function postExercises(params) {
+  let url = "/api/v1/exercises/do";
+  return axios({
+    method: "post",
+    url: url,
+    data: params
+  });
 }

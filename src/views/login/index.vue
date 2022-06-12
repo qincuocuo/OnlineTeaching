@@ -10,7 +10,11 @@
       <!-- 表单 -->
       <el-form ref="loginFormRef" class="login_form" :model="form" :rules="formRules">
         <el-form-item prop="user_id" class="login-email">
-          <el-input placeholder="账户名" v-model.trim="form.user_id" class="email-input"></el-input>
+          <el-input
+            placeholder="教师工号/学生号"
+            v-model.trim="form.user_id"
+            class="email-input"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="password" class="password">
           <el-input placeholder="密码" v-model.trim="form.password" type="password"></el-input>
