@@ -124,15 +124,12 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return
 	}
-	title := fh.Filename
-	if len(req.Title) > 0 {
-		title = req.Title
-	}
 
 	learningContent := models.LearningContent{
 		ContentId:   mongo.Content.GetMaxId(traceCtx),
 		CourseId:    req.CourseId,
-		Title:       title,
+		Title:       req.Title,
+		FileName:    fh.Filename,
 		FinishedNum: 0,
 		Finished:    nil,
 	}
@@ -269,7 +266,7 @@ func LearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (err erro
 		return nil
 	}
 
-	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", contentDoc.CourseId, contentDoc.Title)
+	filePath := fmt.Sprintf("%s/%d/%s", "/workspace/data", contentDoc.CourseId, contentDoc.FileName)
 	file, err := os.Open(filePath)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.OpenFileFailed, 0)

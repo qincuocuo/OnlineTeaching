@@ -182,12 +182,15 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		return nil
 	}
 
-	finish := append(registerDoc.Finished, ctx.UserToken.UserId)
-	update := bson.M{"finished": finish}
-	err = mongo.Register.Update(traceCtx, query, update)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.JoinInRegisterFailed, 0)
-		return nil
+	if utils.IsContainInSlice(ctx.UserToken.UserId, registerDoc.Finished) {
+		finish := append(registerDoc.Finished, ctx.UserToken.UserId)
+		update := bson.M{"finished": finish}
+
+		err = mongo.Register.Update(traceCtx, query, update)
+		if err != nil {
+			support.SendApiErrorResponse(ctx, support.JoinInRegisterFailed, 0)
+			return nil
+		}
 	}
 	resp := form_resp.StatusResp{Status: "ok"}
 	support.SendApiResponse(ctx, resp, "success")
