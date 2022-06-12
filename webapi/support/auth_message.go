@@ -11,6 +11,7 @@ const (
 	CreateUserFailed       string = "创建用户失败"
 	UserLockFailed         string = "用户被锁定"
 	UserNoPermission       string = "用户没有操作权限"
+	UserCountFailed        string = "获取学生总数失败"
 
 	CourseIsExists     string = "课程已存在"
 	CreateCourseFailed string = "创建课程失败"
@@ -27,6 +28,7 @@ const (
 	UploadLearningContentFailed  string = "上传学习章节失败"
 	CreateLearningContentFailed  string = "创建学习章节失败"
 	UpdateContentFailed          string = "更新学习结果失败"
+	UserNotInClass               string = "不是本班级学生"
 
 	OpenFileFailed string = "打开文件失败"
 

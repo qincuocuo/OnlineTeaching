@@ -66,6 +66,10 @@ func (l LearningController) Learning(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.LearningHandler, true, &form_req.LearningReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }
 
+func (l LearningController) LearningContent(ctx *wrapper.Context) {
+	wrapper.ApiWrapper(ctx, service.LearningContentHandler, true, &form_req.LearningContentReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
+}
+
 func (l LearningController) StartChat(ctx *wrapper.Context) {
 	wrapper.ApiWrapper(ctx, service.StartChatHandler, true, &form_req.StartChatReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_FORM})
 }

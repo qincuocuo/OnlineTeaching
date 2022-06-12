@@ -133,20 +133,14 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	for _, item := range courseDocs {
 		msg := form_resp.CourseListItem{
-			CourseId:    item.CourseId,
-			CourseName:  item.Name,
-			Grade:       item.Grade,
-			Class:       item.Class,
-			TotalMember: item.TotalMember,
-			CreateTm:    utils.Time2String(item.CreateTm),
+			CourseId:   item.CourseId,
+			CourseName: item.Name,
+			Grade:      item.Grade,
+			Class:      item.Class,
+			CreateTm:   utils.Time2String(item.CreateTm),
 		}
 		if ctx.UserToken.Role == 1 {
-			subQuery := bson.M{
-				"grade": item.Grade,
-				"class": item.Class,
-			}
-
-			total, err := mongo.User.UserCountByGradeAndClass(traceCtx, subQuery)
+			total, err := mongo.User.CountByGradeAndClass(traceCtx, item.Grade, item.Class)
 			if err != nil {
 				support.SendApiErrorResponse(ctx, "get user count failed", 0)
 				return err

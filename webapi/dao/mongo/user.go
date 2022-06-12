@@ -20,13 +20,27 @@ func (user) FindOne(ctx context.Context, query bson.M) (userDoc models.User, err
 	return
 }
 
-func (user) UserCountByGradeAndClass(ctx context.Context, query bson.M) (count int, err error) {
+func (user) CountByGradeAndClass(ctx context.Context, grade, class int) (count int, err error) {
 	dbName := (&models.User{}).CollectName()
 
+	query := bson.M{"grade": grade, "class": class}
 	span, _ := tracking.DbTracking(ctx, dbName, query)
 	defer span.End()
 
 	return db.MongoCli.FindCount(dbName, query)
+}
+
+func (user) GetByGradeAndClass(ctx context.Context, grade, class int) (users []models.User, err error) {
+	dbName := (&models.User{}).CollectName()
+
+	query := bson.M{"grade": grade, "class": class}
+
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+
+	err = db.MongoCli.FindAll(dbName, query, &users)
+
+	return
 }
 
 func (user) IsExist(ctx context.Context, query bson.M) bool {

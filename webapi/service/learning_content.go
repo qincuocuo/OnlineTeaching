@@ -30,7 +30,7 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 	if req.CourseId > 0 {
 		query["course_id"] = req.CourseId
 	}
-	_, err = mongo.Course.FindOne(traceCtx, query)
+	course, err := mongo.Course.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return nil
@@ -55,12 +55,18 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
 		return nil
 	}
+	total, err := mongo.User.CountByGradeAndClass(traceCtx, course.Grade, course.Class)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserCountFailed, 0)
+		return err
+	}
+
 	for _, item := range contentDoc {
 		msg := form_resp.LearningContentItem{
 			ContentId: item.ContentId,
 			Content:   item.Title,
 			Learned:   item.FinishedNum,
-			Unlearned: item.UnfinishedNum,
+			Unlearned: total - item.FinishedNum,
 		}
 		resp.Result = append(resp.Result, msg)
 	}
@@ -103,8 +109,7 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 		return nil
 	}
 	query := bson.M{"course_id": req.CourseId}
-	var courseDoc models.Course
-	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
+	_, err = mongo.Course.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
 		return
@@ -115,13 +120,11 @@ func CreateLearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (er
 	}
 
 	learningContent := models.LearningContent{
-		ContentId:     mongo.Content.GetMaxId(traceCtx),
-		CourseId:      req.CourseId,
-		Title:         title,
-		FinishedNum:   0,
-		UnfinishedNum: courseDoc.TotalMember,
-		Finished:      nil,
-		Unfinished:    courseDoc.StudentId,
+		ContentId:   mongo.Content.GetMaxId(traceCtx),
+		CourseId:    req.CourseId,
+		Title:       title,
+		FinishedNum: 0,
+		Finished:    nil,
 	}
 	err = mongo.Content.Create(traceCtx, learningContent)
 	if err != nil {
@@ -156,6 +159,13 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}
+
+	users, err := mongo.User.GetByGradeAndClass(traceCtx, courseDoc.Grade, courseDoc.Class)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, "获取学生失败", 0)
+		return err
+	}
+
 	if req.Status == "learned" {
 		resp.Count = contentDoc.FinishedNum
 		for _, item := range contentDoc.Finished {
@@ -171,20 +181,19 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 			resp.StudentInfo = append(resp.StudentInfo, msg)
 		}
 	} else if req.Status == "unlearned" {
-		resp.Count = contentDoc.UnfinishedNum
-		for _, item := range contentDoc.Unfinished {
-			var userDoc models.User
-			userDoc, err = mongo.User.FindByUserId(traceCtx, item)
-			if err != nil {
+		resp.Count = len(users) - contentDoc.FinishedNum
+		for _, user := range users {
+			if utils.IsContainInSlice(user.UserId, contentDoc.Finished) {
 				continue
 			}
 			msg := form_resp.StudentItem{
-				Id:   item,
-				Name: userDoc.UserName,
+				Id:   user.UserId,
+				Name: user.UserName,
 			}
 			resp.StudentInfo = append(resp.StudentInfo, msg)
 		}
 	}
+
 	support.SendApiResponse(ctx, resp, "success")
 	return
 }
@@ -192,6 +201,56 @@ func LearningResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.LearningReq)
+	query := bson.M{"content_id": req.ContentId}
+	var contentDoc models.LearningContent
+	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+
+	courseDoc, err := mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.CourseNotFound, 0)
+		return err
+	}
+
+	user, err := mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return nil
+	}
+
+	if ctx.UserToken.Role == 2 {
+		if courseDoc.Grade != user.Grade && courseDoc.Class != user.Class {
+			support.SendApiErrorResponse(ctx, support.UserNotInClass, 0)
+			return nil
+		}
+
+		finished := contentDoc.Finished
+		finishNum := contentDoc.FinishedNum
+
+		if !utils.IsContainInSlice(user.UserId, finished) {
+
+			finished = append(contentDoc.Finished, ctx.UserToken.UserId)
+			finishNum = contentDoc.FinishedNum + 1
+
+			upset := bson.M{"finished_num": finishNum, "finished": finished}
+			err = mongo.Content.Update(traceCtx, query, upset)
+			if err != nil {
+				support.SendApiErrorResponse(ctx, support.UpdateContentFailed, 0)
+				return nil
+			}
+		}
+	}
+
+	support.SendApiResponse(ctx, form_resp.StatusResp{Status: "ok"}, "success")
+	return
+}
+
+func LearningContentHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	traceCtx := ctx.Request().Context()
+	req := reqBody.(*form_req.LearningContentReq)
 	query := bson.M{"content_id": req.ContentId}
 	var contentDoc models.LearningContent
 	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
@@ -208,36 +267,6 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	defer file.Close()
 
-	_, err = mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
-		return nil
-	}
-
-	finished := contentDoc.Finished
-	unfinished := contentDoc.Unfinished
-	finishNum := contentDoc.FinishedNum
-	unfinishedNum := contentDoc.UnfinishedNum
-	if ctx.UserToken.Role == 2 {
-		finished = append(contentDoc.Finished, ctx.UserToken.UserId)
-		unfinishedDoc := make([]string, 0)
-		for _, s := range contentDoc.Unfinished {
-			if s == ctx.UserToken.UserId {
-				continue
-			}
-			unfinishedDoc = append(unfinishedDoc, s)
-		}
-		unfinished = unfinishedDoc
-		finishNum = contentDoc.FinishedNum + 1
-		unfinishedNum = contentDoc.UnfinishedNum - 1
-	}
-
-	upset := bson.M{"finished_num": finishNum, "unfinished_num": unfinishedNum, "finished": finished, "unfinished": unfinished}
-	err = mongo.Content.Update(traceCtx, query, upset)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.UpdateContentFailed, 0)
-		return nil
-	}
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
@@ -245,6 +274,7 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 
 	if strings.HasSuffix(filePath, ".pdf") {
+		ctx.ResponseWriter().Header().Set("Content-type", "application/pdf")
 		ctx.Write(data)
 		return nil
 	} else if strings.HasSuffix(filePath, ".mp4") {
@@ -254,8 +284,6 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 
 	ctx.ResponseWriter().Header().Set("Content-Disposition", "attachment;filename="+url.QueryEscape(filepath.Base(filePath)))
-	_, err = ctx.Write(data)
-
 	_, err = ctx.Write(data)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
