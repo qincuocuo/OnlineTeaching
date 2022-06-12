@@ -85,15 +85,24 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	query := bson.M{}
 	if ctx.UserToken.Role == 1 {
 		query["manager_id"] = ctx.UserToken.UserId
+		if req.Grade > 0 {
+			query["grade"] = req.Grade
+		}
+		if req.Class > 0 {
+			query["class"] = req.Class
+		}
 	} else if ctx.UserToken.Role == 2 {
-		query["student_id"] = bson.M{"$elemMatch": bson.M{"$in": []string{ctx.UserToken.UserId}}}
+		//query["student_id"] = bson.M{"$elemMatch": bson.M{"$in": []string{ctx.UserToken.UserId}}}
+		userDoc, err := mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
+		if err != nil {
+			support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+			return err
+		}
+
+		query["grade"] = userDoc.Grade
+		query["class"] = userDoc.Class
 	}
-	if req.Grade > 0 {
-		query["grade"] = req.Grade
-	}
-	if req.Class > 0 {
-		query["class"] = req.Class
-	}
+
 	if len(req.CreateTm) > 0 {
 		content := strings.Split(req.CreateTm, "--")
 		if len(content) > 1 {
@@ -131,6 +140,20 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 			TotalMember: item.TotalMember,
 			CreateTm:    utils.Time2String(item.CreateTm),
 		}
+		if ctx.UserToken.Role == 1 {
+			subQuery := bson.M{
+				"grade": item.Grade,
+				"class": item.Class,
+			}
+
+			total, err := mongo.User.UserCountByGradeAndClass(traceCtx, subQuery)
+			if err != nil {
+				support.SendApiErrorResponse(ctx, "get user count failed", 0)
+				return err
+			}
+			msg.TotalMember = total
+		}
+
 		resp.Result = append(resp.Result, msg)
 	}
 	resp.Count = len(resp.Result)
@@ -232,7 +255,7 @@ func CourseInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 	for _, item := range courseDoc {
 		msg := form_resp.CourseInfoItem{
-			CourseId: item.CourseId,
+			CourseId:   item.CourseId,
 			CourseName: item.Name,
 		}
 		resp.Results = append(resp.Results, msg)

@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -264,7 +265,20 @@ func LearningHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	return
 }
 
-func StartChatHandler(ctx *wrapper.Context, conn *websocket.Conn, reqBody interface{}) (err error) {
+func StartChatHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+	conn, err := (&websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}).Upgrade(ctx.ResponseWriter(), ctx.Request(), nil)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, "创建websocket失败", 0)
+		return err
+	}
+	defer conn.Close()
+
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.StartChatReq)
 

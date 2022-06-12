@@ -107,7 +107,7 @@ func (r *Room) Process(ctx context.Context, conn *websocket.Conn, userId string)
 			Msg:    msg.Msg,
 			Sender: userId,
 			//Avatar:   user.Avatar,
-			Name:     client.User.UserName,
+			Name:     client.User.UserId,
 			SendTime: time.Now().Unix(),
 		}
 	}

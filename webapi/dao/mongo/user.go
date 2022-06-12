@@ -20,6 +20,15 @@ func (user) FindOne(ctx context.Context, query bson.M) (userDoc models.User, err
 	return
 }
 
+func (user) UserCountByGradeAndClass(ctx context.Context, query bson.M) (count int, err error) {
+	dbName := (&models.User{}).CollectName()
+
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+
+	return db.MongoCli.FindCount(dbName, query)
+}
+
 func (user) IsExist(ctx context.Context, query bson.M) bool {
 	var userDoc []models.User
 	dbName := (&models.User{}).CollectName()
@@ -82,4 +91,3 @@ func (user) FindByNameRole(ctx context.Context, name string, role int) (userDoc 
 	_, err = db.MongoCli.FindOne(dbName, query, &userDoc)
 	return
 }
-

@@ -39,6 +39,8 @@ func CreateUserHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		UserName:        req.Username,
 		UserId:          req.UserId,
 		Password:        password.MakePassword(req.Password),
+		Grade:           req.Grade,
+		Class:           req.Class,
 		LastPwdChangeTm: time.Now(),
 		LastLoginTm:     time.Now(),
 	}
