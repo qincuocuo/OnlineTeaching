@@ -45,6 +45,17 @@ func (content) FindOne(ctx context.Context, query bson.M) (contentDoc models.Lea
 	return
 }
 
+func (content) FindAll(ctx context.Context, query bson.M) (contentDocs []models.LearningContent, err error) {
+	dbName := (&models.LearningContent{}).CollectName()
+
+	span, _ := tracking.DbTracking(ctx, dbName)
+	defer span.End()
+
+	err = db.MongoCli.FindAll(dbName, query, &contentDocs)
+
+	return
+}
+
 func (content) FindSortByLimitAndSkip(ctx context.Context, query bson.M, page int, pageSize int, sorter string) (courseDoc []models.LearningContent, err error) {
 	dbName := (&models.LearningContent{}).CollectName()
 	span, _ := tracking.DbTracking(ctx, dbName, query)

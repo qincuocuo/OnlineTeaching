@@ -6,10 +6,11 @@ type LearningContentListResp struct {
 }
 
 type LearningContentItem struct {
-	ContentId int `json:"content_id"` // 学习内容id
-	Content   string `json:"content"`   // 学习内容
-	Learned   int    `json:"learned"`   // 已学习
-	Unlearned int    `json:"unlearned"` // 未学习
+	ContentId int    `json:"content_id"` // 学习内容id
+	Content   string `json:"content"`    // 学习内容
+	Learned   int    `json:"learned"`    // 已学习
+	Unlearned int    `json:"unlearned"`  // 未学习
+	Register  bool   `json:"register"`
 }
 
 type LearningResultResp struct {

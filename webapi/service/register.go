@@ -67,33 +67,28 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
-	var contentDoc models.LearningContent
-	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
-		return nil
-	}
-	var courseDoc models.Course
-	courseDoc, err = mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
-		return nil
-	}
-	if courseDoc.ManagerId != ctx.UserToken.UserId {
-		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
-		return nil
-	}
-
-	users, err := mongo.User.GetByGradeAndClass(traceCtx, courseDoc.Grade, courseDoc.Class)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, "获取学生失败", 0)
-		return err
-	}
 	var registerDoc models.Register
 	registerDoc, err = mongo.Register.FindOne(traceCtx, query)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.RegisterNotFount, 0)
 		return nil
+	}
+
+	contentDoc, err := mongo.Content.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.LearningContentNotFound, 0)
+		return err
+	}
+	courseDoc, err := mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
+		return err
+	}
+
+	students, err := mongo.User.GetByGradeAndClass(traceCtx, courseDoc.Grade, courseDoc.Class)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, "get user failed", 0)
+		return err
 	}
 
 	if req.RegisterResult == "finished" {
@@ -111,11 +106,12 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 			resp.StudentInfo = append(resp.StudentInfo, msg)
 		}
 	} else if req.RegisterResult == "unfinished" {
-		resp.Count = len(users) - len(registerDoc.Finished)
-		for _, user := range users {
+		resp.Count = len(students) - len(registerDoc.Finished)
+		for _, user := range students {
 			if utils.IsContainInSlice(user.UserId, registerDoc.Finished) {
 				continue
 			}
+
 			msg := form_resp.StudentItem{
 				Id:   user.UserId,
 				Name: user.UserName,
@@ -127,6 +123,11 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	return
 }
 
+func UserRegisterInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+
+	return
+}
+
 func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
 	req := reqBody.(*form_req.RegisterReq)
@@ -134,6 +135,12 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
 	}
+
+	if ctx.UserToken.Role != 2 {
+		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
+		return nil
+	}
+
 	var contentDoc models.LearningContent
 	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
 	if err != nil {
@@ -146,7 +153,14 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
 		return nil
 	}
-	if !utils.IsContainInSlice(ctx.UserToken.UserId, courseDoc.StudentId) {
+
+	user, err := mongo.User.FindByUserId(traceCtx, ctx.UserToken.UserId)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.UserNotExist, 0)
+		return
+	}
+
+	if courseDoc.Grade != user.Grade && courseDoc.Class != user.Class {
 		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
 		return nil
 	}

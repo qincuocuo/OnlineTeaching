@@ -9,7 +9,7 @@ type ExercisesItem struct {
 	Question string   `json:"question" validate:"required"` // 题目
 	Answer   string   `json:"answer" validate:"required"`   // 答案
 	Type     int      `json:"type" validate:"required"`     //类型 1-选择 2-判断
-	Options  []string `json:"option"`                       //选项
+	Options  []string `json:"options"`                      //选项
 }
 
 type GetExercisesReq struct {

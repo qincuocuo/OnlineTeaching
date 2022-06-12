@@ -146,6 +146,10 @@ func CourseListHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 				return err
 			}
 			msg.TotalMember = total
+
+			if ok, _ := IsCourseRegister(ctx, item.CourseId); ok {
+				msg.Register = true
+			}
 		}
 
 		resp.Result = append(resp.Result, msg)
@@ -204,28 +208,28 @@ func DeleteCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) 
 	return
 }
 
-func EnterCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
-	traceCtx := ctx.Request().Context()
-	req := reqBody.(*form_req.EnterCourseReq)
-	query := bson.M{"course_id": req.CourseId}
-	var courseDoc models.Course
-	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
-		return nil
-	}
-	totalNum := courseDoc.TotalMember + 1
-	stuIds := append(courseDoc.StudentId, ctx.UserToken.UserId)
-	upset := bson.M{"student_id": stuIds, "total_member": totalNum}
-	err = mongo.Course.Update(traceCtx, query, upset)
-	if err != nil {
-		support.SendApiErrorResponse(ctx, support.EnterCourseFailed, 0)
-		return nil
-	}
-	resp := form_resp.StatusResp{Status: "ok"}
-	support.SendApiResponse(ctx, resp, "success")
-	return
-}
+//func EnterCourseHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
+//	traceCtx := ctx.Request().Context()
+//	req := reqBody.(*form_req.EnterCourseReq)
+//	query := bson.M{"course_id": req.CourseId}
+//	var courseDoc models.Course
+//	courseDoc, err = mongo.Course.FindOne(traceCtx, query)
+//	if err != nil {
+//		support.SendApiErrorResponse(ctx, support.CourseNotExists, 0)
+//		return nil
+//	}
+//	totalNum := courseDoc.TotalMember + 1
+//	stuIds := append(courseDoc.StudentId, ctx.UserToken.UserId)
+//	upset := bson.M{"student_id": stuIds, "total_member": totalNum}
+//	err = mongo.Course.Update(traceCtx, query, upset)
+//	if err != nil {
+//		support.SendApiErrorResponse(ctx, support.EnterCourseFailed, 0)
+//		return nil
+//	}
+//	resp := form_resp.StatusResp{Status: "ok"}
+//	support.SendApiResponse(ctx, resp, "success")
+//	return
+//}
 
 func CourseInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	traceCtx := ctx.Request().Context()
@@ -257,4 +261,24 @@ func CourseInfoHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	resp.Count = len(courseDoc)
 	support.SendApiResponse(ctx, resp, "success")
 	return
+}
+
+func IsCourseRegister(ctx *wrapper.Context, courseId int) (bool, error) {
+	contentDocs, err := mongo.Content.FindAll(ctx.Request().Context(), bson.M{"course_id": courseId})
+	if err != nil {
+		return false, err
+	}
+
+	for _, contentDoc := range contentDocs {
+		register, err := mongo.Register.FindOne(ctx.Request().Context(), bson.M{"content_id": contentDoc.ContentId})
+		if err != nil {
+			return false, err
+		}
+
+		if !utils.IsContainInSlice(ctx.UserToken.UserId, register.Finished) && time.Now().Before(register.EndTime) {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }

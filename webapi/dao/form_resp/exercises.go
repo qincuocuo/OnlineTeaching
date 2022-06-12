@@ -10,6 +10,7 @@ type ExercisesItem struct {
 	Question string   `json:"question"` //题目
 	Type     int      `json:"type"`     //类型 0-选择 1-判断
 	Options  []string `json:"options"`  //选项
+	Answer   string   `json:"answer"`
 }
 
 type ExercisesResp struct {

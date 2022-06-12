@@ -28,3 +28,28 @@ func (exercises) FindOne(ctx context.Context, query bson.M) (exercisesDoc models
 	_, err = db.MongoCli.FindOne(dbName, query, &exercisesDoc)
 	return
 }
+
+func (exercises) Update(ctx context.Context, query, upset bson.M) (err error) {
+	dbName := (&models.Exercises{}).CollectName()
+
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+
+	err = db.MongoCli.Update(dbName, query, upset, false)
+
+	return
+}
+
+func (exercises) IsExist(ctx context.Context, query bson.M) bool {
+	var exercisesDoc []models.Exercises
+	dbName := (&models.Exercises{}).CollectName()
+
+	span, _ := tracking.DbTracking(ctx, dbName, query)
+	defer span.End()
+
+	if err := db.MongoCli.FindAll(dbName, query, &exercisesDoc); err != nil || len(exercisesDoc) == 0 {
+		return false
+	}
+
+	return true
+}

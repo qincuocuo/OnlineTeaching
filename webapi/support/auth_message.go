@@ -43,4 +43,5 @@ const (
 
 	CreateExercisesFailed string = "创建课后练习失败"
 	ExercisesNotExists    string = "课后练习任务不存在"
+	GetExerciseFailed     string = "获取课后练习失败"
 )

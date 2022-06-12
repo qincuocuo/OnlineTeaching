@@ -91,7 +91,7 @@ func (c CourseController) DeleteCourse(ctx *wrapper.Context) {
 // @Router /v1/course/enter [post]
 // @Security ApiKeyAuth
 func (c CourseController) EnterCourse(ctx *wrapper.Context) {
-	wrapper.ApiWrapper(ctx, service.EnterCourseHandler, true, &form_req.EnterCourseReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
+	//wrapper.ApiWrapper(ctx, service.EnterCourseHandler, true, &form_req.EnterCourseReq{}, &wrapper.ApiConfig{ReqType: support.CHECKTYPE_JSON})
 }
 
 // CourseInfo

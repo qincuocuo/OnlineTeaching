@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
 	"webapi/dao/mongo"
@@ -68,6 +69,12 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 			Learned:   item.FinishedNum,
 			Unlearned: total - item.FinishedNum,
 		}
+
+		register, _ := mongo.Register.FindOne(traceCtx, bson.M{"content_id": item.ContentId})
+		if !utils.IsContainInSlice(ctx.UserToken.UserId, register.Finished) && time.Now().Before(register.EndTime) {
+			msg.Register = true
+		}
+
 		resp.Result = append(resp.Result, msg)
 	}
 	support.SendApiResponse(ctx, resp, "success")
