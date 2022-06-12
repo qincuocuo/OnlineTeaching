@@ -6,7 +6,7 @@ type GetExercisesResp struct {
 }
 
 type ExercisesItem struct {
-	Id       int      `json:"id"`       //课后练习id
+	Id       string   `json:"id"`       //课后练习id
 	Question string   `json:"question"` //题目
 	Type     int      `json:"type"`     //类型 0-选择 1-判断
 	Options  []string `json:"options"`  //选项
@@ -18,7 +18,7 @@ type ExercisesResp struct {
 }
 
 type ExerciseResult struct {
-	Id      int    `json:"id"`      //课后练习id
+	Id      string `json:"id"`      //课后练习id
 	Correct bool   `json:"correct"` //判断是否正确
 	Answer  string `json:"answer"`  //正确答案
 }

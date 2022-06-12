@@ -71,8 +71,11 @@ func LearningContentListHandler(ctx *wrapper.Context, reqBody interface{}) (err 
 		}
 
 		register, _ := mongo.Register.FindOne(traceCtx, bson.M{"content_id": item.ContentId})
-		if !utils.IsContainInSlice(ctx.UserToken.UserId, register.Finished) && time.Now().Before(register.EndTime) {
+		if time.Now().Before(register.EndTime) {
 			msg.Register = true
+		}
+		if utils.IsContainInSlice(ctx.UserToken.UserId, item.Finished) {
+			msg.Registered = true
 		}
 
 		resp.Result = append(resp.Result, msg)

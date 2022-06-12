@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/globalsign/mgo/bson"
 	"math/rand"
+	"strconv"
 	"time"
 	"webapi/dao/form_req"
 	"webapi/dao/form_resp"
@@ -45,7 +46,7 @@ func CreateExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err erro
 		questions := make([]models.QuestionsItem, 0)
 		for _, item := range req.Exercises {
 			msg := models.QuestionsItem{
-				Id:       rand.Int(),
+				Id:       strconv.Itoa(rand.Int()),
 				Type:     item.Type,
 				Question: item.Question,
 				Answer:   item.Answer,
@@ -70,7 +71,7 @@ func CreateExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err erro
 
 		for _, item := range req.Exercises {
 			msg := models.QuestionsItem{
-				Id:       rand.Int(),
+				Id:       strconv.Itoa(rand.Int()),
 				Type:     item.Type,
 				Question: item.Question,
 				Answer:   item.Answer,
@@ -167,19 +168,17 @@ func ExercisesHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 
 	for _, answer := range req.Answers {
-		var flag bool
-		for _, question := range exercisesDoc.Questions {
-			if answer.Id == question.Id {
-				if answer.Answer == question.Answer {
-					flag = true
-					break
-				}
+		var question models.QuestionsItem
+		for _, q := range exercisesDoc.Questions {
+			if answer.Id == q.Id {
+				question = q
+				break
 			}
 		}
 		msg := form_resp.ExerciseResult{
 			Id:      answer.Id,
-			Correct: flag,
-			Answer:  answer.Answer,
+			Correct: question.Answer == answer.Answer,
+			Answer:  question.Answer,
 		}
 		resp.Results = append(resp.Results, msg)
 	}

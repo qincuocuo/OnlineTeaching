@@ -22,6 +22,6 @@ type ExercisesReq struct {
 }
 
 type ExercisesAnswer struct {
-	Id     int    `json:"id" validate:"required"`     // 习题id
+	Id     string `json:"id" validate:"required"`     // 习题id
 	Answer string `json:"answer" validate:"required"` // 答案
 }
