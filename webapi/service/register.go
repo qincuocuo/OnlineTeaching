@@ -46,7 +46,6 @@ func CreateRegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 		ManagerId:  ctx.UserToken.UserId,
 		ContentId:  req.ContentId,
 		Finished:   userList,
-		Unfinished: courseDoc.StudentId,
 		CreateTime: startTm,
 		EndTime:    endTm,
 	}
@@ -67,6 +66,28 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 	query := bson.M{}
 	if req.ContentId > 0 {
 		query["content_id"] = req.ContentId
+	}
+	var contentDoc models.LearningContent
+	contentDoc, err = mongo.Content.FindOne(traceCtx, query)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetLearningContentListFailed, 0)
+		return nil
+	}
+	var courseDoc models.Course
+	courseDoc, err = mongo.Course.FindOne(traceCtx, bson.M{"course_id": contentDoc.CourseId})
+	if err != nil {
+		support.SendApiErrorResponse(ctx, support.GetCourseInfoFailed, 0)
+		return nil
+	}
+	if courseDoc.ManagerId != ctx.UserToken.UserId {
+		support.SendApiErrorResponse(ctx, support.UserNoPermission, 0)
+		return nil
+	}
+
+	users, err := mongo.User.GetByGradeAndClass(traceCtx, courseDoc.Grade, courseDoc.Class)
+	if err != nil {
+		support.SendApiErrorResponse(ctx, "获取学生失败", 0)
+		return err
 	}
 	var registerDoc models.Register
 	registerDoc, err = mongo.Register.FindOne(traceCtx, query)
@@ -90,16 +111,14 @@ func RegisterResultHandler(ctx *wrapper.Context, reqBody interface{}) (err error
 			resp.StudentInfo = append(resp.StudentInfo, msg)
 		}
 	} else if req.RegisterResult == "unfinished" {
-		resp.Count = len(registerDoc.Unfinished)
-		for _, item := range registerDoc.Unfinished {
-			var userDoc models.User
-			userDoc, err = mongo.User.FindByUserId(traceCtx, item)
-			if err != nil {
+		resp.Count = len(users) - len(registerDoc.Finished)
+		for _, user := range users {
+			if utils.IsContainInSlice(user.UserId, registerDoc.Finished) {
 				continue
 			}
 			msg := form_resp.StudentItem{
-				Id:   item,
-				Name: userDoc.UserName,
+				Id:   user.UserId,
+				Name: user.UserName,
 			}
 			resp.StudentInfo = append(resp.StudentInfo, msg)
 		}
@@ -150,14 +169,7 @@ func RegisterHandler(ctx *wrapper.Context, reqBody interface{}) (err error) {
 	}
 
 	finish := append(registerDoc.Finished, ctx.UserToken.UserId)
-	unfinish := make([]string, 0)
-	for _, s := range registerDoc.Unfinished {
-		if s == ctx.UserToken.UserId {
-			continue
-		}
-		unfinish = append(unfinish, s)
-	}
-	update := bson.M{"finished": finish, "unfinished": unfinish}
+	update := bson.M{"finished": finish}
 	err = mongo.Register.Update(traceCtx, query, update)
 	if err != nil {
 		support.SendApiErrorResponse(ctx, support.JoinInRegisterFailed, 0)
